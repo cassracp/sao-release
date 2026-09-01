@@ -1,0 +1,242 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="SAO - Download">
+	<section class="hero">
+		<h1>Baixe a versão mais recente</h1>
+		<p>Experimente a versão mais rápida e estável do SAO.</p>
+		<div id="latest-release-container" class="loading-box">
+			<div class="spinner"></div>
+			<p>Buscando versão...</p>
+		</div>
+	</section>
+
+	<section class="legacy">
+		<h2><i data-lucide="archive" style="display:inline-block; vertical-align:middle; margin-right:8px;"></i> Histórico de Versões</h2>
+		<p class="legacy-subtitle">Versões anteriores de instalação</p>
+		<div id="legacy-releases-container">
+			<div class="spinner"></div>
+			<p>Carregando histórico...</p>
+		</div>
+	</section>
+</Layout>
+
+<script is:inline>
+	const REPO = 'cassracp/sao-release';
+	const API_URL = `https://api.github.com/repos/${REPO}/releases`;
+
+	document.addEventListener('DOMContentLoaded', () => {
+		ConsultarReleases();
+	});
+
+	async function ConsultarReleases() {
+		try {
+			const resposta = await fetch(API_URL);
+			if (!resposta.ok) throw new Error('Falha ao buscar as versões no GitHub.');
+			
+			const versoes = await resposta.json();
+			
+			if (versoes.length === 0) {
+				RenderizarEstadoVazio();
+				return;
+			}
+
+			const versaoMaisRecente = versoes[0];
+			const historicoLegado = versoes.slice(1);
+
+			RenderizarMaisRecente(versaoMaisRecente);
+			RenderizarLegado(historicoLegado);
+
+		} catch (erro) {
+			console.error(erro);
+			RenderizarErro();
+		} finally {
+			if (window.lucide) {
+				window.lucide.createIcons();
+			}
+		}
+	}
+
+	function FormatarData(dataString) {
+		const opcoes = { day: '2-digit', month: 'long', year: 'numeric' };
+		return new Date(dataString).toLocaleDateString('pt-BR', opcoes);
+	}
+
+	function EncontrarInstalador(assets) {
+		return assets.find(a => a.name.endsWith('.exe') || a.name.endsWith('.msi')) || 
+			   assets.find(a => a.name.endsWith('.zip'));
+	}
+
+	function RenderizarMaisRecente(versao) {
+		const container = document.getElementById('latest-release-container');
+		const instalador = EncontrarInstalador(versao.assets);
+		const urlDownload = instalador ? instalador.browser_download_url : versao.html_url;
+
+		container.innerHTML = `
+			<div class="release-card">
+				<div class="release-header">
+					<div class="release-version">
+						<i data-lucide="package"></i>
+						${versao.tag_name}
+					</div>
+					<div class="release-date">
+						<i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+						${FormatarData(versao.published_at)}
+					</div>
+				</div>
+				<div class="release-notes">${versao.body || 'Nenhuma nota de lançamento disponível.'}</div>
+				<a href="${urlDownload}" class="download-btn" target="_blank">
+					<i data-lucide="download"></i>
+					Baixar Instalador Windows
+				</a>
+			</div>
+		`;
+	}
+
+	function RenderizarLegado(versoes) {
+		const container = document.getElementById('legacy-releases-container');
+		
+		if (versoes.length === 0) {
+			container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Nenhum histórico disponível ainda.</p>';
+			return;
+		}
+
+		container.innerHTML = versoes.map(versao => {
+			const instalador = EncontrarInstalador(versao.assets);
+			const urlDownload = instalador ? instalador.browser_download_url : versao.html_url;
+
+			return `
+				<div class="release-card legacy-card">
+					<div class="release-header">
+						<div class="release-version" style="font-size: 1.2rem;">
+							<i data-lucide="package" style="width: 20px; height: 20px;"></i>
+							${versao.tag_name}
+						</div>
+						<div class="release-date">
+							<i data-lucide="calendar" style="width: 12px; height: 12px;"></i>
+							${FormatarData(versao.published_at)}
+						</div>
+					</div>
+					<div style="display: flex; justify-content: flex-end;">
+						<a href="${urlDownload}" class="download-btn" target="_blank" style="width: auto; padding: 8px 16px; font-size: 0.9rem; background-color: transparent; border: 1px solid var(--border-color); color: var(--text-primary);">
+							<i data-lucide="download" style="width: 16px; height: 16px;"></i>
+							Download Antigo
+						</a>
+					</div>
+				</div>
+			`;
+		}).join('');
+	}
+
+	function RenderizarEstadoVazio() {
+		document.getElementById('latest-release-container').innerHTML = '<p>Nenhuma versão publicada ainda.</p>';
+		document.getElementById('legacy-releases-container').innerHTML = '';
+	}
+
+	function RenderizarErro() {
+		document.getElementById('latest-release-container').innerHTML = '<p style="color: #f85149;">Erro ao carregar as versões.</p>';
+		document.getElementById('legacy-releases-container').innerHTML = '';
+	}
+</script>
+
+<style>
+	.hero {
+		text-align: center;
+		margin-bottom: 60px;
+	}
+	.hero p {
+		color: var(--text-secondary);
+		margin-bottom: 30px;
+	}
+	.legacy h2 {
+		text-align: center;
+		margin-top: 40px;
+	}
+	.legacy-subtitle {
+		text-align: center;
+		color: var(--text-secondary);
+		margin-bottom: 30px;
+	}
+	.release-card {
+		background: var(--card-bg);
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		padding: 24px;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+		transition: transform 0.2s ease, border-color 0.2s ease;
+		margin-bottom: 20px;
+	}
+	.release-card:hover {
+		transform: translateY(-2px);
+		border-color: var(--accent-color);
+	}
+	.release-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15px;
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 10px;
+	}
+	.release-version {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: var(--accent-color);
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.release-date {
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.release-notes {
+		color: var(--text-primary);
+		text-align: left;
+		font-size: 0.95rem;
+		margin-bottom: 20px;
+		background: rgba(0,0,0,0.2);
+		padding: 15px;
+		border-radius: 6px;
+		white-space: pre-wrap;
+		border: 1px solid rgba(255,255,255,0.05);
+	}
+	.download-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		background-color: var(--accent-color);
+		color: #fff;
+		text-decoration: none;
+		padding: 12px 30px;
+		border-radius: 6px;
+		font-weight: 600;
+		transition: background-color 0.2s ease;
+		width: 100%;
+	}
+	.download-btn:hover {
+		background-color: var(--accent-hover);
+	}
+	.loading-box {
+		text-align: center;
+		padding: 40px;
+	}
+	.spinner {
+		border: 3px solid rgba(255,255,255,0.1);
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		border-left-color: var(--accent-color);
+		animation: spin 1s linear infinite;
+		margin: 0 auto 15px auto;
+	}
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+</style>
