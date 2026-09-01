@@ -1,4 +1,4 @@
-# 🛠️ DevLog - SAO (Sistema de Administração e Operações)
+# 🛠️ DevLog - SAO (Sistema de Auxílio Operacional)
 
 Este documento registra as principais atualizações, melhorias e correções feitas no projeto.
 O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.
