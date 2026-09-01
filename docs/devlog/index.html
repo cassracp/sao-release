@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="pt-BR"> <head><meta charset="UTF-8"><meta name="description" content="Página de download e changelog do SAO"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/sao-release/favicon.svg"><title>SAO - Notas de Lançamento (Devlog)</title><!-- SAO Font: Noto Sans --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;800&display=swap" rel="stylesheet"><!-- Lucide Icons --><script src="https://unpkg.com/lucide@latest"></script><style>:root{--bg-color: #1A1A1A;--card-bg: #242424;--text-primary: #F3F4F6;--text-secondary: #9CA3AF;--accent-color: #00ABB9;--accent-hover: #008C99;--border-color: #374151;--glow-color: rgba(0, 171, 185, .15)}*{margin:0;padding:0;box-sizing:border-box}body{font-family:Noto Sans,sans-serif;background-color:var(--bg-color);color:var(--text-primary);line-height:1.6;min-height:100vh;position:relative;overflow-x:hidden}.glow-bg{position:absolute;top:-200px;left:50%;transform:translate(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--glow-color) 0%,transparent 70%);z-index:-1;border-radius:50%}.container{max-width:800px;margin:0 auto;padding:40px 20px}header{text-align:center;margin-bottom:40px}.logo{display:flex;align-items:center;justify-content:center;gap:12px;font-size:3rem;font-weight:800;letter-spacing:2px;color:var(--accent-color)}.logo-icon{width:48px;height:48px;stroke-width:2.5}.subtitle{color:var(--text-secondary);font-size:1.1rem;font-weight:300;margin-bottom:24px}.main-nav{display:flex;justify-content:center;gap:16px}.nav-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-weight:600;padding:8px 16px;border-radius:6px;transition:background-color .2s,color .2s}.nav-link:hover{color:var(--accent-color);background-color:#00abb91a}.nav-link i{width:18px;height:18px}h1,h2,h3,h4{font-weight:600;margin-bottom:10px;color:var(--accent-color)}
+.markdown-body{background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;padding:40px;box-shadow:0 4px 6px -1px #0000001a}.markdown-body h1{font-size:2.2rem;border-bottom:1px solid var(--border-color);padding-bottom:10px;margin-bottom:24px}.markdown-body h2{font-size:1.7rem;margin-top:32px;margin-bottom:16px;border-bottom:1px solid rgba(55,65,81,.5);padding-bottom:8px}.markdown-body h3{font-size:1.3rem;margin-top:24px;margin-bottom:12px;color:var(--text-primary)}.markdown-body p{margin-bottom:16px;line-height:1.7}.markdown-body ul,.markdown-body ol{margin-bottom:16px;padding-left:24px}.markdown-body li{margin-bottom:8px}.markdown-body blockquote{border-left:4px solid var(--accent-color);color:var(--text-secondary);background:#0003;padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:16px}.markdown-body code{background:#0000004d;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:.9em;color:#e5e7eb}.markdown-body pre{background:#0d1117;padding:16px;border-radius:8px;overflow-x:auto;margin-bottom:16px;border:1px solid var(--border-color)}.markdown-body pre code{background:transparent;padding:0;color:inherit}
+</style></head> <body> <div class="glow-bg"></div> <div class="container"> <header> <a href="/sao-release/" style="text-decoration: none;"> <div class="logo"> <img src="/sao-release/favicon.svg" class="logo-icon" alt="SAO Logo">
+SAO
+</div> </a> <p class="subtitle">O Gerenciador Definitivo</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-administração-e-operações">🛠️ DevLog - SAO (Sistema de Administração e Operações)</h1>
+<p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto.
+O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
+<hr>
+<h2 id="-060---08-2026">🚀 [0.6.0] - 08-2026</h2>
+<p><strong>“Novas Ferramentas: Cofre de Senhas, SenhaDB e Licenças Temporárias”</strong></p>
+<h3 id="️-novo-módulo-cofre-de-senhas">🗄️ Novo Módulo: Cofre de Senhas</h3>
+<ul>
+<li><strong>Cofres Pessoais e Coletivos</strong>: Gerencie suas senhas de forma segura! Crie cofres individuais ou espaços coletivos para compartilhar acessos estratégicos com o seu setor.</li>
+<li><strong>Gestão de Permissões Granular</strong>: Compartilhamento inteligente com 4 níveis de acesso: <strong>Leitura</strong> (apenas visualizar), <strong>Criação</strong> (adicionar novas), <strong>Edição</strong> (modificar existentes) e <strong>Total</strong> (poderes de arquivar e excluir definitivamente).</li>
+<li><strong>Ações em Lote</strong>: Ganhe produtividade selecionando várias senhas simultaneamente para arquivar, restaurar ou apagar do arquivo morto.</li>
+<li><strong>Importação Inteligente (KeePass CSV)</strong>: Migrar de outros gerenciadores ficou incrivelmente simples. O sistema permite a importação direta de arquivos <code>.csv</code> e lida automaticamente com anomalias de formatação e colunas em branco.</li>
+<li><strong>Segurança Reforçada (PIN Master e Auto-Lock)</strong>: Criamos uma camada dupla de proteção. O Cofre agora exige a criação de um PIN. Caso se afaste do PC, um cronômetro invisível de inatividade trava o cofre automaticamente após 5 minutos, blindando o conteúdo e exigindo o PIN ou senha para voltar a exibir os dados.</li>
+<li><strong>Performance Extrema</strong>: Otimizamos radicalmente o motor do painel para aguentar milhares de senhas. Com técnicas avançadas de renderização (Memoization), interagir com as senhas, buscar ou copiar credenciais acontece de forma instantânea, zero engasgos.</li>
+<li><strong>Visual Responsivo</strong>: Toda a interface do Cofre de Senhas já está adaptada para o novo padrão de <em>Cores Dinâmicas</em>, acompanhando nativamente a identidade visual do módulo sem engessar a UI.</li>
+</ul>
+<h3 id="-módulo-senhadb">🔐 Módulo SenhaDB</h3>
+<ul>
+<li><strong>Descriptografia Local (INFO.001)</strong>: Agora o SAO conta com um módulo nativo, acessível diretamente na Home (para usuários com permissão), capaz de ler e extrair senhas de arquivos <code>INFO.001</code> do DOC-Windows.</li>
+<li><strong>Rapidez e Segurança</strong>: Basta arrastar o arquivo para a tela. Todo o processamento é feito localmente e instantaneamente, revelando a senha em um painel com botão de “Copiar para Área de Transferência”.</li>
+</ul>
+<h3 id="-módulo-licença-temporária">⏳ Módulo Licença Temporária</h3>
+<ul>
+<li><strong>Geração Ágil de Contra-Senhas</strong>: Precisa estender a licença de um cliente? O novo módulo permite gerar as contra-senhas temporárias do DOC-Windows em segundos!</li>
+<li><strong>Flexibilidade Total</strong>: Escolha o prazo facilmente digitando um período numérico e selecionando entre <strong>Dias, Meses ou Anos</strong> no menu, ou simplesmente escolha a data final no calendário bidirecional.</li>
+<li><strong>Formatação Original</strong>: O sistema replica com perfeição a formatação matemática do antigo bot, devolvendo a numeração já separada por traços para colar direto no sistema ou no WhatsApp do cliente.</li>
+</ul>
+<h3 id="-agenda-turbinada-drag--drop-e-ux">📅 Agenda Turbinada (Drag &#x26; Drop e UX)</h3>
+<ul>
+<li><strong>Arrastar e Soltar (Drag &#x26; Drop)</strong>: Remanejar agendamentos nunca foi tão fácil! Agora você pode clicar, segurar e arrastar um evento diretamente para outro dia ou horário. O sistema também respeita suas permissões de edição!</li>
+<li><strong>Redimensionamento Rápido</strong>: Precisou estender ou encurtar a duração de um atendimento? Basta puxar a borda inferior do agendamento diretamente no calendário para ajustar o tempo com precisão.</li>
+<li><strong>Legibilidade e Organização Visual</strong>:
+<ul>
+<li>As etiquetas (badges) dos usuários responsáveis agora são renderizadas em destaque, sem problemas de ocultação por transparência.</li>
+<li>Eventos de mesma cor seguidos agora possuem um contorno sutil, impedindo que pareçam um bloco visual único.</li>
+</ul>
+</li>
+<li><strong>Nomes de Exibição (Display Name)</strong>: O card de detalhes do evento passou a valorizar o “Nome de Exibição” configurado pelo usuário, e o gerador de siglas padrão (fallback) subiu de 2 para 3 caracteres, facilitando bater o olho e reconhecer a equipe!</li>
+</ul>
+<hr>
+<h2 id="-052---08-2026">🚀 [0.5.2] - 08-2026</h2>
+<h3 id="️-correções-e-melhorias-módulos-webview">🛠️ Correções e Melhorias (Módulos Webview)</h3>
+<ul>
+<li><strong>Controle de Abas Internas</strong>: Agora, os módulos que funcionam por webview (como Intranet) suportam abas internas nativamente! Sempre que um link exigir uma nova janela (seja por um clique do meio ou <code>target="_blank"</code>), o SAO abrirá uma aba na própria barra do módulo, melhorando drasticamente a navegação.</li>
+<li><strong>Correção da Tela Preta em Múltiplos Monitores</strong>: Resolvemos um bug no mecanismo de renderização do Windows (<code>WebView2</code>). Janelas desacopladas que eram arrastadas para monitores com escalas ou resoluções diferentes não ficarão mais com a tela preta travada. Agora, cada janela filha gera sua própria instância independente e isolada, sendo 100% à prova de trocas de monitor.</li>
+</ul>
+<hr>
+<h2 id="-051---08-2026">🚀 [0.5.1] - 08-2026</h2>
+<h3 id="-abas-desacopladas-multi-monitores">🪟 Abas Desacopladas (Multi-Monitores)</h3>
+<ul>
+<li><strong>Liberdade de Trabalho</strong>: Agora você pode desacoplar abas dos módulos principais! Basta arrastar a aba para fora da barra (ou clicar com o botão direito e escolher a opção) para transformá-la em uma janela independente nativa do Windows. Perfeito para quem trabalha com dois ou mais monitores e quer, por exemplo, deixar a Agenda em uma tela e o Editor de Textos na outra.</li>
+<li><strong>Desempenho e Persistência “Lazy”</strong>: As janelas desacopladas nascem sabendo exatamente qual módulo carregar (ex: <code>SAO - Editor de Textos</code>). Otimizamos radicalmente os componentes mais pesados (como o Corretor Ortográfico) para carregar no fundo de forma assíncrona, garantindo que a nova janela abra instantaneamente sem engasgos.</li>
+</ul>
+<h3 id="-integração-agenda-x-clientes-clc">📅 Integração Agenda x Clientes (CLC)</h3>
+<ul>
+<li><strong>Vínculo Rápido e Direto</strong>: Adicionamos o campo inteligente <code>Cliente (Opcional)</code> aos modais de agendamento. Agora você pode pesquisar por código e nome para vincular agendamentos aos clientes do CLC, disponível em todos os métodos de criação (Único, em Lote ou Sequência).</li>
+<li><strong>Zero Lentidão</strong>: Implementado através do HTML5 nativo (<code>datalist</code>), o componente exibe a lista completa da base de clientes na velocidade da luz e sem nenhum “engasgo”, substituindo componentes Dropdowns pesados.</li>
+<li><strong>Pensando no Futuro</strong>: A ligação robusta que criamos através da coluna <code>cod_clc</code> no banco de dados PostgreSQL é o primeiro passo para no futuro permitir visualizar <em>todo</em> o histórico e formulários atrelados a um único cliente num piscar de olhos.</li>
+</ul>
+<h3 id="-refinamentos-visuais-e-funcionais-na-agenda">🎯 Refinamentos Visuais e Funcionais na Agenda</h3>
+<ul>
+<li><strong>Escala de Tempo Ampliada</strong>: Aumentamos o espaçamento vertical das visões de Dia e Semana, garantindo que textos e badges caibam sem sufoco nas linhas. Além disso, a visão inicial do calendário agora tem seu “scroll” padrão posicionado nas <strong>08:00h</strong>, facilitando a navegação diária.</li>
+<li><strong>Melhoria Absurda na Visão Mensal</strong>:
+<ul>
+<li>Acabamos com os <em>popups</em> quebrados padrão do calendário quando muitos eventos tentam disputar o mesmo dia! Agora um botão discreto <strong>“Mais X”</strong> aparece no rodapé do dia. Ao clicar, um <strong>Modal Dialog</strong> focado e elegante é aberto listando todos os eventos extras.</li>
+<li>Eventos na visão mensal agora exibem nativamente as badges dos participantes para bater o olho e saber quem está envolvido, com um limite de até <strong>3 badges</strong>. Caso a equipe seja maior, um botão inteligente de reticências (<code>...</code>) exibe o resto da turma ao passar o mouse (<em>tooltip list</em>).</li>
+</ul>
+</li>
+<li><strong>Lapidação do Modo Escuro</strong>: A janela de “Configurações da Agenda” ganhou um banho de loja no Dark Mode. Ajustamos as paletas e caixas de lembretes para que utilizem a cor padrão de fundo do painel e sigam o requinte de todos os outros módulos do SAO.</li>
+<li><strong>Hierarquia Inteligente nos Lembretes</strong>: Removemos o gargalo nas configurações de WhatsApp das Agendas Setoriais. Agora, qualquer membro com perfil <strong>Sênior</strong> ou superior no sistema terá automaticamente a permissão para gerenciar a <strong>Duração Padrão</strong> de agendamento e configurar o disparo de lembretes sem precisar que um diretor altere a configuração.</li>
+</ul>
+<hr>
+<h2 id="-050---08-2026">🚀 [0.5.0] - 08-2026</h2>
+<p><strong>“Pequenos Detalhes, Grandes Impactos: O Mini Editor Cresceu e o CLC Chegou!”</strong></p>
+<h3 id="-novo-módulo-clientes-e-licenças-clc">🏢 Novo Módulo: Clientes e Licenças (CLC)</h3>
+<p>O coração administrativo agora pulsa dentro do SAO! O novo módulo CLC traz toda a base de clientes do sistema legado para uma interface moderna, unificada e ultra-rápida.</p>
+<ul>
+<li><strong>Busca e Filtros Inteligentes</strong>: Encontre clientes em milissegundos pesquisando por nome, código, CNPJ, CPF ou nome oficial. Filtre instantaneamente por status (Regular, Inadimplente, Implantação).</li>
+<li><strong>Sincronização Invisível</strong>: O módulo verifica sozinho o servidor de arquivos a cada acesso (respeitando cooldowns) e se atualiza automaticamente em background sem travar a tela, garantindo que os dados em cache estejam sempre sincronizados com a base original da empresa.</li>
+<li><strong>Cópia Rápida (1-Click)</strong>: Extratos práticos e rápidos dos módulos contratados pelo cliente. Copie siglas dos módulos diretamente (<code>NCOEw</code>) ou gere listas amigáveis para colar no WhatsApp.</li>
+</ul>
+<p>⚠️ <strong>ATENÇÃO</strong> ⚠️</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Os módulos exibidos ainda não refletem com precisão o status de ativação no cliente. Por favor, valide sempre os módulos ativos diretamente no CLC original ou via SAC.</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="️-evolução-do-mini-editor-de-textos-addon">✍️ Evolução do Mini Editor de Textos (Addon)</h3>
+<ul>
+<li><strong>Aproveitamento de Espaço Inteligente</strong>: Corrigido um gap visual no final do modal do Mini Editor. Agora, a área de digitação de texto expande automaticamente preenchendo toda a área disponível do modal de forma natural e elegante.</li>
+<li><strong>Menu de Contexto Inteligente (Bubble Menu)</strong>: Adicionado um menu flutuante muito mais fluido! Agora, ao selecionar qualquer texto dentro do Mini Editor, um menu de acesso rápido aparecerá exatamente sobre a seleção, facilitando a aplicação de formatações (Negrito, Itálico, Sublinhado e Tachado) sem precisar mover o mouse até a barra superior.</li>
+<li><strong>Formatação de Código Inline</strong>: Atendendo a pedidos, o Mini Editor agora conta com o botão de formatação de código <code>&#x3C;/></code>, exatamente como no Editor Principal, tornando-o perfeito para formatar comandos, caminhos de arquivo ou trechos de scripts de forma destacada.</li>
+</ul>
+<h3 id="-integração-webview-avançada-sac-pabx-whatsapp-e-intranet">🌐 Integração Webview Avançada (SAC, PABX, WhatsApp e Intranet)</h3>
+<ul>
+<li><strong>Pop-ups 100% Nativos</strong>: Resolvemos o bloqueio de novas abas nos módulos web (como SAC e Intranet). Agora, quando o sistema tentar abrir um pop-up ou impressão de PDF via JavaScript, a interface intercepta e abre uma <strong>janela nativa do Windows independente</strong>, trazendo uma usabilidade idêntica à do Google Chrome.</li>
+<li><strong>Sincronização Mágica de Credenciais</strong>: O recurso de salvar senhas não é mais exclusivo. Expandimos e padronizamos a captura inteligente de login para todos os módulos (SAC, PABX, WhatsApp e Intranet).</li>
+<li><strong>Segurança Criptografada</strong>: Privacidade é inegociável! Todas as senhas salvas para o preenchimento automático são fortemente criptografadas antes de serem armazenadas no banco de dados, protegendo contra qualquer vazamento de dados.</li>
+<li><strong>Otimização Extrema (Cache + Nuvem)</strong>: As senhas salvas ganharam superpoderes! Elas agora ficam armazenadas no cache local (<code>localStorage</code>) para um carregamento ultra-rápido, mas são espelhadas silenciosamente no banco de dados. Formatar o PC ou trocar de máquina não é mais um problema: seu login segue com você e o preenchimento automático funciona sem engasgos.</li>
+</ul>
+<hr>
+<h2 id="-0416---08-2026">🚀 [0.4.16] - 08-2026</h2>
+<p><strong>“O Fim do F5 nas Imagens e a Nova Vida do Visualizador”</strong></p>
+<p>E aí, pessoal! A versão <code>0.4.16</code> traz uma correção cirúrgica mas que impacta muito no dia a dia, especialmente para quem trabalha muito com prints e imagens dentro do editor de texto. Adeus à tela em branco!</p>
+<h3 id="️-melhorias-no-visualizador-de-imagens-editor">🖼️ Melhorias no Visualizador de Imagens (Editor)</h3>
+<ul>
+<li><strong>Renderização Imediata (Fim do F5!)</strong>: Sabe aquele bug chato onde você clicava em uma imagem colada (em <code>base64</code>) e a nova aba abria em branco, te obrigando a apertar F5? Foi resolvido! Agora as imagens renderizam na hora.</li>
+<li><strong>Segurança e Performance</strong>: Joguei fora o antigo <code>document.write</code> e reescrevi a lógica de abertura de imagens em nova guia usando manipulação limpa do DOM (<code>document.createElement</code>). Isso não só resolve o bug do F5, mas deixa o carregamento mais seguro e fluido.</li>
+<li><strong>Correção de Links de Imagem</strong>: Havia um pequeno erro onde o sistema tentava forçar um <code>https://</code> na frente do código <code>base64</code> da imagem, quebrando a URL. O sistema agora é inteligente o suficiente para identificar e respeitar links de protocolo <code>data:</code>.</li>
+<li><strong>Melhoria no Fallback (Tauri)</strong>: A comunicação nativa em Rust (<code>open_image_in_browser</code>) agora se integra de forma ainda mais suave ao comportamento do frontend para renderizar o visualizador em novas janelas com suporte a zoom nativo.</li>
+</ul>
+<hr>
+<h2 id="-0415---08-2026">🚀 [0.4.15] - 08-2026</h2>
+<p><strong>“O Renascimento do Chat, Auto-Updates Mágicos e Fim da Ansiedade”</strong></p>
+<p>Fala pessoal! Muita coisa aconteceu desde a versão <code>0.4.14</code>. Trabalhei duro nos bastidores para trazer atualizações massivas que mudam completamente a forma como vocês interagem dentro do SAO. Pegue um café e confira a lista gigantesca do que mudou:</p>
+<h3 id="-novo-editor-de-texto-sincronização-nuvem">📝 Novo Editor de Texto (Sincronização Nuvem)</h3>
+<ul>
+<li><strong>Salvamento Automático Robusto</strong>: Agora o Editor de Texto salva seus documentos diretamente no banco de dados, além de manter uma cópia rápida no navegador (<em>Local Storage</em>).
+<ul>
+<li><strong>O ganho prático:</strong> Se você mudar de computador, limpar o cache do navegador ou formatar o PC, <strong>seus textos não serão mais perdidos</strong>, pois estarão sincronizados com a nuvem! (Lembrando que os textos não bloqueados ficam salvos no banco por 90 dias).</li>
+</ul>
+</li>
+<li><strong>Privacidade Garantida</strong>: Para a sua tranquilidade, todos esses dados salvos no banco são rigorosamente criptografados, garantindo a total privacidade dos textos de cada usuário.</li>
+<li><strong>Imagens Otimizadas</strong>: Fiz uma otimização profunda no tratamento das imagens auto-hospedadas dentro do Editor de Texto, melhorando significativamente a qualidade visual e o comportamento do visualizador de imagens embutido.</li>
+</ul>
+<h3 id="-comuchat-agora-é-oficialmente-um-monstro">💬 ComuChat: Agora é Oficialmente um Monstro</h3>
+<ul>
+<li><strong>Novo Editor de Texto (Tiptap)</strong>: O chat recebeu um upgrade absurdo. Agora há suporte para emojis nativos, blocos de código formatados e links customizados!</li>
+<li><strong>Sistema de Menções Completo</strong>: Agora você pode digitar <code>@</code> e mencionar não apenas <strong>Usuários</strong>, mas também <strong>Setores</strong> e <strong>Cargos</strong>. Falar com a pessoa certa nunca foi tão fácil.</li>
+<li><strong>Mensagens Fixadas</strong>: Informação importante no canal? Agora você pode fixar (<em>pin</em>) mensagens para que ninguém perca os avisos cruciais.</li>
+<li><strong>Gestão de Comunidades</strong>: Adicionei painéis completos para administração de membros, atribuição de cargos e até exclusão de comunidades, dando total controle aos administradores.</li>
+</ul>
+<h3 id="-notificações-e-agenda-o-poder-é-seu">🔔 Notificações e Agenda: O Poder é Seu</h3>
+<ul>
+<li><strong>Granularidade Máxima no ComuChat</strong>: Nas Configurações, você agora decide exatamente o que aciona um alerta (Todas as mensagens, Menções, Cargos ou DMs) <em>separadamente</em> para os seus status (Disponível, Ocupado ou Ausente). Escolha se quer som, pop-up ou apenas silêncio.</li>
+<li><strong>Integração de Agenda com WhatsApp</strong>: Implementei um sistema robusto de gestão de agendas que agora conta com configurações para disparar notificações automáticas via WhatsApp.</li>
+<li><strong>Sons Elegantes para Status Temporários</strong>: Colocou o status em “Almoço” por 60 minutos? O sistema te avisará com um suave efeito sonoro de piano assim que o timer expirar.</li>
+</ul>
+<h3 id="-infraestrutura-e-qualidade-de-vida-qol">⚡ Infraestrutura e Qualidade de Vida (QoL)</h3>
+<ul>
+<li><strong>Atualizações Silenciosas via GitHub</strong>: Diga adeus ao antigo servidor IIS! Migrei todo o sistema de entrega de atualizações para o <em>GitHub Releases</em>. O SAO agora baixa atualizações silenciosamente no fundo e os instaladores lidam automaticamente com os certificados.</li>
+<li><strong>Nova Arquitetura Core (Tauri v2)</strong>: Reconstruí a base do aplicativo para suportar múltiplas abas (multi-tab layout) e uma navegação muito mais rápida e fluida.</li>
+<li><strong>Visualizador Unificado de Scripts SQL</strong>: Para otimizar a parte técnica, criei um novo componente dedicado à visualização unificada de scripts do banco.</li>
+</ul>
+<h3 id="-correções-de-estabilidade">🐛 Correções de Estabilidade</h3>
+<ul>
+<li>Refatorei todo o processamento de mensagens em tempo real e corrigi travamentos internos (o famoso <em>borrow checker</em> do Rust) que ocorriam nas trocas de status. O SAO está mais leve do que nunca.</li>
+</ul>
+<hr>
+<p><em>Para acompanhar as próximas novidades em tempo real, fique de olho aqui no canal!</em></p> </article>  </main> </div> <script>
+			// Inicializa ícones que já estão no HTML estático
+			document.addEventListener('DOMContentLoaded', () => {
+				lucide.createIcons();
+			});
+		</script> </body> </html>  
