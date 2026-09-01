@@ -1,6 +1,6 @@
 ---
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -8,160 +8,180 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="pt-BR">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Página de download e changelog do SAO" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}/favicon.svg`} />
-		<title>{title}</title>
-		
-		<!-- SAO Font: Noto Sans -->
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-		
-		<!-- Lucide Icons -->
-		<script is:inline src="https://unpkg.com/lucide@latest"></script>
-	</head>
-	<body>
-		<div class="glow-bg"></div>
-		<div class="container">
-			<header>
-				<a href={`${import.meta.env.BASE_URL}/`} style="text-decoration: none;">
-					<div class="logo">
-						<img src={`${import.meta.env.BASE_URL}/favicon.svg`} class="logo-icon" alt="SAO Logo" />
-						SAO
-					</div>
-				</a>
-				<p class="subtitle">O Gerenciador Definitivo</p>
-				
-				<nav class="main-nav">
-					<a href={`${import.meta.env.BASE_URL}/`} class="nav-link"><i data-lucide="download"></i> Downloads</a>
-					<a href={`${import.meta.env.BASE_URL}/devlog`} class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a>
-				</nav>
-			</header>
-			
-			<main>
-				<slot />
-			</main>
-		</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Página de download e changelog do SAO" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={`${import.meta.env.BASE_URL}/favicon.svg`}
+    />
+    <title>{title}</title>
 
-		<script is:inline>
-			// Inicializa ícones que já estão no HTML estático
-			document.addEventListener('DOMContentLoaded', () => {
-				lucide.createIcons();
-			});
-		</script>
-	</body>
+    <!-- SAO Font: Noto Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Lucide Icons -->
+    <script is:inline src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <div class="glow-bg"></div>
+    <div class="container">
+      <header>
+        <a href={`${import.meta.env.BASE_URL}/`} style="text-decoration: none;">
+          <div class="logo">
+            <img
+              src={`${import.meta.env.BASE_URL}/favicon.svg`}
+              class="logo-icon"
+              alt="SAO Logo"
+            />
+            SAO
+          </div>
+        </a>
+        <p class="subtitle">Sistema de Auxílio Operacinal</p>
+
+        <nav class="main-nav">
+          <a href={`${import.meta.env.BASE_URL}/`} class="nav-link"
+            ><i data-lucide="download"></i> Downloads</a
+          >
+          <a href={`${import.meta.env.BASE_URL}/devlog`} class="nav-link"
+            ><i data-lucide="file-text"></i> Notas de Lançamento</a
+          >
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+    </div>
+
+    <script is:inline>
+      // Inicializa ícones que já estão no HTML estático
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+      });
+    </script>
+  </body>
 </html>
 
 <style is:global>
-	:root {
-		/* Cores fiéis ao SAO Tauri */
-		--bg-color: #1A1A1A;
-		--card-bg: #242424;
-		--text-primary: #F3F4F6;
-		--text-secondary: #9CA3AF;
-		--accent-color: #00ABB9;
-		--accent-hover: #008C99;
-		--border-color: #374151;
-		--glow-color: rgba(0, 171, 185, 0.15);
-	}
+  :root {
+    /* Cores fiéis ao SAO Tauri */
+    --bg-color: #1a1a1a;
+    --card-bg: #242424;
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --accent-color: #00abb9;
+    --accent-hover: #008c99;
+    --border-color: #374151;
+    --glow-color: rgba(0, 171, 185, 0.15);
+  }
 
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-	body {
-		font-family: 'Noto Sans', sans-serif;
-		background-color: var(--bg-color);
-		color: var(--text-primary);
-		line-height: 1.6;
-		min-height: 100vh;
-		position: relative;
-		overflow-x: hidden;
-	}
+  body {
+    font-family: "Noto Sans", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
 
-	.glow-bg {
-		position: absolute;
-		top: -200px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 600px;
-		height: 600px;
-		background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
-		z-index: -1;
-		border-radius: 50%;
-	}
+  .glow-bg {
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+    z-index: -1;
+    border-radius: 50%;
+  }
 
-	.container {
-		max-width: 800px;
-		margin: 0 auto;
-		padding: 40px 20px;
-	}
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
 
-	header {
-		text-align: center;
-		margin-bottom: 40px;
-	}
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
 
-	.logo {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 12px;
-		font-size: 3rem;
-		font-weight: 800;
-		letter-spacing: 2px;
-		color: var(--accent-color);
-	}
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--accent-color);
+  }
 
-	.logo-icon {
-		width: 48px;
-		height: 48px;
-		stroke-width: 2.5;
-	}
+  .logo-icon {
+    width: 48px;
+    height: 48px;
+    stroke-width: 2.5;
+  }
 
-	.subtitle {
-		color: var(--text-secondary);
-		font-size: 1.1rem;
-		font-weight: 300;
-		margin-bottom: 24px;
-	}
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
 
-	.main-nav {
-		display: flex;
-		justify-content: center;
-		gap: 16px;
-	}
+  .main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
 
-	.nav-link {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		color: var(--text-secondary);
-		text-decoration: none;
-		font-weight: 600;
-		padding: 8px 16px;
-		border-radius: 6px;
-		transition: background-color 0.2s, color 0.2s;
-	}
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
 
-	.nav-link:hover {
-		color: var(--accent-color);
-		background-color: rgba(0, 171, 185, 0.1);
-	}
-	
-	.nav-link i {
-		width: 18px;
-		height: 18px;
-	}
+  .nav-link:hover {
+    color: var(--accent-color);
+    background-color: rgba(0, 171, 185, 0.1);
+  }
 
-	h1, h2, h3, h4 {
-		font-weight: 600;
-		margin-bottom: 10px;
-		color: var(--accent-color);
-	}
+  .nav-link i {
+    width: 18px;
+    height: 18px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+  }
 </style>
