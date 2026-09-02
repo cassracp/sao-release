@@ -6,6 +6,43 @@ SAO
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto.
 O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
+<h2 id="-065---09-2026">🚀 [0.6.5] - 09-2026</h2>
+<p><strong>“Evolução: De Unificador de Scripts para Controle de Scripts SQL”</strong></p>
+<h3 id="️-renomeação-e-refatoração-controle-de-scripts-sql">🗄️ Renomeação e Refatoração: Controle de Scripts SQL</h3>
+<p>O antigo módulo <strong>Unificador de Scripts</strong> amadureceu e agora se chama oficialmente <strong>Controle de Scripts SQL</strong>! A nova nomenclatura reflete a transformação da ferramenta em um verdadeiro hub para gestão, empacotamento e deploy de atualizações em bancos de dados.</p>
+<ul>
+<li><strong>Execução Direta no Banco (Nativa e sem Modais)</strong>:
+<ul>
+<li>Adicionada a aba <strong>“Executar no Banco de Dados”</strong> diretamente no módulo, dispensando janelas modais flutuantes e mantendo navegação fluida por abas.</li>
+<li>Varredura e detecção automática de instâncias locais ativas do PostgreSQL (portas 5432 a 5438).</li>
+<li>Seletor inteligente de bancos de dados locais com opção de digitação manual livre.</li>
+<li>Indicadores em tempo real da versão do PostgreSQL e da versão do sistema DOC-Windows (tabela <code>aux_preferencias_tb.inf_bd_rel</code>), com atualização automática ao concluir os scripts e botão interativo para refresh.</li>
+<li>Suporte completo a modos de transação: <em>Única (Tudo ou Nada)</em>, <em>Por Script</em> ou <em>Sem Transação</em>, além de parada no primeiro erro e decodificação automática de encodings (UTF-8, Windows-1252, ASCII, UTF-8 BOM).</li>
+</ul>
+</li>
+<li><strong>Fila de Execução com Paridade Visual e Funcional</strong>:
+<ul>
+<li>Grid adaptativo com proporção otimizada (5 colunas para a Fila de Scripts e 7 colunas para o Terminal de Logs).</li>
+<li>Barra de ferramentas idêntica à lista principal: campo de busca textual e opção destacada de <strong>pesquisar dentro do conteúdo dos arquivos</strong> (tanto em pastas locais quanto no cache do GitHub).</li>
+<li>Pílulas de filtro (<em>Todos</em> / <em>Selecionados</em>), ordenação cronológica (<em>V. Mais Antiga</em> / <em>V. Mais Recente</em>) e ações em lote (<em>Selecionar Todos</em> / <em>Desmarcar Todos</em>).</li>
+<li>Botão de ação rápida para <strong>copiar a seleção da aba Unificar</strong> diretamente para a fila de execução.</li>
+</ul>
+</li>
+<li><strong>Terminal de Logs Amplo em Tempo Real</strong>:
+<ul>
+<li>Acompanhamento do progresso script a script com tempo de execução em milissegundos.</li>
+<li>Realce sintático de SQL, filtros por nível de log (<em>Sucesso</em>, <em>Aviso</em>, <em>Erro</em>), busca no histórico, cópia e download da saída em <code>.txt</code>.</li>
+</ul>
+</li>
+<li><strong>Refatoração Arquitetural e Limpeza de Código</strong>:
+<ul>
+<li>Código, componentes e diretórios refatorados para <code>ControleScriptsSqlModule</code> e <code>src/components/controle-scripts-sql/</code>.</li>
+<li>Retrocompatibilidade total preservada nas permissões de usuário e chaves de armazenamento local (<code>localStorage</code>).</li>
+<li>Cache de sincronização com o GitHub otimizado para pular instantaneamente scripts inalterados sem queries ou downloads repetidos.</li>
+</ul>
+</li>
+</ul>
+<hr>
 <h2 id="-060---08-2026">🚀 [0.6.0] - 08-2026</h2>
 <p><strong>“Novas Ferramentas: Cofre de Senhas, SenhaDB e Licenças Temporárias”</strong></p>
 <h3 id="️-novo-módulo-cofre-de-senhas">🗄️ Novo Módulo: Cofre de Senhas</h3>

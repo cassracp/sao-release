@@ -5,6 +5,35 @@ O formato ideal para cada entrada é misturar uma linguagem amigável (excelente
 
 ---
 
+## 🚀 [0.6.5] - 09-2026
+
+**"Evolução: De Unificador de Scripts para Controle de Scripts SQL"**
+
+### 🗄️ Renomeação e Refatoração: Controle de Scripts SQL
+
+O antigo módulo **Unificador de Scripts** amadureceu e agora se chama oficialmente **Controle de Scripts SQL**! A nova nomenclatura reflete a transformação da ferramenta em um verdadeiro hub para gestão, empacotamento e deploy de atualizações em bancos de dados.
+
+- **Execução Direta no Banco (Nativa e sem Modais)**:
+  - Adicionada a aba **"Executar no Banco de Dados"** diretamente no módulo, dispensando janelas modais flutuantes e mantendo navegação fluida por abas.
+  - Varredura e detecção automática de instâncias locais ativas do PostgreSQL (portas 5432 a 5438).
+  - Seletor inteligente de bancos de dados locais com opção de digitação manual livre.
+  - Indicadores em tempo real da versão do PostgreSQL e da versão do sistema DOC-Windows (tabela `aux_preferencias_tb.inf_bd_rel`), com atualização automática ao concluir os scripts e botão interativo para refresh.
+  - Suporte completo a modos de transação: *Única (Tudo ou Nada)*, *Por Script* ou *Sem Transação*, além de parada no primeiro erro e decodificação automática de encodings (UTF-8, Windows-1252, ASCII, UTF-8 BOM).
+- **Fila de Execução com Paridade Visual e Funcional**:
+  - Grid adaptativo com proporção otimizada (5 colunas para a Fila de Scripts e 7 colunas para o Terminal de Logs).
+  - Barra de ferramentas idêntica à lista principal: campo de busca textual e opção destacada de **pesquisar dentro do conteúdo dos arquivos** (tanto em pastas locais quanto no cache do GitHub).
+  - Pílulas de filtro (*Todos* / *Selecionados*), ordenação cronológica (*V. Mais Antiga* / *V. Mais Recente*) e ações em lote (*Selecionar Todos* / *Desmarcar Todos*).
+  - Botão de ação rápida para **copiar a seleção da aba Unificar** diretamente para a fila de execução.
+- **Terminal de Logs Amplo em Tempo Real**:
+  - Acompanhamento do progresso script a script com tempo de execução em milissegundos.
+  - Realce sintático de SQL, filtros por nível de log (*Sucesso*, *Aviso*, *Erro*), busca no histórico, cópia e download da saída em `.txt`.
+- **Refatoração Arquitetural e Limpeza de Código**:
+  - Código, componentes e diretórios refatorados para `ControleScriptsSqlModule` e `src/components/controle-scripts-sql/`.
+  - Retrocompatibilidade total preservada nas permissões de usuário e chaves de armazenamento local (`localStorage`).
+  - Cache de sincronização com o GitHub otimizado para pular instantaneamente scripts inalterados sem queries ou downloads repetidos.
+
+---
+
 ## 🚀 [0.6.0] - 08-2026
 
 **"Novas Ferramentas: Cofre de Senhas, SenhaDB e Licenças Temporárias"**
