@@ -5,6 +5,25 @@ O formato ideal para cada entrada é misturar uma linguagem amigável (excelente
 
 ---
 
+## ✨ Novidades e Melhorias
+
+### 09-2026 — Contraste nos Comentários da Agenda
+
+- Ajustei os balões do chat de agendamentos para usar tons de grafite no
+  modo escuro, preservando a diferenciação visual entre mensagens próprias e
+  de outros usuários.
+- Corrigi a herança de cores do conteúdo formatado para manter o texto legível
+  dentro dos balões.
+
+### 09-2026 — Recorrência de Agendamentos
+
+- Adicionei a opção **Repetir agendamento** ao fluxo de agendamento único,
+  mantendo o Lote de Agendamento para registros independentes.
+- A criação recorrente grava uma série e suas ocorrências em uma transação,
+  com suporte a recorrência diária, semanal, quinzenal e mensal.
+- A série permite definir intervalo, quantidade de ocorrências ou data final,
+  com validação de permissão e limite de segurança no backend.
+
 ## 🚀 [0.6.5] - 09-2026
 
 **"Evolução: De Unificador de Scripts para Controle de Scripts SQL"**
