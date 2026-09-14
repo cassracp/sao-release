@@ -3,27 +3,24 @@
 </style></head> <body> <div class="glow-bg"></div> <div class="container"> <header> <a href="/sao-release/" style="text-decoration: none;"> <div class="logo"> <img src="/sao-release/favicon.svg" class="logo-icon" alt="SAO Logo">
 SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-auxílio-operacional">🛠️ DevLog - SAO (Sistema de Auxílio Operacional)</h1>
-<p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto.
-O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
+<p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
-<h2 id="-novidades-e-melhorias">✨ Novidades e Melhorias</h2>
-<h3 id="09-2026--contraste-nos-comentários-da-agenda">09-2026 — Contraste nos Comentários da Agenda</h3>
+<h2 id="-067---09-2026">🚀 [0.6.7] - 09-2026</h2>
+<h3 id="-contraste-nos-comentários-da-agenda">💬 Contraste nos Comentários da Agenda</h3>
 <ul>
-<li>Ajustei os balões do chat de agendamentos para usar tons de grafite no
-modo escuro, preservando a diferenciação visual entre mensagens próprias e
-de outros usuários.</li>
-<li>Corrigi a herança de cores do conteúdo formatado para manter o texto legível
-dentro dos balões.</li>
+<li>Ajustei os balões do chat de agendamentos para usar tons de grafite no modo escuro, preservando a diferenciação visual entre mensagens próprias e de outros usuários.</li>
+<li>Corrigi a herança de cores do conteúdo formatado para manter o texto legível dentro dos balões.</li>
 </ul>
-<h3 id="09-2026--recorrência-de-agendamentos">09-2026 — Recorrência de Agendamentos</h3>
+<h3 id="-recorrência-de-agendamentos">📅 Recorrência de Agendamentos</h3>
 <ul>
-<li>Adicionei a opção <strong>Repetir agendamento</strong> ao fluxo de agendamento único,
-mantendo o Lote de Agendamento para registros independentes.</li>
-<li>A criação recorrente grava uma série e suas ocorrências em uma transação,
-com suporte a recorrência diária, semanal, quinzenal e mensal.</li>
-<li>A série permite definir intervalo, quantidade de ocorrências ou data final,
-com validação de permissão e limite de segurança no backend.</li>
+<li>Adicionei a opção <strong>Repetir agendamento</strong> ao fluxo de agendamento único, mantendo o Lote de Agendamento para registros independentes.</li>
+<li>A criação recorrente grava uma série e suas ocorrências em uma transação, com suporte a recorrência diária, semanal, quinzenal e mensal.</li>
+<li>A série permite definir intervalo, quantidade de ocorrências ou data final, com validação de permissão e limite de segurança no backend.</li>
 </ul>
+<h2 id="-066---09-2026">🚀 [0.6.6] - 09-2026</h2>
+<h3 id="correção-de-bug-no-controle-de-scripts-sql">Correção de Bug no Controle de Scripts SQL</h3>
+<p>Foi identificado um pequeno bug no arquivo <code>.bat</code> que executava todos o arquivo de script <code>.sql</code> unificado gerado pelo módulo de <strong>Controle de Scripts SQL</strong>.</p>
+<p>A correção foi aplicado na build <code>0.6.6</code></p>
 <h2 id="-065---09-2026">🚀 [0.6.5] - 09-2026</h2>
 <p><strong>“Evolução: De Unificador de Scripts para Controle de Scripts SQL”</strong></p>
 <h3 id="️-renomeação-e-refatoração-controle-de-scripts-sql">🗄️ Renomeação e Refatoração: Controle de Scripts SQL</h3>
