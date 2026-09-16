@@ -5,6 +5,43 @@ SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-auxílio-operacional">🛠️ DevLog - SAO (Sistema de Auxílio Operacional)</h1>
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
+<h2 id="-069---09-2026">🚀 [0.6.9] - 09-2026</h2>
+<p><strong>“Pesquisa mais inteligente na Agenda e suporte completo a clientes CLC!”</strong></p>
+<h3 id="-busca-avançada-por-clientes-na-agenda">🔍 Busca Avançada por Clientes na Agenda</h3>
+<ul>
+<li><strong>Campo Dedicado de Cliente CLC</strong>: Adicionamos um campo específico de busca de clientes na pesquisa de agendamentos, com autocomplete idêntico ao formulário de criação/edição. Agora é possível buscar tanto selecionando da lista (pelo código ou nome) quanto digitando termos livres.</li>
+<li><strong>Busca de Clientes na Pesquisa Rápida (“O quê”)</strong>: Sabe aquele agendamento com título genérico como “Treinamento” ou “Migração”? Agora, ao digitar o nome ou código do cliente no campo de palavras-chave (“O quê” ou “Pesquisa rápida”), o sistema localiza o compromisso automaticamente através do vínculo com o cliente CLC!</li>
+<li><strong>Filtro Independente de Vínculo</strong>: O checkbox foi mantido de forma separada como <strong>“Apenas com cliente associado”</strong>, permitindo filtrar agendamentos que possuam qualquer cliente associado, combinado ou não com outros filtros.</li>
+<li><strong>Cliente Visível no Preview</strong>: O card de resultados da pesquisa agora exibe uma linha dedicada ao <strong>Cliente</strong> associado (com ícone e formato <code>código - nome</code>), facilitando a identificação imediata do compromisso antes mesmo de abri-lo.</li>
+</ul>
+<h3 id="-renderização-de-html-nos-detalhes-do-agendamento">📝 Renderização de HTML nos Detalhes do Agendamento</h3>
+<ul>
+<li><strong>Links e Formatações Clicáveis</strong>: Corrigimos o preview de resultados da pesquisa da Agenda para renderizar tags HTML nativamente nos detalhes do evento. Links de tarefas e formatações ricas agora funcionam diretamente no card, eliminando a exibição de tags brutas de código.</li>
+</ul>
+<h3 id="-correções-de-estabilidade">🐛 Correções de Estabilidade</h3>
+<ul>
+<li><strong>Tooltip de Links nos Detalhes do Agendamento</strong>: Corrigi a visualização do aviso de atalho/clique nos links dentro do mini editor de texto rico. O tooltip agora flutua via portal com prioridade máxima de camada (<code>z-[99999]</code>), evitando que fique cortado ou oculto atrás da barra de ferramentas de formatação.</li>
+<li><strong>Unificação da Abertura de Links (SAC, Intranet e Externos)</strong>: Unifiquei o comportamento de navegação em todo o sistema. Links de ordens de serviço do SAC (<code>https://www.sacdemaria.com.br/adm/...</code>) e de tarefas da Intranet (<code>https://www.demaria.com.br/intranet/v3/...</code>) agora abrem diretamente nos respectivos módulos internos do SAO tanto no ComuChat e Comentários da Agenda quanto nos editores de texto rico (MiniRichTextEditor e RichTextEditor) e visualizações da Agenda (popover e busca), reservando o navegador externo apenas para links de outros domínios.</li>
+</ul>
+<hr>
+<h2 id="-068---09-2026">🚀 [0.6.8] - 09-2026</h2>
+<p><strong>“Agendamentos mais rápidos e uma visão semanal muito mais limpa!”</strong></p>
+<h3 id="-sugestões-de-títulos-padrão-na-agenda">💡 Sugestões de Títulos Padrão na Agenda</h3>
+<ul>
+<li><strong>Agilidade na Digitação</strong>: Chega de digitar o mesmo título várias vezes! Agora, ao criar um agendamento, o sistema exibe automaticamente uma lista de sugestões de títulos conforme você digita, baseada na agenda selecionada.</li>
+<li><strong>Gestão de Títulos</strong>: Se você tem permissão para gerenciar a agenda, agora conta com uma nova aba exclusiva chamada <strong>“Títulos Padrão”</strong> nas configurações. Lá, você pode cadastrar, editar e excluir facilmente os títulos que mais usa no seu setor.</li>
+<li><strong>Sincronização Mágica</strong>: Adicionou um título novo? Ele já aparece para toda a sua equipe na mesma hora, sem precisar recarregar a tela!</li>
+</ul>
+<h3 id="-mais-espaço-na-sua-semana-ocultar-finais-de-semana">📅 Mais Espaço na Sua Semana (Ocultar Finais de Semana)</h3>
+<ul>
+<li><strong>Foco nos Dias Úteis</strong>: Atendendo a pedidos, adicionamos a opção de <strong>“Ocultar Finais de Semana”</strong> nas configurações da agenda.</li>
+<li><strong>Fim do Aperto</strong>: Ao ativar essa opção, a visão semanal esconde o sábado e o domingo, esticando as colunas de segunda a sexta. Isso dá um belo respiro na tela, deixando os agendamentos mais largos, fáceis de ler e com um visual muito mais agradável, principalmente naqueles dias super lotados!</li>
+</ul>
+<h3 id="-correções">🐛 Correções</h3>
+<ul>
+<li><strong>Estabilidade e Ajustes</strong>: Apliquei também um pacote de correções internas e ajustes finos baseados em feedbacks fornecidos no Discord.</li>
+</ul>
+<hr>
 <h2 id="-067---09-2026">🚀 [0.6.7] - 09-2026</h2>
 <h3 id="-contraste-nos-comentários-da-agenda">💬 Contraste nos Comentários da Agenda</h3>
 <ul>
@@ -195,7 +232,7 @@ SAO
 <li><strong>Nova Arquitetura Core (Tauri v2)</strong>: Reconstruí a base do aplicativo para suportar múltiplas abas (multi-tab layout) e uma navegação muito mais rápida e fluida.</li>
 <li><strong>Visualizador Unificado de Scripts SQL</strong>: Para otimizar a parte técnica, criei um novo componente dedicado à visualização unificada de scripts do banco.</li>
 </ul>
-<h3 id="-correções-de-estabilidade">🐛 Correções de Estabilidade</h3>
+<h3 id="-correções-de-estabilidade-1">🐛 Correções de Estabilidade</h3>
 <ul>
 <li>Refatorei todo o processamento de mensagens em tempo real e corrigi travamentos internos (o famoso <em>borrow checker</em> do Rust) que ocorriam nas trocas de status. O SAO está mais leve do que nunca.</li>
 </ul>

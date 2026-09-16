@@ -4,6 +4,49 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
+## 🚀 [0.6.9] - 09-2026
+
+**"Pesquisa mais inteligente na Agenda e suporte completo a clientes CLC!"**
+
+### 🔍 Busca Avançada por Clientes na Agenda
+
+- **Campo Dedicado de Cliente CLC**: Adicionamos um campo específico de busca de clientes na pesquisa de agendamentos, com autocomplete idêntico ao formulário de criação/edição. Agora é possível buscar tanto selecionando da lista (pelo código ou nome) quanto digitando termos livres.
+- **Busca de Clientes na Pesquisa Rápida ("O quê")**: Sabe aquele agendamento com título genérico como "Treinamento" ou "Migração"? Agora, ao digitar o nome ou código do cliente no campo de palavras-chave ("O quê" ou "Pesquisa rápida"), o sistema localiza o compromisso automaticamente através do vínculo com o cliente CLC!
+- **Filtro Independente de Vínculo**: O checkbox foi mantido de forma separada como **"Apenas com cliente associado"**, permitindo filtrar agendamentos que possuam qualquer cliente associado, combinado ou não com outros filtros.
+- **Cliente Visível no Preview**: O card de resultados da pesquisa agora exibe uma linha dedicada ao **Cliente** associado (com ícone e formato `código - nome`), facilitando a identificação imediata do compromisso antes mesmo de abri-lo.
+
+### 📝 Renderização de HTML nos Detalhes do Agendamento
+
+- **Links e Formatações Clicáveis**: Corrigimos o preview de resultados da pesquisa da Agenda para renderizar tags HTML nativamente nos detalhes do evento. Links de tarefas e formatações ricas agora funcionam diretamente no card, eliminando a exibição de tags brutas de código.
+
+### 🐛 Correções de Estabilidade
+
+- **Tooltip de Links nos Detalhes do Agendamento**: Corrigi a visualização do aviso de atalho/clique nos links dentro do mini editor de texto rico. O tooltip agora flutua via portal com prioridade máxima de camada (`z-[99999]`), evitando que fique cortado ou oculto atrás da barra de ferramentas de formatação.
+- **Unificação da Abertura de Links (SAC, Intranet e Externos)**: Unifiquei o comportamento de navegação em todo o sistema. Links de ordens de serviço do SAC (`https://www.sacdemaria.com.br/adm/...`) e de tarefas da Intranet (`https://www.demaria.com.br/intranet/v3/...`) agora abrem diretamente nos respectivos módulos internos do SAO tanto no ComuChat e Comentários da Agenda quanto nos editores de texto rico (MiniRichTextEditor e RichTextEditor) e visualizações da Agenda (popover e busca), reservando o navegador externo apenas para links de outros domínios.
+
+---
+
+## 🚀 [0.6.8] - 09-2026
+
+**"Agendamentos mais rápidos e uma visão semanal muito mais limpa!"**
+
+### 💡 Sugestões de Títulos Padrão na Agenda
+
+- **Agilidade na Digitação**: Chega de digitar o mesmo título várias vezes! Agora, ao criar um agendamento, o sistema exibe automaticamente uma lista de sugestões de títulos conforme você digita, baseada na agenda selecionada.
+- **Gestão de Títulos**: Se você tem permissão para gerenciar a agenda, agora conta com uma nova aba exclusiva chamada **"Títulos Padrão"** nas configurações. Lá, você pode cadastrar, editar e excluir facilmente os títulos que mais usa no seu setor.
+- **Sincronização Mágica**: Adicionou um título novo? Ele já aparece para toda a sua equipe na mesma hora, sem precisar recarregar a tela!
+
+### 📅 Mais Espaço na Sua Semana (Ocultar Finais de Semana)
+
+- **Foco nos Dias Úteis**: Atendendo a pedidos, adicionamos a opção de **"Ocultar Finais de Semana"** nas configurações da agenda.
+- **Fim do Aperto**: Ao ativar essa opção, a visão semanal esconde o sábado e o domingo, esticando as colunas de segunda a sexta. Isso dá um belo respiro na tela, deixando os agendamentos mais largos, fáceis de ler e com um visual muito mais agradável, principalmente naqueles dias super lotados!
+
+### 🐛 Correções
+
+- **Estabilidade e Ajustes**: Apliquei também um pacote de correções internas e ajustes finos baseados em feedbacks fornecidos no Discord.
+
+---
+
 ## 🚀 [0.6.7] - 09-2026
 
 ### 💬 Contraste nos Comentários da Agenda
