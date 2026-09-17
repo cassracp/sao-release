@@ -5,6 +5,45 @@ SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-auxílio-operacional">🛠️ DevLog - SAO (Sistema de Auxílio Operacional)</h1>
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
+<h2 id="-070---09-2026">🚀 [0.7.0] - 09-2026</h2>
+<p><strong>“Inteligência Analítica com Painel BI de Cancelamentos e Governança na Agenda!”</strong></p>
+<h3 id="-painel-de-bi-e-métricas-de-cancelamentos">📊 Painel de BI e Métricas de Cancelamentos</h3>
+<ul>
+<li><strong>Métricas e Indicadores em Tempo Real</strong>: Novo painel analítico para acompanhamento detalhado dos cancelamentos de agendamentos. Acompanhe taxas de cancelamento, motivos mais frequentes, distribuição por solicitante (Cliente vs. DeMaria) e volume por agenda.</li>
+<li><strong>Filtros e Análise Histórica</strong>: Filtre os cancelamentos por período e agenda, visualizando o histórico completo com data, horário, responsável, motivo, solicitante, justificativa e indicação de reagendamento.</li>
+<li><strong>Gestão de Motivos Customizados</strong>: Gestores de agendas agora possuem uma aba exclusiva chamada <strong>“Motivos de Cancelamento”</strong> nas configurações da agenda, permitindo cadastrar, editar e desativar motivos específicos para a realidade da sua equipe.</li>
+<li><strong>Filtro Rápido “Ocultar Cancelados”</strong>: Adicionado botão de alternância na barra superior da agenda para ocultar ou exibir agendamentos cancelados, mantendo o calendário limpo no dia a dia sem perder o histórico analítico.</li>
+</ul>
+<h3 id="️-governança-de-acesso-e-permissões-granulares">🛡️ Governança de Acesso e Permissões Granulares</h3>
+<ul>
+<li><strong>Acesso Nativo por Hierarquia de Cargo</strong>: Usuários em cargos iguais ou superiores a <strong>Gerente</strong> (Gerente, Gerente Geral, Diretoria e Administrador) têm acesso imediato e nativo ao Painel BI e suas métricas.</li>
+<li><strong>Permissão Granular por Agenda (<code>view_bi</code>)</strong>: Gestores de agenda podem delegar acesso analítico a colaboradores específicos da equipe através de uma nova permissão chamada <strong>“Visualizar BI e Métricas”</strong> na aba de membros das configurações da agenda.</li>
+</ul>
+<h3 id="-saneamento-das-ações-do-agendamento-popover">🎯 Saneamento das Ações do Agendamento (Popover)</h3>
+<ul>
+<li><strong>Separação Clara entre “Cancelar” e “Excluir”</strong>: Diferenciação definitiva das ações no popover do agendamento:
+<ul>
+<li><strong>Cancelar</strong> (ícone âmbar): abre o modal para registro formal do motivo, solicitante e justificativa, alimentando os dados do BI.</li>
+<li><strong>Excluir</strong> (ícone vermelho): realiza a remoção permanente do agendamento com diálogo de confirmação.</li>
+<li><strong>Reativar</strong> (ícone verde): permite restaurar rapidamente um compromisso previamente cancelado.</li>
+<li><strong>Editar</strong> (ícone lápis): abre o formulário completo para edição de dados do compromisso.</li>
+</ul>
+</li>
+<li><strong>Correção de Duplicidades</strong>: Eliminados botões duplicados de cancelamento que apareciam sob determinadas condições no popover de clique simples do agendamento.</li>
+</ul>
+<h3 id="-sincronização-em-tempo-real-e-navegação-fluida-da-agenda">🔄 Sincronização em Tempo Real e Navegação Fluida da Agenda</h3>
+<ul>
+<li><strong>Preservação de Contexto e Detalhes Abertos</strong>: Acabou o incômodo de perder o que estava fazendo ao clicar em links de Tarefas da Intranet ou Ordens de Serviço do SAC dentro de um agendamento! As abas agora contam com preservação de estado (<em>keep-alive</em>): ao navegar para a Intranet ou SAC e depois retornar para a Agenda, o modal de detalhes do agendamento continua aberto no exato lugar onde estava.</li>
+<li><strong>Resultados de Pesquisa Persistentes</strong>: A lista de resultados da Pesquisa Avançada agora permanece intacta mesmo após clicar em um agendamento para inspecioná-lo ou alternar entre módulos. Chega de ter que pesquisar tudo de novo ao voltar!</li>
+<li><strong>Sincronização Silenciosa em Background</strong>: As atualizações em tempo real entre diferentes usuários (<code>NOTIFY realtime_events</code> e eventos Tauri) agora recarregam os dados da Agenda silenciosamente em segundo plano, sem fechar modais, desmarcar seleções ou atrapalhar a digitação do usuário.</li>
+<li><strong>Isolamento de WebViews Nativas (Intranet e SAC)</strong>: Criado controle inteligente no backend Rust (<code>hide_all_embedded_webviews</code>) e frontend para sincronizar a visibilidade de janelas nativas Webview2 do Windows. Ao retornar à Agenda ou outros módulos React, as WebViews filhas são ocultadas imediatamente pelo sistema operacional, impedindo qualquer sobreposição indevida na tela e reaparecendo instantaneamente quando a aba do módulo for reativada.</li>
+</ul>
+<h3 id="️-melhorias-de-arquitetura-e-engenharia">🏗️ Melhorias de Arquitetura e Engenharia</h3>
+<ul>
+<li><strong>Store Global da Agenda (<code>useAgendaStore</code>)</strong>: Criação de store reativa com Zustand para centralizar a persistência de modais, data de visão e resultados de pesquisa, desacoplando o ciclo de vida do componente visual dos dados em memória.</li>
+<li><strong>Centralização DRY de Permissões</strong>: Refatorada a deserialização de permissões em Rust (<code>PermissoesJson::resolver</code>), substituindo dezenas de blocos repetitivos e garantindo robustez a cada novo atributo de autorização adicionado.</li>
+</ul>
+<hr>
 <h2 id="-069---09-2026">🚀 [0.6.9] - 09-2026</h2>
 <p><strong>“Pesquisa mais inteligente na Agenda e suporte completo a clientes CLC!”</strong></p>
 <h3 id="-busca-avançada-por-clientes-na-agenda">🔍 Busca Avançada por Clientes na Agenda</h3>

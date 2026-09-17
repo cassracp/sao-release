@@ -4,6 +4,45 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
+## 🚀 [0.7.0] - 09-2026
+
+**"Inteligência Analítica com Painel BI de Cancelamentos e Governança na Agenda!"**
+
+### 📊 Painel de BI e Métricas de Cancelamentos
+
+- **Métricas e Indicadores em Tempo Real**: Novo painel analítico para acompanhamento detalhado dos cancelamentos de agendamentos. Acompanhe taxas de cancelamento, motivos mais frequentes, distribuição por solicitante (Cliente vs. DeMaria) e volume por agenda.
+- **Filtros e Análise Histórica**: Filtre os cancelamentos por período e agenda, visualizando o histórico completo com data, horário, responsável, motivo, solicitante, justificativa e indicação de reagendamento.
+- **Gestão de Motivos Customizados**: Gestores de agendas agora possuem uma aba exclusiva chamada **"Motivos de Cancelamento"** nas configurações da agenda, permitindo cadastrar, editar e desativar motivos específicos para a realidade da sua equipe.
+- **Filtro Rápido "Ocultar Cancelados"**: Adicionado botão de alternância na barra superior da agenda para ocultar ou exibir agendamentos cancelados, mantendo o calendário limpo no dia a dia sem perder o histórico analítico.
+
+### 🛡️ Governança de Acesso e Permissões Granulares
+
+- **Acesso Nativo por Hierarquia de Cargo**: Usuários em cargos iguais ou superiores a **Gerente** (Gerente, Gerente Geral, Diretoria e Administrador) têm acesso imediato e nativo ao Painel BI e suas métricas.
+- **Permissão Granular por Agenda (`view_bi`)**: Gestores de agenda podem delegar acesso analítico a colaboradores específicos da equipe através de uma nova permissão chamada **"Visualizar BI e Métricas"** na aba de membros das configurações da agenda.
+
+### 🎯 Saneamento das Ações do Agendamento (Popover)
+
+- **Separação Clara entre "Cancelar" e "Excluir"**: Diferenciação definitiva das ações no popover do agendamento:
+  - **Cancelar** (ícone âmbar): abre o modal para registro formal do motivo, solicitante e justificativa, alimentando os dados do BI.
+  - **Excluir** (ícone vermelho): realiza a remoção permanente do agendamento com diálogo de confirmação.
+  - **Reativar** (ícone verde): permite restaurar rapidamente um compromisso previamente cancelado.
+  - **Editar** (ícone lápis): abre o formulário completo para edição de dados do compromisso.
+- **Correção de Duplicidades**: Eliminados botões duplicados de cancelamento que apareciam sob determinadas condições no popover de clique simples do agendamento.
+
+### 🔄 Sincronização em Tempo Real e Navegação Fluida da Agenda
+
+- **Preservação de Contexto e Detalhes Abertos**: Acabou o incômodo de perder o que estava fazendo ao clicar em links de Tarefas da Intranet ou Ordens de Serviço do SAC dentro de um agendamento! As abas agora contam com preservação de estado (*keep-alive*): ao navegar para a Intranet ou SAC e depois retornar para a Agenda, o modal de detalhes do agendamento continua aberto no exato lugar onde estava.
+- **Resultados de Pesquisa Persistentes**: A lista de resultados da Pesquisa Avançada agora permanece intacta mesmo após clicar em um agendamento para inspecioná-lo ou alternar entre módulos. Chega de ter que pesquisar tudo de novo ao voltar!
+- **Sincronização Silenciosa em Background**: As atualizações em tempo real entre diferentes usuários (`NOTIFY realtime_events` e eventos Tauri) agora recarregam os dados da Agenda silenciosamente em segundo plano, sem fechar modais, desmarcar seleções ou atrapalhar a digitação do usuário.
+- **Isolamento de WebViews Nativas (Intranet e SAC)**: Criado controle inteligente no backend Rust (`hide_all_embedded_webviews`) e frontend para sincronizar a visibilidade de janelas nativas Webview2 do Windows. Ao retornar à Agenda ou outros módulos React, as WebViews filhas são ocultadas imediatamente pelo sistema operacional, impedindo qualquer sobreposição indevida na tela e reaparecendo instantaneamente quando a aba do módulo for reativada.
+
+### 🏗️ Melhorias de Arquitetura e Engenharia
+
+- **Store Global da Agenda (`useAgendaStore`)**: Criação de store reativa com Zustand para centralizar a persistência de modais, data de visão e resultados de pesquisa, desacoplando o ciclo de vida do componente visual dos dados em memória.
+- **Centralização DRY de Permissões**: Refatorada a deserialização de permissões em Rust (`PermissoesJson::resolver`), substituindo dezenas de blocos repetitivos e garantindo robustez a cada novo atributo de autorização adicionado.
+
+---
+
 ## 🚀 [0.6.9] - 09-2026
 
 **"Pesquisa mais inteligente na Agenda e suporte completo a clientes CLC!"**
@@ -63,6 +102,7 @@ Este documento registra as principais atualizações, melhorias e correções fe
 ## 🚀 [0.6.6] - 09-2026
 
 ### Correção de Bug no Controle de Scripts SQL
+
 Foi identificado um pequeno bug no arquivo `.bat` que executava todos o arquivo de script `.sql` unificado gerado pelo módulo de **Controle de Scripts SQL**.
 
 A correção foi aplicado na build `0.6.6`
@@ -76,23 +116,23 @@ A correção foi aplicado na build `0.6.6`
 O antigo módulo **Unificador de Scripts** amadureceu e agora se chama oficialmente **Controle de Scripts SQL**! A nova nomenclatura reflete a transformação da ferramenta em um verdadeiro hub para gestão, empacotamento e deploy de atualizações em bancos de dados.
 
 - **Execução Direta no Banco (Nativa e sem Modais)**:
-    - Adicionada a aba **"Executar no Banco de Dados"** diretamente no módulo, dispensando janelas modais flutuantes e mantendo navegação fluida por abas.
-    - Varredura e detecção automática de instâncias locais ativas do PostgreSQL (portas 5432 a 5438).
-    - Seletor inteligente de bancos de dados locais com opção de digitação manual livre.
-    - Indicadores em tempo real da versão do PostgreSQL e da versão do sistema DOC-Windows (tabela `aux_preferencias_tb.inf_bd_rel`), com atualização automática ao concluir os scripts e botão interativo para refresh.
-    - Suporte completo a modos de transação: *Única (Tudo ou Nada)*, *Por Script* ou *Sem Transação*, além de parada no primeiro erro e decodificação automática de encodings (UTF-8, Windows-1252, ASCII, UTF-8 BOM).
+  - Adicionada a aba **"Executar no Banco de Dados"** diretamente no módulo, dispensando janelas modais flutuantes e mantendo navegação fluida por abas.
+  - Varredura e detecção automática de instâncias locais ativas do PostgreSQL (portas 5432 a 5438).
+  - Seletor inteligente de bancos de dados locais com opção de digitação manual livre.
+  - Indicadores em tempo real da versão do PostgreSQL e da versão do sistema DOC-Windows (tabela `aux_preferencias_tb.inf_bd_rel`), com atualização automática ao concluir os scripts e botão interativo para refresh.
+  - Suporte completo a modos de transação: *Única (Tudo ou Nada)*, *Por Script* ou *Sem Transação*, além de parada no primeiro erro e decodificação automática de encodings (UTF-8, Windows-1252, ASCII, UTF-8 BOM).
 - **Fila de Execução com Paridade Visual e Funcional**:
-    - Grid adaptativo com proporção otimizada (5 colunas para a Fila de Scripts e 7 colunas para o Terminal de Logs).
-    - Barra de ferramentas idêntica à lista principal: campo de busca textual e opção destacada de **pesquisar dentro do conteúdo dos arquivos** (tanto em pastas locais quanto no cache do GitHub).
-    - Pílulas de filtro (*Todos* / *Selecionados*), ordenação cronológica (*V. Mais Antiga* / *V. Mais Recente*) e ações em lote (*Selecionar Todos* / *Desmarcar Todos*).
-    - Botão de ação rápida para **copiar a seleção da aba Unificar** diretamente para a fila de execução.
+  - Grid adaptativo com proporção otimizada (5 colunas para a Fila de Scripts e 7 colunas para o Terminal de Logs).
+  - Barra de ferramentas idêntica à lista principal: campo de busca textual e opção destacada de **pesquisar dentro do conteúdo dos arquivos** (tanto em pastas locais quanto no cache do GitHub).
+  - Pílulas de filtro (*Todos* / *Selecionados*), ordenação cronológica (*V. Mais Antiga* / *V. Mais Recente*) e ações em lote (*Selecionar Todos* / *Desmarcar Todos*).
+  - Botão de ação rápida para **copiar a seleção da aba Unificar** diretamente para a fila de execução.
 - **Terminal de Logs Amplo em Tempo Real**:
-    - Acompanhamento do progresso script a script com tempo de execução em milissegundos.
-    - Realce sintático de SQL, filtros por nível de log (*Sucesso*, *Aviso*, *Erro*), busca no histórico, cópia e download da saída em `.txt`.
+  - Acompanhamento do progresso script a script com tempo de execução em milissegundos.
+  - Realce sintático de SQL, filtros por nível de log (*Sucesso*, *Aviso*, *Erro*), busca no histórico, cópia e download da saída em `.txt`.
 - **Refatoração Arquitetural e Limpeza de Código**:
-    - Código, componentes e diretórios refatorados para `ControleScriptsSqlModule` e `src/components/controle-scripts-sql/`.
-    - Retrocompatibilidade total preservada nas permissões de usuário e chaves de armazenamento local (`localStorage`).
-    - Cache de sincronização com o GitHub otimizado para pular instantaneamente scripts inalterados sem queries ou downloads repetidos.
+  - Código, componentes e diretórios refatorados para `ControleScriptsSqlModule` e `src/components/controle-scripts-sql/`.
+  - Retrocompatibilidade total preservada nas permissões de usuário e chaves de armazenamento local (`localStorage`).
+  - Cache de sincronização com o GitHub otimizado para pular instantaneamente scripts inalterados sem queries ou downloads repetidos.
 
 ---
 
@@ -126,8 +166,8 @@ O antigo módulo **Unificador de Scripts** amadureceu e agora se chama oficialme
 - **Arrastar e Soltar (Drag & Drop)**: Remanejar agendamentos nunca foi tão fácil! Agora você pode clicar, segurar e arrastar um evento diretamente para outro dia ou horário. O sistema também respeita suas permissões de edição!
 - **Redimensionamento Rápido**: Precisou estender ou encurtar a duração de um atendimento? Basta puxar a borda inferior do agendamento diretamente no calendário para ajustar o tempo com precisão.
 - **Legibilidade e Organização Visual**:
-    - As etiquetas (badges) dos usuários responsáveis agora são renderizadas em destaque, sem problemas de ocultação por transparência.
-    - Eventos de mesma cor seguidos agora possuem um contorno sutil, impedindo que pareçam um bloco visual único.
+  - As etiquetas (badges) dos usuários responsáveis agora são renderizadas em destaque, sem problemas de ocultação por transparência.
+  - Eventos de mesma cor seguidos agora possuem um contorno sutil, impedindo que pareçam um bloco visual único.
 - **Nomes de Exibição (Display Name)**: O card de detalhes do evento passou a valorizar o "Nome de Exibição" configurado pelo usuário, e o gerador de siglas padrão (fallback) subiu de 2 para 3 caracteres, facilitando bater o olho e reconhecer a equipe!
 
 ---
@@ -158,8 +198,8 @@ O antigo módulo **Unificador de Scripts** amadureceu e agora se chama oficialme
 
 - **Escala de Tempo Ampliada**: Aumentamos o espaçamento vertical das visões de Dia e Semana, garantindo que textos e badges caibam sem sufoco nas linhas. Além disso, a visão inicial do calendário agora tem seu "scroll" padrão posicionado nas **08:00h**, facilitando a navegação diária.
 - **Melhoria Absurda na Visão Mensal**:
-    - Acabamos com os *popups* quebrados padrão do calendário quando muitos eventos tentam disputar o mesmo dia! Agora um botão discreto **"Mais X"** aparece no rodapé do dia. Ao clicar, um **Modal Dialog** focado e elegante é aberto listando todos os eventos extras.
-    - Eventos na visão mensal agora exibem nativamente as badges dos participantes para bater o olho e saber quem está envolvido, com um limite de até **3 badges**. Caso a equipe seja maior, um botão inteligente de reticências (`...`) exibe o resto da turma ao passar o mouse (*tooltip list*).
+  - Acabamos com os *popups* quebrados padrão do calendário quando muitos eventos tentam disputar o mesmo dia! Agora um botão discreto **"Mais X"** aparece no rodapé do dia. Ao clicar, um **Modal Dialog** focado e elegante é aberto listando todos os eventos extras.
+  - Eventos na visão mensal agora exibem nativamente as badges dos participantes para bater o olho e saber quem está envolvido, com um limite de até **3 badges**. Caso a equipe seja maior, um botão inteligente de reticências (`...`) exibe o resto da turma ao passar o mouse (*tooltip list*).
 - **Lapidação do Modo Escuro**: A janela de "Configurações da Agenda" ganhou um banho de loja no Dark Mode. Ajustamos as paletas e caixas de lembretes para que utilizem a cor padrão de fundo do painel e sigam o requinte de todos os outros módulos do SAO.
 - **Hierarquia Inteligente nos Lembretes**: Removemos o gargalo nas configurações de WhatsApp das Agendas Setoriais. Agora, qualquer membro com perfil **Sênior** ou superior no sistema terá automaticamente a permissão para gerenciar a **Duração Padrão** de agendamento e configurar o disparo de lembretes sem precisar que um diretor altere a configuração.
 
@@ -222,7 +262,7 @@ Fala pessoal! Muita coisa aconteceu desde a versão `0.4.14`. Trabalhei duro nos
 ### 📝 Novo Editor de Texto (Sincronização Nuvem)
 
 - **Salvamento Automático Robusto**: Agora o Editor de Texto salva seus documentos diretamente no banco de dados, além de manter uma cópia rápida no navegador (*Local Storage*).
-    - **O ganho prático:** Se você mudar de computador, limpar o cache do navegador ou formatar o PC, **seus textos não serão mais perdidos**, pois estarão sincronizados com a nuvem! (Lembrando que os textos não bloqueados ficam salvos no banco por 90 dias).
+  - **O ganho prático:** Se você mudar de computador, limpar o cache do navegador ou formatar o PC, **seus textos não serão mais perdidos**, pois estarão sincronizados com a nuvem! (Lembrando que os textos não bloqueados ficam salvos no banco por 90 dias).
 - **Privacidade Garantida**: Para a sua tranquilidade, todos esses dados salvos no banco são rigorosamente criptografados, garantindo a total privacidade dos textos de cada usuário.
 - **Imagens Otimizadas**: Fiz uma otimização profunda no tratamento das imagens auto-hospedadas dentro do Editor de Texto, melhorando significativamente a qualidade visual e o comportamento do visualizador de imagens embutido.
 
