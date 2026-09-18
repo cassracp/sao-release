@@ -5,6 +5,37 @@ SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-auxílio-operacional">🛠️ DevLog - SAO (Sistema de Auxílio Operacional)</h1>
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
+<h2 id="-071---09-2026">🚀 [0.7.1] - 09-2026</h2>
+<p><strong>“Correções no Fluxo de Edição de Agendamentos e Gestão de Horários Livres!”</strong></p>
+<h3 id="-correções-críticas-na-agenda">🐛 Correções Críticas na Agenda</h3>
+<ul>
+<li><strong>Correção na Edição de Agendamentos (Abertura Atômica via Zustand)</strong>:
+<ul>
+<li>Corrigida falha em que tentar editar qualquer compromisso ou bloco da Agenda abria invariavelmente o formulário de “Novo Agendamento” (sem carregar o ID existente), impedindo a alteração e gerando agendamentos duplicados por cima dos horários existentes.</li>
+<li>Abertura e fechamento do modal unificados de forma atômica e direta através da store Zustand (<code>useAgendaStore</code>), eliminando qualquer captura de estado desatualizado (<em>closure stale</em>).</li>
+</ul>
+</li>
+</ul>
+<h3 id="-saneamento-e-ciclo-de-vida-de-agenda-livre">📅 Saneamento e Ciclo de Vida de “Agenda Livre”</h3>
+<ul>
+<li><strong>Ações Adequadas para Horários Disponíveis</strong>:
+<ul>
+<li>Removido o botão indevido de “Cancelar” dos blocos de Agenda Livre (evitando registros espúrios de cancelamento de cliente no BI e loops de geração de novos blocos).</li>
+<li>Disponibilizado o botão <strong>“Excluir”</strong> no popover e no menu de contexto para blocos livres, permitindo remover o horário vago com diálogo de confirmação claro.</li>
+</ul>
+</li>
+<li><strong>Conversão Fluida de Disponibilidade</strong>:
+<ul>
+<li>Ao editar um bloco de Agenda Livre e associar um cliente ou alterar o título, o horário disponível é convertido automaticamente em um agendamento regular e o mesmo registro é atualizado no banco de dados via ID, sem exigir diálogos de confirmação redundantes.</li>
+</ul>
+</li>
+<li><strong>Persistência de Horários Livres Pós-Cancelamento no Backend Rust</strong>:
+<ul>
+<li>Corrigida a persistência em <code>cancelar_agendamento</code> para gravar <code>is_bloqueio_disponibilidade: true</code> nos blocos de Agenda Livre gerados, garantindo consistência nas checagens de conflito e autorização adequada para colaboradores com permissão de edição/criação/agendamento.</li>
+</ul>
+</li>
+</ul>
+<hr>
 <h2 id="-070---09-2026">🚀 [0.7.0] - 09-2026</h2>
 <p><strong>“Inteligência Analítica com Painel BI de Cancelamentos e Governança na Agenda!”</strong></p>
 <h3 id="-painel-de-bi-e-métricas-de-cancelamentos">📊 Painel de BI e Métricas de Cancelamentos</h3>

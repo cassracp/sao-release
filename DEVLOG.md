@@ -4,6 +4,28 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
+## 🚀 [0.7.1] - 09-2026
+
+**"Correções no Fluxo de Edição de Agendamentos e Gestão de Horários Livres!"**
+
+### 🐛 Correções Críticas na Agenda
+
+- **Correção na Edição de Agendamentos (Abertura Atômica via Zustand)**:
+  - Corrigida falha em que tentar editar qualquer compromisso ou bloco da Agenda abria invariavelmente o formulário de "Novo Agendamento" (sem carregar o ID existente), impedindo a alteração e gerando agendamentos duplicados por cima dos horários existentes.
+  - Abertura e fechamento do modal unificados de forma atômica e direta através da store Zustand (`useAgendaStore`), eliminando qualquer captura de estado desatualizado (*closure stale*).
+
+### 📅 Saneamento e Ciclo de Vida de "Agenda Livre"
+
+- **Ações Adequadas para Horários Disponíveis**:
+  - Removido o botão indevido de "Cancelar" dos blocos de Agenda Livre (evitando registros espúrios de cancelamento de cliente no BI e loops de geração de novos blocos).
+  - Disponibilizado o botão **"Excluir"** no popover e no menu de contexto para blocos livres, permitindo remover o horário vago com diálogo de confirmação claro.
+- **Conversão Fluida de Disponibilidade**:
+  - Ao editar um bloco de Agenda Livre e associar um cliente ou alterar o título, o horário disponível é convertido automaticamente em um agendamento regular e o mesmo registro é atualizado no banco de dados via ID, sem exigir diálogos de confirmação redundantes.
+- **Persistência de Horários Livres Pós-Cancelamento no Backend Rust**:
+  - Corrigida a persistência em `cancelar_agendamento` para gravar `is_bloqueio_disponibilidade: true` nos blocos de Agenda Livre gerados, garantindo consistência nas checagens de conflito e autorização adequada para colaboradores com permissão de edição/criação/agendamento.
+
+---
+
 ## 🚀 [0.7.0] - 09-2026
 
 **"Inteligência Analítica com Painel BI de Cancelamentos e Governança na Agenda!"**
