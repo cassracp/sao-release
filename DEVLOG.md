@@ -4,6 +4,27 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
+## 🚀 [0.7.7] - 09-2026
+
+**"ComuChat: Fim do Vazamento de Notificações e Blindagem de Acesso!"**
+
+### 🐛 Correções de Estabilidade
+
+- **Notificações de DM não vazam mais para todo mundo**: encontrei a causa raiz — o trigger do Postgres que dispara a notificação de nova mensagem (`notify_new_chat_message`) não enviava `comunidade_id` nem os participantes da DM no payload, então o filtro de destinatário no frontend (`AlertsContext`) nunca tinha dado suficiente para funcionar e acabava notificando todo mundo conectado. Também existia uma corrida de eventos: o INSERT disparava esse trigger incompleto *antes* do evento correto emitido manualmente por `enviar_mensagem`, e como o frontend deduplica por ID de mensagem, o evento incompleto sempre "vencia".
+- Corrigi o payload de `notify_new_chat_message()` e `notify_chat_reacao_event()` para sempre incluírem `comunidade_id` (canais de comunidade) ou `participant_ids` (DMs), e endureci o filtro em `AlertsContext.tsx`/`SidebarChannels.tsx`: se a mensagem não trouxer nenhum dado de destinatário, ela agora é ignorada por segurança, em vez de ser exibida para todos.
+- Corrigi também o mesmo vazamento na notificação de edição de mensagem (`editar_mensagem`), cujo payload manual também não incluía `comunidade_id`/`participant_ids`.
+
+### 🔒 Segurança e Arquitetura
+
+- **Autorização no backend para todos os comandos do chat**: antes, vários comandos Rust (`listar_mensagens`, `buscar_mensagens_canal`, `toggle_pin_mensagem`, `obter_detalhes_notificacao_chat`, reações, digitação, etc.) confiavam apenas no frontend para restringir o acesso, e alguns nem recebiam o `user_id` de quem chamava. Agora todos exigem `user_id` e passam por uma checagem central (`usuario_pode_acessar_canal`) que confirma participação em DM ou vínculo com a comunidade (owner, membro direto ou por setor) antes de descriptografar e retornar qualquer conteúdo.
+- **Consultas de não lidos deixaram de vazar por todo o sistema**: `buscar_mensagens_nao_lidas` e `buscar_status_leitura` varriam mensagens de qualquer canal do banco; agora usam a mesma CTE de canais acessíveis para restringir o resultado apenas aos canais em que o usuário realmente participa.
+- **Nova tabela `chat_canal_participantes`**: substitui a dependência de fazer *parsing* do nome do canal (`DM_<uuid>_<uuid>`) para saber quem participa de uma DM, com índice único e migração de backfill para os canais existentes. Novas DMs já registram os participantes automaticamente na criação.
+- **Índices de performance**: adicionados índices em `chat_mensagens (canal_id, created_at)`, `chat_comunidade_membros`, `chat_comunidade_setores` e `chat_canais (comunidade_id)` para acelerar as consultas de listagem e autorização à medida que o volume de mensagens cresce.
+- **Canais Postgres NOTIFY segmentados por usuário (Fase 4)**: em vez de todo evento de chat (nova mensagem, edição, reação, exclusão, fixar, digitando) ser publicado em um único canal global `realtime_events` — recebido por 100% dos clientes conectados, mesmo sem qualquer relação com a DM/comunidade —, os triggers e os comandos Rust agora calculam a lista real de destinatários (via a função `chat_canal_destinatarios`, reaproveitando a mesma lógica de `usuario_pode_acessar_canal`) e disparam `pg_notify` individualmente em canais `realtime_events_user_<uuid>`. O app passa a registrar um listener Postgres dedicado após o login (`registrar_ouvinte_realtime_usuario`) e encerrá-lo no logout (`desregistrar_ouvinte_realtime_usuario`), sem qualquer mudança necessária nos consumidores do evento Tauri `realtime_event` já existentes. Isso elimina o vazamento de metadados de mensagens na própria origem dos dados (não apenas no filtro client-side) e reduz o tráfego de eventos irrelevantes para cada cliente.
+- Validado manualmente contra o banco de produção: migrações 052–056 aplicadas com sucesso, e testes com `LISTEN`/`pg_notify` reais confirmaram que apenas usuários participantes do canal recebem a notificação — um usuário fora da comunidade testada não recebeu nada em seu canal segmentado.
+
+---
+
 ## 🚀 [0.7.1] - 09-2026
 
 **"Correções no Fluxo de Edição de Agendamentos e Gestão de Horários Livres!"**

@@ -5,6 +5,24 @@ SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-auxílio-operacional">🛠️ DevLog - SAO (Sistema de Auxílio Operacional)</h1>
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
+<h2 id="-077---09-2026">🚀 [0.7.7] - 09-2026</h2>
+<p><strong>“ComuChat: Fim do Vazamento de Notificações e Blindagem de Acesso!”</strong></p>
+<h3 id="-correções-de-estabilidade">🐛 Correções de Estabilidade</h3>
+<ul>
+<li><strong>Notificações de DM não vazam mais para todo mundo</strong>: encontrei a causa raiz — o trigger do Postgres que dispara a notificação de nova mensagem (<code>notify_new_chat_message</code>) não enviava <code>comunidade_id</code> nem os participantes da DM no payload, então o filtro de destinatário no frontend (<code>AlertsContext</code>) nunca tinha dado suficiente para funcionar e acabava notificando todo mundo conectado. Também existia uma corrida de eventos: o INSERT disparava esse trigger incompleto <em>antes</em> do evento correto emitido manualmente por <code>enviar_mensagem</code>, e como o frontend deduplica por ID de mensagem, o evento incompleto sempre “vencia”.</li>
+<li>Corrigi o payload de <code>notify_new_chat_message()</code> e <code>notify_chat_reacao_event()</code> para sempre incluírem <code>comunidade_id</code> (canais de comunidade) ou <code>participant_ids</code> (DMs), e endureci o filtro em <code>AlertsContext.tsx</code>/<code>SidebarChannels.tsx</code>: se a mensagem não trouxer nenhum dado de destinatário, ela agora é ignorada por segurança, em vez de ser exibida para todos.</li>
+<li>Corrigi também o mesmo vazamento na notificação de edição de mensagem (<code>editar_mensagem</code>), cujo payload manual também não incluía <code>comunidade_id</code>/<code>participant_ids</code>.</li>
+</ul>
+<h3 id="-segurança-e-arquitetura">🔒 Segurança e Arquitetura</h3>
+<ul>
+<li><strong>Autorização no backend para todos os comandos do chat</strong>: antes, vários comandos Rust (<code>listar_mensagens</code>, <code>buscar_mensagens_canal</code>, <code>toggle_pin_mensagem</code>, <code>obter_detalhes_notificacao_chat</code>, reações, digitação, etc.) confiavam apenas no frontend para restringir o acesso, e alguns nem recebiam o <code>user_id</code> de quem chamava. Agora todos exigem <code>user_id</code> e passam por uma checagem central (<code>usuario_pode_acessar_canal</code>) que confirma participação em DM ou vínculo com a comunidade (owner, membro direto ou por setor) antes de descriptografar e retornar qualquer conteúdo.</li>
+<li><strong>Consultas de não lidos deixaram de vazar por todo o sistema</strong>: <code>buscar_mensagens_nao_lidas</code> e <code>buscar_status_leitura</code> varriam mensagens de qualquer canal do banco; agora usam a mesma CTE de canais acessíveis para restringir o resultado apenas aos canais em que o usuário realmente participa.</li>
+<li><strong>Nova tabela <code>chat_canal_participantes</code></strong>: substitui a dependência de fazer <em>parsing</em> do nome do canal (<code>DM_&#x3C;uuid>_&#x3C;uuid></code>) para saber quem participa de uma DM, com índice único e migração de backfill para os canais existentes. Novas DMs já registram os participantes automaticamente na criação.</li>
+<li><strong>Índices de performance</strong>: adicionados índices em <code>chat_mensagens (canal_id, created_at)</code>, <code>chat_comunidade_membros</code>, <code>chat_comunidade_setores</code> e <code>chat_canais (comunidade_id)</code> para acelerar as consultas de listagem e autorização à medida que o volume de mensagens cresce.</li>
+<li><strong>Canais Postgres NOTIFY segmentados por usuário (Fase 4)</strong>: em vez de todo evento de chat (nova mensagem, edição, reação, exclusão, fixar, digitando) ser publicado em um único canal global <code>realtime_events</code> — recebido por 100% dos clientes conectados, mesmo sem qualquer relação com a DM/comunidade —, os triggers e os comandos Rust agora calculam a lista real de destinatários (via a função <code>chat_canal_destinatarios</code>, reaproveitando a mesma lógica de <code>usuario_pode_acessar_canal</code>) e disparam <code>pg_notify</code> individualmente em canais <code>realtime_events_user_&#x3C;uuid></code>. O app passa a registrar um listener Postgres dedicado após o login (<code>registrar_ouvinte_realtime_usuario</code>) e encerrá-lo no logout (<code>desregistrar_ouvinte_realtime_usuario</code>), sem qualquer mudança necessária nos consumidores do evento Tauri <code>realtime_event</code> já existentes. Isso elimina o vazamento de metadados de mensagens na própria origem dos dados (não apenas no filtro client-side) e reduz o tráfego de eventos irrelevantes para cada cliente.</li>
+<li>Validado manualmente contra o banco de produção: migrações 052–056 aplicadas com sucesso, e testes com <code>LISTEN</code>/<code>pg_notify</code> reais confirmaram que apenas usuários participantes do canal recebem a notificação — um usuário fora da comunidade testada não recebeu nada em seu canal segmentado.</li>
+</ul>
+<hr>
 <h2 id="-071---09-2026">🚀 [0.7.1] - 09-2026</h2>
 <p><strong>“Correções no Fluxo de Edição de Agendamentos e Gestão de Horários Livres!”</strong></p>
 <h3 id="-correções-críticas-na-agenda">🐛 Correções Críticas na Agenda</h3>
@@ -88,7 +106,7 @@ SAO
 <ul>
 <li><strong>Links e Formatações Clicáveis</strong>: Corrigimos o preview de resultados da pesquisa da Agenda para renderizar tags HTML nativamente nos detalhes do evento. Links de tarefas e formatações ricas agora funcionam diretamente no card, eliminando a exibição de tags brutas de código.</li>
 </ul>
-<h3 id="-correções-de-estabilidade">🐛 Correções de Estabilidade</h3>
+<h3 id="-correções-de-estabilidade-1">🐛 Correções de Estabilidade</h3>
 <ul>
 <li><strong>Tooltip de Links nos Detalhes do Agendamento</strong>: Corrigi a visualização do aviso de atalho/clique nos links dentro do mini editor de texto rico. O tooltip agora flutua via portal com prioridade máxima de camada (<code>z-[99999]</code>), evitando que fique cortado ou oculto atrás da barra de ferramentas de formatação.</li>
 <li><strong>Unificação da Abertura de Links (SAC, Intranet e Externos)</strong>: Unifiquei o comportamento de navegação em todo o sistema. Links de ordens de serviço do SAC (<code>https://www.sacdemaria.com.br/adm/...</code>) e de tarefas da Intranet (<code>https://www.demaria.com.br/intranet/v3/...</code>) agora abrem diretamente nos respectivos módulos internos do SAO tanto no ComuChat e Comentários da Agenda quanto nos editores de texto rico (MiniRichTextEditor e RichTextEditor) e visualizações da Agenda (popover e busca), reservando o navegador externo apenas para links de outros domínios.</li>
@@ -302,7 +320,7 @@ SAO
 <li><strong>Nova Arquitetura Core (Tauri v2)</strong>: Reconstruí a base do aplicativo para suportar múltiplas abas (multi-tab layout) e uma navegação muito mais rápida e fluida.</li>
 <li><strong>Visualizador Unificado de Scripts SQL</strong>: Para otimizar a parte técnica, criei um novo componente dedicado à visualização unificada de scripts do banco.</li>
 </ul>
-<h3 id="-correções-de-estabilidade-1">🐛 Correções de Estabilidade</h3>
+<h3 id="-correções-de-estabilidade-2">🐛 Correções de Estabilidade</h3>
 <ul>
 <li>Refatorei todo o processamento de mensagens em tempo real e corrigi travamentos internos (o famoso <em>borrow checker</em> do Rust) que ocorriam nas trocas de status. O SAO está mais leve do que nunca.</li>
 </ul>
