@@ -4,6 +4,50 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
+## 🚀 [0.7.8] - 09-2026
+
+**"Agenda Renovada: Nova Visualização em Linha do Tempo, Acessibilidade WCAG 2.1 AA e Grade Inteligente!"**
+
+### 📅 Nova Visualização de "Programação" (Schedule Timeline Feed)
+
+- **Linha do Tempo Cronológica Contínua**: Chegou a nova visão **"Programação"** na Agenda! Estruturada como um feed horizontal limpo e dinâmico, ela lista todos os compromissos do mês selecionado agrupados por dia, permitindo uma leitura rápida e sem barreiras da rotina.
+- **Rolagem Inteligente (*Auto-scroll*)**: Ao abrir a visão de programação no mês atual, a tela rola suavemente de forma automática para o dia atual (**"Hoje"**) ou para o próximo compromisso agendado, poupando tempo de navegação.
+- **Cards Ricos com Identificação Visual**:
+  - **Faixa Lateral de Cor**: Identificação visual imediata pela cor do responsável ou da agenda, com suporte automático a gradientes listrados quando há múltiplos responsáveis.
+  - **Horário e Duração Calculada**: Exibição clara do período e da duração total do evento (ex.: `09:00 – 10:30 (1h 30min)`).
+  - **Cliente Sempre em Evidência**: Nome e código do cliente CLC sempre destacados e legíveis.
+  - **Prévia da Pauta com Abertura Inteligente DeMaria**: Links para Ordens de Serviço do SAC ou Tarefas da Intranet continuam funcionando com clique direto para abertura nos módulos nativos do SAO.
+  - **Transparência em Cancelamentos**: Agendamentos cancelados exibem detalhes completos de justificativa, solicitante e motivo cadastrado.
+- **Cabeçalho de Dia Limpo e Acessível**: Quadrado moderno e compacto destacando apenas o número do dia do mês (eliminando redundâncias visuais e transbordos com o texto do cabeçalho) e otimizado para tecnologias assistivas via `aria-hidden`.
+
+### ♿ Acessibilidade Digital e Contraste Estrito (WCAG 2.1 Nível AA)
+
+- **Cálculo Matemático de Luminância Relativa sRGB**: Criado motor universal de contraste (`estilizadorEventos.ts`) em estrita conformidade com as diretrizes internacionais da **WCAG 2.1 AA**, garantindo taxa de contraste mínima de **4.5:1** em todos os elementos da Agenda.
+- **Seleção Dinâmica de Cores de Texto e Ícones**: O sistema avalia dinamicamente qualquer cor de fundo cadastrada (incluindo cores customizadas e gradientes complexos de múltiplos colaboradores). Fundos claros (amarelo, verde-limão, ciano e tons pastéis) recebem tipografia em tom escuro de alto contraste (`#0f172a` ou `#000000`), enquanto fundos profundos mantêm texto branco com sombra de realce.
+- **Independência de Cores para Cancelamentos**: Status de cancelamento não depende unicamente da cor. Agendamentos cancelados contam com indicador textual explícito `[CANC]` com fundo contrastante, borda tracejada de alta visibilidade e texto riscado (*line-through*) em todas as visões (Mês, Semana, Dia e Programação).
+- **Avatares e Badges Acessíveis**: As siglas e avatares dos responsáveis agora calculam contraste individual contra a respectiva cor de fundo do colaborador, mantendo contorno nítido e legibilidade cristalina.
+
+### 🎨 Grade Inteligente, Layout sem Sobreposição e Atenuação Visual
+
+- **Organização Inteligente sem Sobreposição (`no-overlap`)**: A grade semanal e diária foi configurada com o algoritmo de layout `no-overlap`. Eventos com horários concorrentes agora dividem a coluna harmoniosamente lado a lado, sem sobreposições opacas ou dados encobertos.
+- **Atenuação Visual para Eventos Passados (Estilo Google Calendar)**: Compromissos passados recebem tratamento visual atenuado e sutil com filtros balanceados de saturação e brilho, mantendo o foco total nos compromissos do momento e recuperando a cor viva ao passar o cursor (*hover*).
+- **Opacidade Sólida e Foco Visual**: Eliminada a transparência excessiva que causava confusão visual em eventos sobrepostos na grade, assegurando leitura nítida das informações.
+
+### 🧭 Navegação Confortável e Estabilidade de Layout na Barra Superior
+
+- **Fim do "Pula-Pula" nos Botões de Navegação**:
+  - Reformulada a formatação dos intervalos de datas da visualização semanal (`formatarIntervaloSemana`). Meses abreviados padronizados (ex.: `SET 21 – 25` ou `SET 28 – OUT 02`) mantêm o texto com tamanho estável.
+  - Largura fixa e estável no botão seletor de data da barra superior (`w-[250px] shrink-0 tabular-nums`), eliminando variações de tamanho (*layout shift*) e garantindo que os botões de avançar e retroceder fiquem sempre exatamente no mesmo lugar durante a navegação rápida.
+  - Formatação e capitalização refinadas em português (pt-BR) para os cabeçalhos diários e mensais.
+
+### 🏗️ Arquitetura, Testes Automatizados e Resiliência
+
+- **Isolamento de Contextos da Grade**: Contextos da barra de ferramentas e dos eventos desacoplados em `GradeCalendarioContext.tsx`, facilitando manutenções futuras e o consumo de ações por novas visualizações da Agenda.
+- **Busca Resiliente de Usuários**: A função `obterUsuario` agora realiza correspondência insensível a maiúsculas/minúsculas (*case-insensitive*) e suporta com segurança tanto estruturas de lista quanto mapeamentos de usuários.
+- **100% de Cobertura nos Testes de Estilização**: Criada suíte completa de testes automatizados com Node Test Runner (`estilizadorEventos.test.ts`), validando conversões sRGB, luminâncias limites, regras de contraste para gradientes e os métodos de ciclo de vida da visão de Programação.
+
+---
+
 ## 🚀 [0.7.7] - 09-2026
 
 **"ComuChat: Fim do Vazamento de Notificações e Blindagem de Acesso!"**
