@@ -4,6 +4,64 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
+## 🚀 [0.7.9] - 09-2026
+
+**"Agenda Mais Prática: Novo Seletor de Clientes CLC, Repetição Estilo Google Calendar e Tela Ampla!"**
+
+### 🔍 Novo Seletor Inteligente de Clientes do CLC
+
+- **Busca Rápida e Unificada**: Encontrar clientes e cartórios na Agenda agora está muito mais rápido e moderno. A busca dinâmica funciona em todos os formulários da agenda (novo agendamento, agendamento de sessões em sequência, reserva comercial, disponibilização de vagas e fila de espera).
+- **Pesquisa Multifiltro**: Você pode pesquisar instantaneamente digitando o código do cliente, nome, cidade ou estado (UF).
+- **Preenchimento Automático com Um Clique**: Ao selecionar o cliente na lista, o título do agendamento e o telefone de contato são preenchidos automaticamente, economizando cliques e evitando erros de digitação.
+- **Navegação Ágil pelo Teclado e Visual Acessível**: É possível navegar pelos resultados usando as setas do teclado e selecionar com Enter, com visual agradável, excelente contraste e suporte completo aos modos claro e escuro.
+
+### 🔁 Repetição Inteligente e Intuitiva (Padrão Google Calendar)
+
+- **Rotinas e Compromissos Periódicos Descomplicados**: Agora ficou simples criar compromissos que se repetem na sua rotina (como reuniões de equipe, atendimentos fixos ou intervalos). O seletor oferece opções prontas:
+  - Não se repete;
+  - Todos os dias;
+  - A cada dia útil (segunda a sexta-feira);
+  - Semanalmente;
+  - Quinzenalmente;
+  - Mensalmente;
+  - Personalizado (escolhendo dias da semana específicos e data limite para encerramento).
+- **Período e Horários Bem Definidos**: O intervalo de datas e a sincronização de horários ficam sempre claros, eliminando qualquer dúvida de quando o compromisso começa, quanto tempo dura e até quando ele se repetirá.
+
+### 🖥️ Abertura em Tela Ampla e Hierarquia Visual Limpa
+
+- **Espaço Amplo de Trabalho**: O formulário de agendamento agora abre em formato espaçoso de tela inteira, garantindo visualização confortável de todas as informações, participantes e observações sem campos espremidos.
+- **Organização Clara de Informações**: Campos organizados de forma fluida: Título em destaque no topo, cliente vinculado logo abaixo, definição de data/horário/repetição e pauta do atendimento.
+
+### 📅 Separação Clara entre Rotinas e Grade de Vagas Livres
+
+- **Fim da Confusão entre Rotinas e Vagas**: Orientações visuais na tela agora ajudam a distinguir quando você está criando um compromisso repetitivo (para a sua própria rotina) e quando está disponibilizando blocos de vagas livres para atendimentos futuros.
+
+### 🏷️ Flexibilidade na Edição de Blocos de Agenda Livre
+
+- **Opção de Manter como Bloco Livre**: Ao editar um agendamento já existente como Agenda Livre (para realizar pequenas alterações, como trocar a cor de destaque, ajustar horários ou observações), o salvamento agora oferece três opções claras: **Manter como Bloco Livre**, **Converter em Bloco Padrão** ou **Cancelar**.
+- **Diálogo Interativo e Acessível (WCAG 2.1 AA)**: As opções são apresentadas através de cartões visuais com ícones representativos (`CalendarClock` e `CheckCircle2`), textos explicativos detalhados, foco visível por teclado e alto contraste, permitindo a edição rápida de propriedades da vaga sem consumir acidentalmente o horário na grade.
+
+### 💬 ComuChat: Notificações Passivas em Segundo Plano e Correção de Conexão Realtime
+
+- **Notificações Passivas 100% Funcionais**: Corrigida a falha em que as notificações do ComuChat só apareciam quando o usuário abria o módulo. Agora, sons de alerta e o sininho do cabeçalho funcionam o tempo todo em segundo plano, mesmo com o ComuChat fechado ou navegando em outros módulos (Agenda, SAC, Intranet, Editor, etc.).
+- **Correção da Conexão Segmentada no Backend Rust**: Identificada e sanada a causa raiz em que a URL padrão do banco de dados no listener segmentado (`iniciar_ouvinte_usuario` em `realtime.rs`) continha caracteres mascarados (`******`), impedindo a conexão Postgres de ser aberta e silenciando os eventos em tempo real para instalações sem variável de ambiente explícita.
+- **Resolução de Áudio Local Offline**: Substituída a dependência exclusiva do streaming via CDN externo do `react-sounds` (que falhava silenciosamente em redes corporativas com proxy ou offline) por reprodução nativa do arquivo de áudio local empacotado (`/alexis_gaming_cam-bell-notification-337658.mp3`), com fallback gracioso.
+- **Autocorreção de Participantes de DM no Backend**: `enviar_mensagem` e `obter_ou_criar_dm` garantem preventivamente o registro dos participantes na tabela `chat_canal_participantes` antes da inserção da mensagem, permitindo que a função `chat_canal_destinatarios` do Postgres identifique imediatamente os destinatários e dispare o `pg_notify` segmentado sem depender de abertura prévia da conversa.
+- **Desacoplamento do Ciclo de Vida de Abas (*Keep-Alive*)**: Removida a atribuição forçada de `setIsComuChatActive(true)` no `ComuChatLayout.tsx`, deixando a gestão de atividade exclusivamente a cargo do `LayoutMain.tsx` com base na aba visível. Isso impede que abas de chat ocultadas em segundo plano se declarem ativas e silenciem as notificações.
+- **Validação Resiliente no AlertsContext e ChatArea**: Ajustada a detecção de canais DM para `!details.comunidade_id`, unificado o controle de áudio com `playSoundDebounced("comuchat")` (respeitando preferências e regras de status do usuário), e adicionado suporte ao evento de banco `NEW_CHAT_MESSAGE` no `ChatArea.tsx`.
+
+### ⚡ ComuChat: Virtualização e Alta Escalabilidade Frontend (Fase 3)
+
+- **Feed de Mensagens 100% Virtualizado (`@tanstack/react-virtual`)**: O histórico do chat agora renderiza no DOM apenas os nós visíveis na janela de visualização (`~20–30` nós) com medição dinâmica de altura (`measureElement`), garantindo rolagem a 60 FPS com zero travamentos em canais longos e pesados (com fotos, blocos de código e múltiplos anexos).
+- **Paginação Bidirecional com Cursor no Backend Rust (`comandos_chat.rs`)**: Implementado suporte nativo a `before_id: Option<Uuid>` e `limit: Option<u64>` (com *clamp* seguro entre 1 e 200 mensagens, padrão 50), utilizando ordenação por tupla `(created_at, id)` para paginação imune a inserções concorrentes.
+- **Scroll Anchoring com Zero Jitter**: Ao rolar para o topo e carregar lotes de mensagens anteriores, a posição da rolagem é compensada de forma precisa via medição `getBoundingClientRect().top` da mensagem mais antiga visível (com fallback resiliente ao delta de `scrollHeight`), eliminando saltos visuais.
+- **Syntax Highlighting Não Bloqueante (`IntersectionObserver` + `requestIdleCallback`)**: O realce de código via `highlight.js` em blocos `<code>` é aplicado sob demanda apenas quando o elemento entra na vizinhança da viewport, preservando a fluidez da thread principal da UI.
+- **Rascunhos Persistentes por Canal (`rascunhosPorCanal`)**: Textos digitados no editor que ainda não foram enviados são mantidos em cache sincronizado com `sessionStorage` (`comuchat_drafts_v1`). O usuário pode alternar livremente entre múltiplos canais e DMs sem perder o que estava escrevendo.
+- **Conformidade WCAG 2.1 AA**: Todos os botões e áreas interativas possuem `aria-label`, foco visível (`focus-visible:ring-2 focus-visible:outline-none`) e contraste aprimorado (`text-module-foreground` em fundos temáticos).
+
+
+---
+
 ## 🚀 [0.7.8] - 09-2026
 
 **"Agenda Renovada: Nova Visualização em Linha do Tempo, Acessibilidade WCAG 2.1 AA e Grade Inteligente!"**

@@ -5,6 +5,110 @@ SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-auxílio-operacional">🛠️ DevLog - SAO (Sistema de Auxílio Operacional)</h1>
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
+<h2 id="-079---09-2026">🚀 [0.7.9] - 09-2026</h2>
+<p><strong>“Agenda Mais Prática: Novo Seletor de Clientes CLC, Repetição Estilo Google Calendar e Tela Ampla!”</strong></p>
+<h3 id="-novo-seletor-inteligente-de-clientes-do-clc">🔍 Novo Seletor Inteligente de Clientes do CLC</h3>
+<ul>
+<li><strong>Busca Rápida e Unificada</strong>: Encontrar clientes e cartórios na Agenda agora está muito mais rápido e moderno. A busca dinâmica funciona em todos os formulários da agenda (novo agendamento, agendamento de sessões em sequência, reserva comercial, disponibilização de vagas e fila de espera).</li>
+<li><strong>Pesquisa Multifiltro</strong>: Você pode pesquisar instantaneamente digitando o código do cliente, nome, cidade ou estado (UF).</li>
+<li><strong>Preenchimento Automático com Um Clique</strong>: Ao selecionar o cliente na lista, o título do agendamento e o telefone de contato são preenchidos automaticamente, economizando cliques e evitando erros de digitação.</li>
+<li><strong>Navegação Ágil pelo Teclado e Visual Acessível</strong>: É possível navegar pelos resultados usando as setas do teclado e selecionar com Enter, com visual agradável, excelente contraste e suporte completo aos modos claro e escuro.</li>
+</ul>
+<h3 id="-repetição-inteligente-e-intuitiva-padrão-google-calendar">🔁 Repetição Inteligente e Intuitiva (Padrão Google Calendar)</h3>
+<ul>
+<li><strong>Rotinas e Compromissos Periódicos Descomplicados</strong>: Agora ficou simples criar compromissos que se repetem na sua rotina (como reuniões de equipe, atendimentos fixos ou intervalos). O seletor oferece opções prontas:
+<ul>
+<li>Não se repete;</li>
+<li>Todos os dias;</li>
+<li>A cada dia útil (segunda a sexta-feira);</li>
+<li>Semanalmente;</li>
+<li>Quinzenalmente;</li>
+<li>Mensalmente;</li>
+<li>Personalizado (escolhendo dias da semana específicos e data limite para encerramento).</li>
+</ul>
+</li>
+<li><strong>Período e Horários Bem Definidos</strong>: O intervalo de datas e a sincronização de horários ficam sempre claros, eliminando qualquer dúvida de quando o compromisso começa, quanto tempo dura e até quando ele se repetirá.</li>
+</ul>
+<h3 id="️-abertura-em-tela-ampla-e-hierarquia-visual-limpa">🖥️ Abertura em Tela Ampla e Hierarquia Visual Limpa</h3>
+<ul>
+<li><strong>Espaço Amplo de Trabalho</strong>: O formulário de agendamento agora abre em formato espaçoso de tela inteira, garantindo visualização confortável de todas as informações, participantes e observações sem campos espremidos.</li>
+<li><strong>Organização Clara de Informações</strong>: Campos organizados de forma fluida: Título em destaque no topo, cliente vinculado logo abaixo, definição de data/horário/repetição e pauta do atendimento.</li>
+</ul>
+<h3 id="-separação-clara-entre-rotinas-e-grade-de-vagas-livres">📅 Separação Clara entre Rotinas e Grade de Vagas Livres</h3>
+<ul>
+<li><strong>Fim da Confusão entre Rotinas e Vagas</strong>: Orientações visuais na tela agora ajudam a distinguir quando você está criando um compromisso repetitivo (para a sua própria rotina) e quando está disponibilizando blocos de vagas livres para atendimentos futuros.</li>
+</ul>
+<h3 id="️-flexibilidade-na-edição-de-blocos-de-agenda-livre">🏷️ Flexibilidade na Edição de Blocos de Agenda Livre</h3>
+<ul>
+<li><strong>Opção de Manter como Bloco Livre</strong>: Ao editar um agendamento já existente como Agenda Livre (para realizar pequenas alterações, como trocar a cor de destaque, ajustar horários ou observações), o salvamento agora oferece três opções claras: <strong>Manter como Bloco Livre</strong>, <strong>Converter em Bloco Padrão</strong> ou <strong>Cancelar</strong>.</li>
+<li><strong>Diálogo Interativo e Acessível (WCAG 2.1 AA)</strong>: As opções são apresentadas através de cartões visuais com ícones representativos (<code>CalendarClock</code> e <code>CheckCircle2</code>), textos explicativos detalhados, foco visível por teclado e alto contraste, permitindo a edição rápida de propriedades da vaga sem consumir acidentalmente o horário na grade.</li>
+</ul>
+<h3 id="-comuchat-notificações-passivas-em-segundo-plano-e-correção-de-conexão-realtime">💬 ComuChat: Notificações Passivas em Segundo Plano e Correção de Conexão Realtime</h3>
+<ul>
+<li><strong>Notificações Passivas 100% Funcionais</strong>: Corrigida a falha em que as notificações do ComuChat só apareciam quando o usuário abria o módulo. Agora, sons de alerta e o sininho do cabeçalho funcionam o tempo todo em segundo plano, mesmo com o ComuChat fechado ou navegando em outros módulos (Agenda, SAC, Intranet, Editor, etc.).</li>
+<li><strong>Correção da Conexão Segmentada no Backend Rust</strong>: Identificada e sanada a causa raiz em que a URL padrão do banco de dados no listener segmentado (<code>iniciar_ouvinte_usuario</code> em <code>realtime.rs</code>) continha caracteres mascarados (<code>******</code>), impedindo a conexão Postgres de ser aberta e silenciando os eventos em tempo real para instalações sem variável de ambiente explícita.</li>
+<li><strong>Resolução de Áudio Local Offline</strong>: Substituída a dependência exclusiva do streaming via CDN externo do <code>react-sounds</code> (que falhava silenciosamente em redes corporativas com proxy ou offline) por reprodução nativa do arquivo de áudio local empacotado (<code>/alexis_gaming_cam-bell-notification-337658.mp3</code>), com fallback gracioso.</li>
+<li><strong>Autocorreção de Participantes de DM no Backend</strong>: <code>enviar_mensagem</code> e <code>obter_ou_criar_dm</code> garantem preventivamente o registro dos participantes na tabela <code>chat_canal_participantes</code> antes da inserção da mensagem, permitindo que a função <code>chat_canal_destinatarios</code> do Postgres identifique imediatamente os destinatários e dispare o <code>pg_notify</code> segmentado sem depender de abertura prévia da conversa.</li>
+<li><strong>Desacoplamento do Ciclo de Vida de Abas (<em>Keep-Alive</em>)</strong>: Removida a atribuição forçada de <code>setIsComuChatActive(true)</code> no <code>ComuChatLayout.tsx</code>, deixando a gestão de atividade exclusivamente a cargo do <code>LayoutMain.tsx</code> com base na aba visível. Isso impede que abas de chat ocultadas em segundo plano se declarem ativas e silenciem as notificações.</li>
+<li><strong>Validação Resiliente no AlertsContext e ChatArea</strong>: Ajustada a detecção de canais DM para <code>!details.comunidade_id</code>, unificado o controle de áudio com <code>playSoundDebounced("comuchat")</code> (respeitando preferências e regras de status do usuário), e adicionado suporte ao evento de banco <code>NEW_CHAT_MESSAGE</code> no <code>ChatArea.tsx</code>.</li>
+</ul>
+<h3 id="-comuchat-virtualização-e-alta-escalabilidade-frontend-fase-3">⚡ ComuChat: Virtualização e Alta Escalabilidade Frontend (Fase 3)</h3>
+<ul>
+<li><strong>Feed de Mensagens 100% Virtualizado (<code>@tanstack/react-virtual</code>)</strong>: O histórico do chat agora renderiza no DOM apenas os nós visíveis na janela de visualização (<code>~20–30</code> nós) com medição dinâmica de altura (<code>measureElement</code>), garantindo rolagem a 60 FPS com zero travamentos em canais longos e pesados (com fotos, blocos de código e múltiplos anexos).</li>
+<li><strong>Paginação Bidirecional com Cursor no Backend Rust (<code>comandos_chat.rs</code>)</strong>: Implementado suporte nativo a <code>before_id: Option&#x3C;Uuid></code> e <code>limit: Option&#x3C;u64></code> (com <em>clamp</em> seguro entre 1 e 200 mensagens, padrão 50), utilizando ordenação por tupla <code>(created_at, id)</code> para paginação imune a inserções concorrentes.</li>
+<li><strong>Scroll Anchoring com Zero Jitter</strong>: Ao rolar para o topo e carregar lotes de mensagens anteriores, a posição da rolagem é compensada de forma precisa via medição <code>getBoundingClientRect().top</code> da mensagem mais antiga visível (com fallback resiliente ao delta de <code>scrollHeight</code>), eliminando saltos visuais.</li>
+<li><strong>Syntax Highlighting Não Bloqueante (<code>IntersectionObserver</code> + <code>requestIdleCallback</code>)</strong>: O realce de código via <code>highlight.js</code> em blocos <code>&#x3C;code></code> é aplicado sob demanda apenas quando o elemento entra na vizinhança da viewport, preservando a fluidez da thread principal da UI.</li>
+<li><strong>Rascunhos Persistentes por Canal (<code>rascunhosPorCanal</code>)</strong>: Textos digitados no editor que ainda não foram enviados são mantidos em cache sincronizado com <code>sessionStorage</code> (<code>comuchat_drafts_v1</code>). O usuário pode alternar livremente entre múltiplos canais e DMs sem perder o que estava escrevendo.</li>
+<li><strong>Conformidade WCAG 2.1 AA</strong>: Todos os botões e áreas interativas possuem <code>aria-label</code>, foco visível (<code>focus-visible:ring-2 focus-visible:outline-none</code>) e contraste aprimorado (<code>text-module-foreground</code> em fundos temáticos).</li>
+</ul>
+<hr>
+<h2 id="-078---09-2026">🚀 [0.7.8] - 09-2026</h2>
+<p><strong>“Agenda Renovada: Nova Visualização em Linha do Tempo, Acessibilidade WCAG 2.1 AA e Grade Inteligente!”</strong></p>
+<h3 id="-nova-visualização-de-programação-schedule-timeline-feed">📅 Nova Visualização de “Programação” (Schedule Timeline Feed)</h3>
+<ul>
+<li><strong>Linha do Tempo Cronológica Contínua</strong>: Chegou a nova visão <strong>“Programação”</strong> na Agenda! Estruturada como um feed horizontal limpo e dinâmico, ela lista todos os compromissos do mês selecionado agrupados por dia, permitindo uma leitura rápida e sem barreiras da rotina.</li>
+<li><strong>Rolagem Inteligente (<em>Auto-scroll</em>)</strong>: Ao abrir a visão de programação no mês atual, a tela rola suavemente de forma automática para o dia atual (<strong>“Hoje”</strong>) ou para o próximo compromisso agendado, poupando tempo de navegação.</li>
+<li><strong>Cards Ricos com Identificação Visual</strong>:
+<ul>
+<li><strong>Faixa Lateral de Cor</strong>: Identificação visual imediata pela cor do responsável ou da agenda, com suporte automático a gradientes listrados quando há múltiplos responsáveis.</li>
+<li><strong>Horário e Duração Calculada</strong>: Exibição clara do período e da duração total do evento (ex.: <code>09:00 – 10:30 (1h 30min)</code>).</li>
+<li><strong>Cliente Sempre em Evidência</strong>: Nome e código do cliente CLC sempre destacados e legíveis.</li>
+<li><strong>Prévia da Pauta com Abertura Inteligente DeMaria</strong>: Links para Ordens de Serviço do SAC ou Tarefas da Intranet continuam funcionando com clique direto para abertura nos módulos nativos do SAO.</li>
+<li><strong>Transparência em Cancelamentos</strong>: Agendamentos cancelados exibem detalhes completos de justificativa, solicitante e motivo cadastrado.</li>
+</ul>
+</li>
+<li><strong>Cabeçalho de Dia Limpo e Acessível</strong>: Quadrado moderno e compacto destacando apenas o número do dia do mês (eliminando redundâncias visuais e transbordos com o texto do cabeçalho) e otimizado para tecnologias assistivas via <code>aria-hidden</code>.</li>
+</ul>
+<h3 id="-acessibilidade-digital-e-contraste-estrito-wcag-21-nível-aa">♿ Acessibilidade Digital e Contraste Estrito (WCAG 2.1 Nível AA)</h3>
+<ul>
+<li><strong>Cálculo Matemático de Luminância Relativa sRGB</strong>: Criado motor universal de contraste (<code>estilizadorEventos.ts</code>) em estrita conformidade com as diretrizes internacionais da <strong>WCAG 2.1 AA</strong>, garantindo taxa de contraste mínima de <strong>4.5:1</strong> em todos os elementos da Agenda.</li>
+<li><strong>Seleção Dinâmica de Cores de Texto e Ícones</strong>: O sistema avalia dinamicamente qualquer cor de fundo cadastrada (incluindo cores customizadas e gradientes complexos de múltiplos colaboradores). Fundos claros (amarelo, verde-limão, ciano e tons pastéis) recebem tipografia em tom escuro de alto contraste (<code>#0f172a</code> ou <code>#000000</code>), enquanto fundos profundos mantêm texto branco com sombra de realce.</li>
+<li><strong>Independência de Cores para Cancelamentos</strong>: Status de cancelamento não depende unicamente da cor. Agendamentos cancelados contam com indicador textual explícito <code>[CANC]</code> com fundo contrastante, borda tracejada de alta visibilidade e texto riscado (<em>line-through</em>) em todas as visões (Mês, Semana, Dia e Programação).</li>
+<li><strong>Avatares e Badges Acessíveis</strong>: As siglas e avatares dos responsáveis agora calculam contraste individual contra a respectiva cor de fundo do colaborador, mantendo contorno nítido e legibilidade cristalina.</li>
+</ul>
+<h3 id="-grade-inteligente-layout-sem-sobreposição-e-atenuação-visual">🎨 Grade Inteligente, Layout sem Sobreposição e Atenuação Visual</h3>
+<ul>
+<li><strong>Organização Inteligente sem Sobreposição (<code>no-overlap</code>)</strong>: A grade semanal e diária foi configurada com o algoritmo de layout <code>no-overlap</code>. Eventos com horários concorrentes agora dividem a coluna harmoniosamente lado a lado, sem sobreposições opacas ou dados encobertos.</li>
+<li><strong>Atenuação Visual para Eventos Passados (Estilo Google Calendar)</strong>: Compromissos passados recebem tratamento visual atenuado e sutil com filtros balanceados de saturação e brilho, mantendo o foco total nos compromissos do momento e recuperando a cor viva ao passar o cursor (<em>hover</em>).</li>
+<li><strong>Opacidade Sólida e Foco Visual</strong>: Eliminada a transparência excessiva que causava confusão visual em eventos sobrepostos na grade, assegurando leitura nítida das informações.</li>
+</ul>
+<h3 id="-navegação-confortável-e-estabilidade-de-layout-na-barra-superior">🧭 Navegação Confortável e Estabilidade de Layout na Barra Superior</h3>
+<ul>
+<li><strong>Fim do “Pula-Pula” nos Botões de Navegação</strong>:
+<ul>
+<li>Reformulada a formatação dos intervalos de datas da visualização semanal (<code>formatarIntervaloSemana</code>). Meses abreviados padronizados (ex.: <code>SET 21 – 25</code> ou <code>SET 28 – OUT 02</code>) mantêm o texto com tamanho estável.</li>
+<li>Largura fixa e estável no botão seletor de data da barra superior (<code>w-[250px] shrink-0 tabular-nums</code>), eliminando variações de tamanho (<em>layout shift</em>) e garantindo que os botões de avançar e retroceder fiquem sempre exatamente no mesmo lugar durante a navegação rápida.</li>
+<li>Formatação e capitalização refinadas em português (pt-BR) para os cabeçalhos diários e mensais.</li>
+</ul>
+</li>
+</ul>
+<h3 id="️-arquitetura-testes-automatizados-e-resiliência">🏗️ Arquitetura, Testes Automatizados e Resiliência</h3>
+<ul>
+<li><strong>Isolamento de Contextos da Grade</strong>: Contextos da barra de ferramentas e dos eventos desacoplados em <code>GradeCalendarioContext.tsx</code>, facilitando manutenções futuras e o consumo de ações por novas visualizações da Agenda.</li>
+<li><strong>Busca Resiliente de Usuários</strong>: A função <code>obterUsuario</code> agora realiza correspondência insensível a maiúsculas/minúsculas (<em>case-insensitive</em>) e suporta com segurança tanto estruturas de lista quanto mapeamentos de usuários.</li>
+<li><strong>100% de Cobertura nos Testes de Estilização</strong>: Criada suíte completa de testes automatizados com Node Test Runner (<code>estilizadorEventos.test.ts</code>), validando conversões sRGB, luminâncias limites, regras de contraste para gradientes e os métodos de ciclo de vida da visão de Programação.</li>
+</ul>
+<hr>
 <h2 id="-077---09-2026">🚀 [0.7.7] - 09-2026</h2>
 <p><strong>“ComuChat: Fim do Vazamento de Notificações e Blindagem de Acesso!”</strong></p>
 <h3 id="-correções-de-estabilidade">🐛 Correções de Estabilidade</h3>
