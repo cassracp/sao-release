@@ -8,6 +8,14 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 **"Agenda Mais Prática: Novo Seletor de Clientes CLC, Repetição Estilo Google Calendar e Tela Ampla!"**
 
+### 🖱️ Scrollbars Minimalistas e Auto-Ocultáveis Estilo macOS / Mobile (Abordagem 2)
+
+- **Comportamento Limpo e Invisível em Repouso**: Por padrão, todas as barras de rolagem do SAO permanecem 100% invisíveis mesmo quando o cursor do mouse está sobre a tela ou sobre o container, mantendo a interface despoluída, focada e profissional.
+- **Detecção Instantânea de Rolagem**: Ao girar a rodinha do mouse (`wheel`), rolar a página (`scroll`), utilizar teclas de navegação ou toque, a barra surge imediatamente em formato de cápsula arredondada de 6px com trilhas e cantos transparentes.
+- **Timer de Auto-Ocultação de 1 Segundo**: Após 1 segundo sem movimentação de rolagem, a barra desvanece suavemente aos 750ms e é ocultada aos 1000ms, proporcionando a experiência fluida do macOS e mobile.
+- **Interação Direta e Arraste Preservados**: Ao passar o cursor diretamente sobre a faixa do polegar (`*::-webkit-scrollbar-thumb:hover`) ou segurá-lo para arrastar (`*::-webkit-scrollbar-thumb:active`), a barra permanece nítida e visível até a liberação do clique e afastamento do cursor.
+- **Conformidade com Paletas Neutras e Dark Mode Carvão/Grafite**: Sem cores slate ou azuis, utilizando tons translúcidos neutros adaptados para os modos Claro e Escuro, com supressão de botões e setas nativas do Windows WebView2.
+
 ### 🔍 Novo Seletor Inteligente de Clientes do CLC
 
 - **Busca Rápida e Unificada**: Encontrar clientes e cartórios na Agenda agora está muito mais rápido e moderno. A busca dinâmica funciona em todos os formulários da agenda (novo agendamento, agendamento de sessões em sequência, reserva comercial, disponibilização de vagas e fila de espera).
