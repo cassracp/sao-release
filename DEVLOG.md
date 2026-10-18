@@ -75,6 +75,19 @@ Este documento registra as principais atualizações, melhorias e correções fe
 - **Sincronização Direta no `LayoutMain.tsx` / `AddonsContext.tsx` e Reexibição Atômica no Backend Rust (`commands.rs`)**: No `LayoutMain.tsx` e no `AddonsContext.tsx`, unifiquei a detecção de módulos WebView via `ehModuloWebviewNativo()`, corrigi a atualização de `activeTabId` ao fechar outras abas / abas à direita / todas as abas (`fecharOutrasAbas`, `fecharAbasADireita`, `fecharTodasAsAbas`), substituí o `import()` dinâmico assíncrono por `invoke` estático imediato na troca de abas e removi `closeAddonModal` do array de dependências do efeito de troca de aba. No backend Rust (`create_or_show_embedded_webview`), passei a ocultar preventivamente outras WebViews de módulos na mesma janela (`ocultar_outras_webviews_embarcadas_na_janela`) e, ao reexibir uma WebView existente (`reexibir_e_sincronizar_webview_existente`), aplicar `set_bounds`, `show()`, `set_position`, `set_size` e notificar diretamente o `ICoreWebView2Controller` no Windows via `SetIsVisible(true)` e `NotifyParentWindowPositionChanged()`.
 
 
+### 📎 Agenda: Anexos e Mídia nos Comentários de Agendamento (Unificação com o ComuChat)
+
+- **Experiência Visual Unificada e Sem Duplicação de Código (DRY)**: A área de comentários dos agendamentos agora conta com o mesmo poder visual do ComuChat, em uma versão focada e minimalista. Novas melhorias nos reprodutores e visualizadores de mídia beneficiam ambos os módulos simultaneamente através de componentes parametrizados (`ChatAnexosLista`, `ChatAudioPlayer`, `ChatVideoPlayer`).
+- **Galeria de Imagens com Modal em Alta Resolução**: Envio de fotos com thumbnail otimizado e visualizador em tela cheia com controles de zoom (até 500%), visualização 1:1 em tamanho real, pan com arraste pelo mouse, rotação e download seguro pelo diálogo nativo do sistema operacional.
+- **Mensagens de Voz com Player de Áudio Dedicado**: Possibilidade de gravar áudios em tempo real diretamente pelo microfone com cronômetro, visualização de ondas sonoras e envio instantâneo, renderizados no histórico com player de áudio dedicado com barra de progresso e controle de tempo.
+- **Player de Vídeo Nativo e Embeds Externos**: Reprodução direta de vídeos anexados nos comentários e detecção automática de links de vídeos do YouTube e Vimeo no texto do comentário.
+- **Arquivos e Documentos com Download Seguro Desktop**: PDFs, planilhas e documentos genéricos exibem cartões com identificação visual por categoria, tamanho formatado e download em camadas via `@tauri-apps/plugin-dialog` e escrita nativa no disco pelo Tauri.
+- **Arquitetura Robusta no Banco de Dados (Migração SeaORM 63)**:
+  - Modelagem atômica dividida em metadados leves no SSD (`agendamento_comentario_anexos` em `pg_default`) e dados binários em BYTEA com detecção dinâmica da tablespace `hd_4tb` (`agendamento_comentario_anexos_arquivos`).
+  - Carregamento em lote único (*batch loading* anti-$N+1$) e download de binários sob demanda (`baixar_anexo_comentario_agendamento`), mantendo a abertura de comentários instantânea e leve.
+  - Exclusão em cascata (`CASCADE`) e sanitização rigorosa contra transbordos de string, bytes NUL e arquivos corrompidos.
+- **Design System Neutro e Acessibilidade (WCAG 2.1 AA)**: Interface em Grafite/Carvão Neutro sem classes `slate-*`, foco nítido por teclado, botões de ação com contraste estrito e scrollbar minimalista auto-ocultável `.sao-scrollbar`.
+
 ---
 
 ## 🚀 [0.7.8] - 09-2026
