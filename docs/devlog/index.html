@@ -5,6 +5,34 @@ SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <h1 id="️-devlog---sao-sistema-de-auxílio-operacional">🛠️ DevLog - SAO (Sistema de Auxílio Operacional)</h1>
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
+<h2 id="-080---10-2026">🚀 [0.8.0] - 10-2026</h2>
+<p><strong>“Vídeo e Câmera no Nível Google Meet: Pipeline Gráfico Adaptativo, Fim do Serrilhado e Desfoque Inteligente por Hardware!”</strong></p>
+<h3 id="-pipeline-gráfico-adaptativo-de-câmera-e-efeitos-virtuais-estilo-google-meet">🎥 Pipeline Gráfico Adaptativo de Câmera e Efeitos Virtuais (Estilo Google Meet)</h3>
+<ul>
+<li><strong>Qualidade Visual Semelhante ao Google Meet</strong>: Reformulamos por completo a engenharia de vídeo e efeitos de fundo de câmera do ComuChat. A imagem agora possui recortes orgânicos, transições suaves e estabilidade impecável, extinguindo as bordas quadriculadas e o tremor (<em>flickering</em>) característicos de segmentações puras.</li>
+<li><strong>Arquitetura Adaptativa em 3 Níveis de Hardware (Tiers 1, 2 e 3)</strong>:
+<ul>
+<li><strong>Nível 3 (Ultra / Studio)</strong>: Ativado em dispositivos com GPUs dedicadas potentes (NVIDIA GeForce/RTX, AMD Radeon RX, Apple Silicon) ou WebGPU acelerada. Aplica <strong>Filtro Bilateral Guiado (<em>Guided Filter</em>)</strong> em alta resolução, alinhando a máscara aos contrastes reais da imagem da câmera para recortar com precisão fios de cabelo, ombros e roupas, impedindo que partes do fundo vazem.</li>
+<li><strong>Nível 2 (Equilibrado / Padrão Google Meet 30 FPS)</strong>: Otimizado para GPUs integradas modernas (Intel Iris Xe, AMD Radeon RDNA/Vega). Implementa <strong>Suavização Temporal (<em>EMA - Exponential Moving Average</em>)</strong> via framebuffers duplos (<em>FBO Ping-Pong</em>) para amortecer ruídos do sensor entre quadros consecutivos e <strong>Feathering Gaussiano em 2 Passes</strong> com curva sigmoide (<em>smoothstep</em> sub-pixel), gerando o efeito <em>bokeh</em> fotográfico natural.</li>
+<li><strong>Nível 1 (Econômico / Baixa CPU)</strong>: Modo leve com modelo 16:9 Landscape (<code>selfie_segmenter_landscape.tflite</code>) e aceleração GPU direta com consumo elétrico mínimo (&#x3C; 3% de CPU), ideal para notebooks em bateria ou computadores mais modestos.</li>
+</ul>
+</li>
+<li><strong>Watchdog Adaptativo de Desempenho e Frame-Budget (&#x3C; 32ms)</strong>:
+<ul>
+<li>Monitora continuamente a latência de processamento por quadro da câmera.</li>
+<li>Se a máquina sofrer sobrecarga (latência contínua > 32ms), o sistema executa um <strong>auto-downgrade silencioso e instantâneo</strong> (Nível 3 $\rightarrow$ Nível 2 $\rightarrow$ Nível 1), preservando a fluidez da chamada de vídeo sem travamentos e sem piscar a tela.</li>
+<li>Mecanismo <em>anti-thrashing</em> com histerese (&#x3C; 24ms) e tempo de resfriamento de 30 segundos, prevenindo oscilações indesejadas de qualidade.</li>
+</ul>
+</li>
+<li><strong>Nova Interface do Seletor de Câmera (<code>SeletorEfeitoFundoCamera</code>)</strong>:
+<ul>
+<li><strong>Pílula de Telemetria ao Vivo</strong>: Exibe em tempo real o FPS estimado, latência EMA em milissegundos e o perfil de qualidade ativo.</li>
+<li><strong>Seletor de Modo</strong>: Permite manter o sistema em <strong>Automático (Recomendado)</strong> ou travar manualmente no perfil desejado (Ultra, Equilibrado ou Econômico).</li>
+<li><strong>Conformidade WCAG 2.1 AA &#x26; Design System SAO</strong>: Superfícies neutras de carvão/grafite (<code>#1A1A1A</code>, <code>#242424</code>), foco visível nítido, alertas com leitor de tela (<code>aria-live="polite"</code>), contraste $\ge 4.5:1$ com pareamento canônico <code>text-module-foreground</code> sobre <code>bg-module</code> e erradicação absoluta de classes <code>slate-*</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
 <h2 id="-079---09-2026">🚀 [0.7.9] - 09-2026</h2>
 <p><strong>“Agenda Mais Prática: Novo Seletor de Clientes CLC, Repetição Estilo Google Calendar e Tela Ampla!”</strong></p>
 <h3 id="️-scrollbars-minimalistas-e-auto-ocultáveis-estilo-macos--mobile-abordagem-2">🖱️ Scrollbars Minimalistas e Auto-Ocultáveis Estilo macOS / Mobile (Abordagem 2)</h3>

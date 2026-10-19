@@ -4,6 +4,28 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
+## 🚀 [0.8.0] - 10-2026
+
+**"Vídeo e Câmera no Nível Google Meet: Pipeline Gráfico Adaptativo, Fim do Serrilhado e Desfoque Inteligente por Hardware!"**
+
+### 🎥 Pipeline Gráfico Adaptativo de Câmera e Efeitos Virtuais (Estilo Google Meet)
+
+- **Qualidade Visual Semelhante ao Google Meet**: Reformulamos por completo a engenharia de vídeo e efeitos de fundo de câmera do ComuChat. A imagem agora possui recortes orgânicos, transições suaves e estabilidade impecável, extinguindo as bordas quadriculadas e o tremor (*flickering*) característicos de segmentações puras.
+- **Arquitetura Adaptativa em 3 Níveis de Hardware (Tiers 1, 2 e 3)**:
+  - **Nível 3 (Ultra / Studio)**: Ativado em dispositivos com GPUs dedicadas potentes (NVIDIA GeForce/RTX, AMD Radeon RX, Apple Silicon) ou WebGPU acelerada. Aplica **Filtro Bilateral Guiado (*Guided Filter*)** em alta resolução, alinhando a máscara aos contrastes reais da imagem da câmera para recortar com precisão fios de cabelo, ombros e roupas, impedindo que partes do fundo vazem.
+  - **Nível 2 (Equilibrado / Padrão Google Meet 30 FPS)**: Otimizado para GPUs integradas modernas (Intel Iris Xe, AMD Radeon RDNA/Vega). Implementa **Suavização Temporal (*EMA - Exponential Moving Average*)** via framebuffers duplos (*FBO Ping-Pong*) para amortecer ruídos do sensor entre quadros consecutivos e **Feathering Gaussiano em 2 Passes** com curva sigmoide (*smoothstep* sub-pixel), gerando o efeito *bokeh* fotográfico natural.
+  - **Nível 1 (Econômico / Baixa CPU)**: Modo leve com modelo 16:9 Landscape (`selfie_segmenter_landscape.tflite`) e aceleração GPU direta com consumo elétrico mínimo (< 3% de CPU), ideal para notebooks em bateria ou computadores mais modestos.
+- **Watchdog Adaptativo de Desempenho e Frame-Budget (< 32ms)**:
+  - Monitora continuamente a latência de processamento por quadro da câmera.
+  - Se a máquina sofrer sobrecarga (latência contínua > 32ms), o sistema executa um **auto-downgrade silencioso e instantâneo** (Nível 3 $\rightarrow$ Nível 2 $\rightarrow$ Nível 1), preservando a fluidez da chamada de vídeo sem travamentos e sem piscar a tela.
+  - Mecanismo *anti-thrashing* com histerese (< 24ms) e tempo de resfriamento de 30 segundos, prevenindo oscilações indesejadas de qualidade.
+- **Nova Interface do Seletor de Câmera (`SeletorEfeitoFundoCamera`)**:
+  - **Pílula de Telemetria ao Vivo**: Exibe em tempo real o FPS estimado, latência EMA em milissegundos e o perfil de qualidade ativo.
+  - **Seletor de Modo**: Permite manter o sistema em **Automático (Recomendado)** ou travar manualmente no perfil desejado (Ultra, Equilibrado ou Econômico).
+  - **Conformidade WCAG 2.1 AA & Design System SAO**: Superfícies neutras de carvão/grafite (`#1A1A1A`, `#242424`), foco visível nítido, alertas com leitor de tela (`aria-live="polite"`), contraste $\ge 4.5:1$ com pareamento canônico `text-module-foreground` sobre `bg-module` e erradicação absoluta de classes `slate-*`.
+
+---
+
 ## 🚀 [0.7.9] - 09-2026
 
 **"Agenda Mais Prática: Novo Seletor de Clientes CLC, Repetição Estilo Google Calendar e Tela Ampla!"**
