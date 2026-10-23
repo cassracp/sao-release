@@ -4,7 +4,7 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ---
 
-## 🚀 [0.8.0] - 10-2026
+## 🚀 [0.8.x] - 10-2026
 
 **"Vídeo e Câmera no Nível Google Meet: Pipeline Gráfico Adaptativo, Fim do Serrilhado e Desfoque Inteligente por Hardware!"**
 
