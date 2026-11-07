@@ -6,7 +6,28 @@ Este documento registra as principais atualizações, melhorias e correções fe
 
 ## 🚀 [0.8.x] - 10-2026
 
-**"Vídeo e Câmera no Nível Google Meet: Pipeline Gráfico Adaptativo, Fim do Serrilhado e Desfoque Inteligente por Hardware!"**
+**"Vídeo e Câmera no Nível Google Meet e Nova Command Palette Global (Ctrl + K)!"**
+
+### ⚡ Command Palette Global do SAO (`Ctrl + K`): Navegação Instantânea, Acessível e Híbrida
+
+- **Atalho Universal `Ctrl + K` (e `Cmd + K`)**: Pressione `Ctrl + K` em qualquer tela do SAO ou clique no novo gatilho integrado da barra superior para abrir uma paleta de comandos e busca geral instantânea.
+- **Busca Híbrida Inteligente (0ms local + ~250ms assíncrono na Agenda)**:
+  - **Módulos e Addons**: Encontre qualquer módulo e ferramenta do sistema com checagem rigorosa de permissões.
+  - **ComuChat**: Pesquise instantaneamente canais de texto (`#`), canais de voz (`🔊`), comunidades e contatos diretos (`@`), com foto e indicador de presença em tempo real.
+  - **Agenda de Compromissos**: Consulta de compromissos com debounce inteligente via IPC com o PostgreSQL, exibindo data/hora amigável, cliente e agenda associada.
+  - **Ações Rápidas do Sistema**: Alterne o tema (claro / grafite neutro), abra configurações, reporte erros ou melhorias com gravação e Notion, gerencie usuários ou encerre sua sessão com facilidade.
+- **Prefixos Inteligentes e Chips de Categoria**:
+  - Digite `@` para buscar contatos, `#` para canais/comunidades e `>` para ações rápidas.
+  - Alterne entre os chips de categoria com um clique ou através da tecla `Tab`.
+- **Navegação 100% por Teclado e Desacoplamento de Janelas**:
+  - Navegue pelos resultados com `↑` e `↓`.
+  - Pressione `Enter` para abrir diretamente no módulo, agendamento ou conversa correspondente.
+  - Pressione `Ctrl + Enter` em módulos para desacoplá-los instantaneamente em uma janela separada do Windows.
+- **Histórico Recente e Sugestões**:
+  - Salva automaticamente os últimos itens selecionados em `localStorage` para acesso ultra-rápido, com botão para remoção pontual ou limpeza completa do histórico.
+- **Isolamento de WebViews Nativas e Design System**:
+  - Ocultação preventiva de WebViews nativas do Windows DirectComposition (`hide_all_embedded_webviews`) enquanto a barra de busca estiver aberta, evitando sobreposições incorretas e restaurando automaticamente ao fechar.
+  - Conformidade estrita com WCAG 2.1 AA (contraste $\ge 4.5:1$, indicadores de foco nítidos, papéis ARIA) e tema Carvão/Grafite Neutro (`#121212`, `#1F1F1F`, `#242424`).
 
 ### 🎥 Pipeline Gráfico Adaptativo de Câmera e Efeitos Virtuais (Estilo Google Meet)
 

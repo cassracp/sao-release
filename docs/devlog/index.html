@@ -6,7 +6,43 @@ SAO
 <p>Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.</p>
 <hr>
 <h2 id="-08x---10-2026">🚀 [0.8.x] - 10-2026</h2>
-<p><strong>“Vídeo e Câmera no Nível Google Meet: Pipeline Gráfico Adaptativo, Fim do Serrilhado e Desfoque Inteligente por Hardware!”</strong></p>
+<p><strong>“Vídeo e Câmera no Nível Google Meet e Nova Command Palette Global (Ctrl + K)!”</strong></p>
+<h3 id="-command-palette-global-do-sao-ctrl--k-navegação-instantânea-acessível-e-híbrida">⚡ Command Palette Global do SAO (<code>Ctrl + K</code>): Navegação Instantânea, Acessível e Híbrida</h3>
+<ul>
+<li><strong>Atalho Universal <code>Ctrl + K</code> (e <code>Cmd + K</code>)</strong>: Pressione <code>Ctrl + K</code> em qualquer tela do SAO ou clique no novo gatilho integrado da barra superior para abrir uma paleta de comandos e busca geral instantânea.</li>
+<li><strong>Busca Híbrida Inteligente (0ms local + ~250ms assíncrono na Agenda)</strong>:
+<ul>
+<li><strong>Módulos e Addons</strong>: Encontre qualquer módulo e ferramenta do sistema com checagem rigorosa de permissões.</li>
+<li><strong>ComuChat</strong>: Pesquise instantaneamente canais de texto (<code>#</code>), canais de voz (<code>🔊</code>), comunidades e contatos diretos (<code>@</code>), com foto e indicador de presença em tempo real.</li>
+<li><strong>Agenda de Compromissos</strong>: Consulta de compromissos com debounce inteligente via IPC com o PostgreSQL, exibindo data/hora amigável, cliente e agenda associada.</li>
+<li><strong>Ações Rápidas do Sistema</strong>: Alterne o tema (claro / grafite neutro), abra configurações, reporte erros ou melhorias com gravação e Notion, gerencie usuários ou encerre sua sessão com facilidade.</li>
+</ul>
+</li>
+<li><strong>Prefixos Inteligentes e Chips de Categoria</strong>:
+<ul>
+<li>Digite <code>@</code> para buscar contatos, <code>#</code> para canais/comunidades e <code>></code> para ações rápidas.</li>
+<li>Alterne entre os chips de categoria com um clique ou através da tecla <code>Tab</code>.</li>
+</ul>
+</li>
+<li><strong>Navegação 100% por Teclado e Desacoplamento de Janelas</strong>:
+<ul>
+<li>Navegue pelos resultados com <code>↑</code> e <code>↓</code>.</li>
+<li>Pressione <code>Enter</code> para abrir diretamente no módulo, agendamento ou conversa correspondente.</li>
+<li>Pressione <code>Ctrl + Enter</code> em módulos para desacoplá-los instantaneamente em uma janela separada do Windows.</li>
+</ul>
+</li>
+<li><strong>Histórico Recente e Sugestões</strong>:
+<ul>
+<li>Salva automaticamente os últimos itens selecionados em <code>localStorage</code> para acesso ultra-rápido, com botão para remoção pontual ou limpeza completa do histórico.</li>
+</ul>
+</li>
+<li><strong>Isolamento de WebViews Nativas e Design System</strong>:
+<ul>
+<li>Ocultação preventiva de WebViews nativas do Windows DirectComposition (<code>hide_all_embedded_webviews</code>) enquanto a barra de busca estiver aberta, evitando sobreposições incorretas e restaurando automaticamente ao fechar.</li>
+<li>Conformidade estrita com WCAG 2.1 AA (contraste $\ge 4.5:1$, indicadores de foco nítidos, papéis ARIA) e tema Carvão/Grafite Neutro (<code>#121212</code>, <code>#1F1F1F</code>, <code>#242424</code>).</li>
+</ul>
+</li>
+</ul>
 <h3 id="-pipeline-gráfico-adaptativo-de-câmera-e-efeitos-virtuais-estilo-google-meet">🎥 Pipeline Gráfico Adaptativo de Câmera e Efeitos Virtuais (Estilo Google Meet)</h3>
 <ul>
 <li><strong>Qualidade Visual Semelhante ao Google Meet</strong>: Reformulamos por completo a engenharia de vídeo e efeitos de fundo de câmera do ComuChat. A imagem agora possui recortes orgânicos, transições suaves e estabilidade impecável, extinguindo as bordas quadriculadas e o tremor (<em>flickering</em>) característicos de segmentações puras.</li>
