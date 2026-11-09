@@ -1,510 +1,311 @@
-# 🛠️ DevLog - SAO (Sistema de Auxílio Operacional)
+<!-- #
+# GUIA RÁPIDO PARA ADICIONAR OU EDITAR NOTAS DA RELEASE MANUALMENTE:
 
-Este documento registra as principais atualizações, melhorias e correções feitas no projeto. O formato ideal para cada entrada é misturar uma linguagem amigável (excelente para a comunidade no Discord) com a organização técnica que os desenvolvedores amam no GitHub.
+Quando quiser registrar uma nova atualização, basta adicionar um bloco no topo deste
+arquivo seguindo a estrutura abaixo (sem jargões técnicos, focando nos benefícios):
 
----
+## [0.9.0] - Novembro de 2026
 
-## 🚀 [0.8.x] - 10-2026
+"Frase de Destaque da Versão entre Aspas"
 
-**"Vídeo e Câmera no Nível Google Meet e Nova Command Palette Global (Ctrl + K)!"**
+### ✨ O que há de novo
 
-### ⚡ Command Palette Global do SAO (`Ctrl + K`): Navegação Instantânea, Acessível e Híbrida
+- **Título da Novidade**: Explicação simples e amigável do que melhorou no dia a dia.
+- **Outra Funcionalidade**: Suporta formatação de código curto com crases (ex: `Ctrl + K`).
 
-- **Atalho Universal `Ctrl + K` (e `Cmd + K`)**: Pressione `Ctrl + K` em qualquer tela do SAO ou clique no novo gatilho integrado da barra superior para abrir uma paleta de comandos e busca geral instantânea.
-- **Busca Híbrida Inteligente (0ms local + ~250ms assíncrono na Agenda)**:
-  - **Módulos e Addons**: Encontre qualquer módulo e ferramenta do sistema com checagem rigorosa de permissões.
-  - **ComuChat**: Pesquise instantaneamente canais de texto (`#`), canais de voz (`🔊`), comunidades e contatos diretos (`@`), com foto e indicador de presença em tempo real.
-  - **Agenda de Compromissos**: Consulta de compromissos com debounce inteligente via IPC com o PostgreSQL, exibindo data/hora amigável, cliente e agenda associada.
-  - **Ações Rápidas do Sistema**: Alterne o tema (claro / grafite neutro), abra configurações, reporte erros ou melhorias com gravação e Notion, gerencie usuários ou encerre sua sessão com facilidade.
-- **Prefixos Inteligentes e Chips de Categoria**:
-  - Digite `@` para buscar contatos, `#` para canais/comunidades e `>` para ações rápidas.
-  - Alterne entre os chips de categoria com um clique ou através da tecla `Tab`.
-- **Navegação 100% por Teclado e Desacoplamento de Janelas**:
-  - Navegue pelos resultados com `↑` e `↓`.
-  - Pressione `Enter` para abrir diretamente no módulo, agendamento ou conversa correspondente.
-  - Pressione `Ctrl + Enter` em módulos para desacoplá-los instantaneamente em uma janela separada do Windows.
-- **Histórico Recente e Sugestões**:
-  - Salva automaticamente os últimos itens selecionados em `localStorage` para acesso ultra-rápido, com botão para remoção pontual ou limpeza completa do histórico.
-- **Isolamento de WebViews Nativas e Design System**:
-  - Ocultação preventiva de WebViews nativas do Windows DirectComposition (`hide_all_embedded_webviews`) enquanto a barra de busca estiver aberta, evitando sobreposições incorretas e restaurando automaticamente ao fechar.
-  - Conformidade estrita com WCAG 2.1 AA (contraste $\ge 4.5:1$, indicadores de foco nítidos, papéis ARIA) e tema Carvão/Grafite Neutro (`#121212`, `#1F1F1F`, `#242424`).
+### 🔧 Melhorias e Correções
 
-### 🎥 Pipeline Gráfico Adaptativo de Câmera e Efeitos Virtuais (Estilo Google Meet)
+- # **Título do Ajuste**: Descrição objetiva da correção ou aperfeiçoamento.
+  -->
 
-- **Qualidade Visual Semelhante ao Google Meet**: Reformulamos por completo a engenharia de vídeo e efeitos de fundo de câmera do ComuChat. A imagem agora possui recortes orgânicos, transições suaves e estabilidade impecável, extinguindo as bordas quadriculadas e o tremor (*flickering*) característicos de segmentações puras.
-- **Arquitetura Adaptativa em 3 Níveis de Hardware (Tiers 1, 2 e 3)**:
-  - **Nível 3 (Ultra / Studio)**: Ativado em dispositivos com GPUs dedicadas potentes (NVIDIA GeForce/RTX, AMD Radeon RX, Apple Silicon) ou WebGPU acelerada. Aplica **Filtro Bilateral Guiado (*Guided Filter*)** em alta resolução, alinhando a máscara aos contrastes reais da imagem da câmera para recortar com precisão fios de cabelo, ombros e roupas, impedindo que partes do fundo vazem.
-  - **Nível 2 (Equilibrado / Padrão Google Meet 30 FPS)**: Otimizado para GPUs integradas modernas (Intel Iris Xe, AMD Radeon RDNA/Vega). Implementa **Suavização Temporal (*EMA - Exponential Moving Average*)** via framebuffers duplos (*FBO Ping-Pong*) para amortecer ruídos do sensor entre quadros consecutivos e **Feathering Gaussiano em 2 Passes** com curva sigmoide (*smoothstep* sub-pixel), gerando o efeito *bokeh* fotográfico natural.
-  - **Nível 1 (Econômico / Baixa CPU)**: Modo leve com modelo 16:9 Landscape (`selfie_segmenter_landscape.tflite`) e aceleração GPU direta com consumo elétrico mínimo (< 3% de CPU), ideal para notebooks em bateria ou computadores mais modestos.
-- **Watchdog Adaptativo de Desempenho e Frame-Budget (< 32ms)**:
-  - Monitora continuamente a latência de processamento por quadro da câmera.
-  - Se a máquina sofrer sobrecarga (latência contínua > 32ms), o sistema executa um **auto-downgrade silencioso e instantâneo** (Nível 3 $\rightarrow$ Nível 2 $\rightarrow$ Nível 1), preservando a fluidez da chamada de vídeo sem travamentos e sem piscar a tela.
-  - Mecanismo *anti-thrashing* com histerese (< 24ms) e tempo de resfriamento de 30 segundos, prevenindo oscilações indesejadas de qualidade.
-- **Nova Interface do Seletor de Câmera (`SeletorEfeitoFundoCamera`)**:
-  - **Pílula de Telemetria ao Vivo**: Exibe em tempo real o FPS estimado, latência EMA em milissegundos e o perfil de qualidade ativo.
-  - **Seletor de Modo**: Permite manter o sistema em **Automático (Recomendado)** ou travar manualmente no perfil desejado (Ultra, Equilibrado ou Econômico).
-  - **Conformidade WCAG 2.1 AA & Design System SAO**: Superfícies neutras de carvão/grafite (`#1A1A1A`, `#242424`), foco visível nítido, alertas com leitor de tela (`aria-live="polite"`), contraste $\ge 4.5:1$ com pareamento canônico `text-module-foreground` sobre `bg-module` e erradicação absoluta de classes `slate-*`.
+## [0.9.1] - 09 de Novembro de 2026
 
----
+Build de Melhoria e Correção
 
-## 🚀 [0.7.9] - 09-2026
+### Melhorias e Correções
 
-**"Agenda Mais Prática: Novo Seletor de Clientes CLC, Repetição Estilo Google Calendar e Tela Ampla!"**
+- **Painel de Abertura de Solicitações:** Corrigido um pequeno bug que impedia a abertura de solicitação através do painel.
+- **Sincronização Painel de Aberutra de SOlicitações:** Otimizada a comunicação entre o Painel de Abertura de Solicitações e o Notion (utilizado para gestão das solicitações).
+- **Adicionado mensageria de resposta às Solicitações:** Criado um campo para exibição das avaliações das solicitações diretamente no SAO com apoio de notificação e mensageria.
 
-### 🖱️ Scrollbars Minimalistas e Auto-Ocultáveis Estilo macOS / Mobile (Abordagem 2)
+## [0.9.0] - 09 de Novembro de 2026
 
-- **Comportamento Limpo e Invisível em Repouso**: Por padrão, todas as barras de rolagem do SAO permanecem 100% invisíveis mesmo quando o cursor do mouse está sobre a tela ou sobre o container, mantendo a interface despoluída, focada e profissional.
-- **Detecção Instantânea de Rolagem**: Ao girar a rodinha do mouse (`wheel`), rolar a página (`scroll`), utilizar teclas de navegação ou toque, a barra surge imediatamente em formato de cápsula arredondada de 6px com trilhas e cantos transparentes.
-- **Timer de Auto-Ocultação de 1 Segundo**: Após 1 segundo sem movimentação de rolagem, a barra desvanece suavemente aos 750ms e é ocultada aos 1000ms, proporcionando a experiência fluida do macOS e mobile.
-- **Interação Direta e Arraste Preservados**: Ao passar o cursor diretamente sobre a faixa do polegar (`*::-webkit-scrollbar-thumb:hover`) ou segurá-lo para arrastar (`*::-webkit-scrollbar-thumb:active`), a barra permanece nítida e visível até a liberação do clique e afastamento do cursor.
-- **Conformidade com Paletas Neutras e Dark Mode Carvão/Grafite**: Sem cores slate ou azuis, utilizando tons translúcidos neutros adaptados para os modos Claro e Escuro, com supressão de botões e setas nativas do Windows WebView2.
+"Um passo mais próximo da versão de lançamento 1.0.0"
 
-### 🔍 Novo Seletor Inteligente de Clientes do CLC
+### O que há de novo
 
-- **Busca Rápida e Unificada**: Encontrar clientes e cartórios na Agenda agora está muito mais rápido e moderno. A busca dinâmica funciona em todos os formulários da agenda (novo agendamento, agendamento de sessões em sequência, reserva comercial, disponibilização de vagas e fila de espera).
-- **Pesquisa Multifiltro**: Você pode pesquisar instantaneamente digitando o código do cliente, nome, cidade ou estado (UF).
-- **Preenchimento Automático com Um Clique**: Ao selecionar o cliente na lista, o título do agendamento e o telefone de contato são preenchidos automaticamente, economizando cliques e evitando erros de digitação.
-- **Navegação Ágil pelo Teclado e Visual Acessível**: É possível navegar pelos resultados usando as setas do teclado e selecionar com Enter, com visual agradável, excelente contraste e suporte completo aos modos claro e escuro.
+- **Atalho Rápido (Ctrl + K)**: Pressione `Ctrl + K` em qualquer tela para abrir uma busca unificada e encontrar ferramentas, conversas do _ComuChat!_, compromissos da Agenda e mais em um instante.
+- **Tutorial Guiado**: Adicionei um tutorial guiado para ajudar você a se familiarizar com o sistema e seus módulos.
+- **Notas de Release**: Adicionado esse painel que você lê! Todas as novidades e atualizações serão publicadas aqui.
+- **Painel para abertura de solicitação**: Agora o SAO conta com um painel interno para abertura de solicitação de melhoria (feat) e correção (bug). Basta clicar no botão no cabeçalho superior e preencher o formulário. As solicitação são organizadas por prioriedade e viabilidade e permitem adição de vários de tipos de mídia para exemplificação.
 
-### 🔁 Repetição Inteligente e Intuitiva (Padrão Google Calendar)
+### Melhorias e Correções
 
-- **Rotinas e Compromissos Periódicos Descomplicados**: Agora ficou simples criar compromissos que se repetem na sua rotina (como reuniões de equipe, atendimentos fixos ou intervalos). O seletor oferece opções prontas:
-  - Não se repete;
-  - Todos os dias;
-  - A cada dia útil (segunda a sexta-feira);
-  - Semanalmente;
-  - Quinzenalmente;
-  - Mensalmente;
-  - Personalizado (escolhendo dias da semana específicos e data limite para encerramento).
-- **Período e Horários Bem Definidos**: O intervalo de datas e a sincronização de horários ficam sempre claros, eliminando qualquer dúvida de quando o compromisso começa, quanto tempo dura e até quando ele se repetirá.
+- **Chamadas de Video Salvas no ComuChat!**: Aperfeiçoei as chamadas de video do ComuChat, de modo que sejam salvas no histórico mesmo em caso de queda de conexão.
+- **Configurações de Notificações aprimorada**: Agora é possível configurar todas as notificações de forma independente dando total autonomia e controle. Além disso, foi corrigido um bug que fazia com que algumas notificações fossem exibidas com erro.
 
-### 🖥️ Abertura em Tela Ampla e Hierarquia Visual Limpa
+## [0.8.x] - Outubro de 2026
 
-- **Espaço Amplo de Trabalho**: O formulário de agendamento agora abre em formato espaçoso de tela inteira, garantindo visualização confortável de todas as informações, participantes e observações sem campos espremidos.
-- **Organização Clara de Informações**: Campos organizados de forma fluida: Título em destaque no topo, cliente vinculado logo abaixo, definição de data/horário/repetição e pauta do atendimento.
+"Busca Rápida em Qualquer Lugar e Câmera com Qualidade de Estúdio"
 
-### 📅 Separação Clara entre Rotinas e Grade de Vagas Livres
+### Busca Global Instantânea (Ctrl + K)
 
-- **Fim da Confusão entre Rotinas e Vagas**: Orientações visuais na tela agora ajudam a distinguir quando você está criando um compromisso repetitivo (para a sua própria rotina) e quando está disponibilizando blocos de vagas livres para atendimentos futuros.
+- **Pesquisa de Contatos e Chat**: Digite `@` para procurar colegas de equipe ou `#` para encontrar canais e comunidades com indicador de status em tempo real.
+- **Consulta de Compromissos**: Pesquise compromissos da sua Agenda rapidamente pelo nome do cliente ou assunto sem sair da tela atual.
+- **Ações Rápidas do Sistema**: Alterne entre tema claro e escuro, verifique atualizações, abra configurações ou reporte sugestões diretamente pela busca.
+- **Histórico Inteligente**: O sistema memoriza seus acessos mais frequentes para você reabrir suas ferramentas favoritas com um clique.
 
-### 🏷️ Flexibilidade na Edição de Blocos de Agenda Livre
+### Câmera e Chamadas de Vídeo
 
-- **Opção de Manter como Bloco Livre**: Ao editar um agendamento já existente como Agenda Livre (para realizar pequenas alterações, como trocar a cor de destaque, ajustar horários ou observações), o salvamento agora oferece três opções claras: **Manter como Bloco Livre**, **Converter em Bloco Padrão** ou **Cancelar**.
-- **Diálogo Interativo e Acessível (WCAG 2.1 AA)**: As opções são apresentadas através de cartões visuais com ícones representativos (`CalendarClock` e `CheckCircle2`), textos explicativos detalhados, foco visível por teclado e alto contraste, permitindo a edição rápida de propriedades da vaga sem consumir acidentalmente o horário na grade.
-
-### 💬 ComuChat: Notificações Passivas em Segundo Plano e Correção de Conexão Realtime
-
-- **Notificações Passivas 100% Funcionais**: Corrigida a falha em que as notificações do ComuChat só apareciam quando o usuário abria o módulo. Agora, sons de alerta e o sininho do cabeçalho funcionam o tempo todo em segundo plano, mesmo com o ComuChat fechado ou navegando em outros módulos (Agenda, SAC, Intranet, Editor, etc.).
-- **Correção da Conexão Segmentada no Backend Rust**: Identificada e sanada a causa raiz em que a URL padrão do banco de dados no listener segmentado (`iniciar_ouvinte_usuario` em `realtime.rs`) continha caracteres mascarados (`******`), impedindo a conexão Postgres de ser aberta e silenciando os eventos em tempo real para instalações sem variável de ambiente explícita.
-- **Resolução de Áudio Local Offline**: Substituída a dependência exclusiva do streaming via CDN externo do `react-sounds` (que falhava silenciosamente em redes corporativas com proxy ou offline) por reprodução nativa do arquivo de áudio local empacotado (`/alexis_gaming_cam-bell-notification-337658.mp3`), com fallback gracioso.
-- **Autocorreção de Participantes de DM no Backend**: `enviar_mensagem` e `obter_ou_criar_dm` garantem preventivamente o registro dos participantes na tabela `chat_canal_participantes` antes da inserção da mensagem, permitindo que a função `chat_canal_destinatarios` do Postgres identifique imediatamente os destinatários e dispare o `pg_notify` segmentado sem depender de abertura prévia da conversa.
-- **Desacoplamento do Ciclo de Vida de Abas (*Keep-Alive*)**: Removida a atribuição forçada de `setIsComuChatActive(true)` no `ComuChatLayout.tsx`, deixando a gestão de atividade exclusivamente a cargo do `LayoutMain.tsx` com base na aba visível. Isso impede que abas de chat ocultadas em segundo plano se declarem ativas e silenciem as notificações.
-- **Validação Resiliente no AlertsContext e ChatArea**: Ajustada a detecção de canais DM para `!details.comunidade_id`, unificado o controle de áudio com `playSoundDebounced("comuchat")` (respeitando preferências e regras de status do usuário), e adicionado suporte ao evento de banco `NEW_CHAT_MESSAGE` no `ChatArea.tsx`.
-
-### ⚡ ComuChat: Virtualização e Alta Escalabilidade Frontend (Fase 3)
-
-- **Feed de Mensagens 100% Virtualizado (`@tanstack/react-virtual`)**: O histórico do chat agora renderiza no DOM apenas os nós visíveis na janela de visualização (`~20–30` nós) com medição dinâmica de altura (`measureElement`), garantindo rolagem a 60 FPS com zero travamentos em canais longos e pesados (com fotos, blocos de código e múltiplos anexos).
-- **Paginação Bidirecional com Cursor no Backend Rust (`comandos_chat.rs`)**: Implementado suporte nativo a `before_id: Option<Uuid>` e `limit: Option<u64>` (com *clamp* seguro entre 1 e 200 mensagens, padrão 50), utilizando ordenação por tupla `(created_at, id)` para paginação imune a inserções concorrentes.
-- **Scroll Anchoring com Zero Jitter**: Ao rolar para o topo e carregar lotes de mensagens anteriores, a posição da rolagem é compensada de forma precisa via medição `getBoundingClientRect().top` da mensagem mais antiga visível (com fallback resiliente ao delta de `scrollHeight`), eliminando saltos visuais.
-- **Syntax Highlighting Não Bloqueante (`IntersectionObserver` + `requestIdleCallback`)**: O realce de código via `highlight.js` em blocos `<code>` é aplicado sob demanda apenas quando o elemento entra na vizinhança da viewport, preservando a fluidez da thread principal da UI.
-- **Rascunhos Persistentes por Canal (`rascunhosPorCanal`)**: Textos digitados no editor que ainda não foram enviados são mantidos em cache sincronizado com `sessionStorage` (`comuchat_drafts_v1`). O usuário pode alternar livremente entre múltiplos canais e DMs sem perder o que estava escrevendo.
-- **Conformidade WCAG 2.1 AA**: Todos os botões e áreas interativas possuem `aria-label`, foco visível (`focus-visible:ring-2 focus-visible:outline-none`) e contraste aprimorado (`text-module-foreground` em fundos temáticos).
-
-### 🌐 WebViews Nativas (Intranet, SAC, PABX e WhatsApp): Fim da Tela Branca ao Alternar Abas
-
-- **Invalidação do Cache de Coordenadas (*Bounds*) ao Ocultar Abas Keep-Alive**: Identifiquei a causa raiz do bug em que abrir um módulo de WebView nativa, alternar para a tela inicial (*Home*) ou para outro módulo e depois retornar deixava a área da página completamente branca. Como as abas permanecem montadas em modo *keep-alive* (`display: none`), a WebView nativa do sistema operacional era ocultada via `hide_all_embedded_webviews` / `hide_embedded_webview`, mas o cache `lastAppliedBoundsRef` no `WebFrameView.tsx` continuava preenchido com as coordenadas anteriores. Ao retornar para a aba, `getBoundingClientRect()` devolvia exatamente as mesmas dimensões `{ x, y, width, height }` e o frontend abortava a chamada a `create_or_show_embedded_webview`, mantendo a WebView nativa oculta sobre o container branco.
-- **Máquina de Estados de Visibilidade, Época de Ocultação e Janela de Estabilização (`cicloVidaWebview.ts`)**: Criei o utilitário `src/utils/cicloVidaWebview.ts` para gerenciar de forma determinística o estado de visibilidade (`visivel`, `moduloAtivo`, `forcarExibicaoAteMs`, `contagemOcultacoes`, `ultimosBounds`). Sempre que a WebView é ocultada (troca de aba principal, troca de sub-aba interna, minimização, container `display: none` ou exibição de imagem Base64 `data:`), `registrarOcultacaoWebview()` invalida o cache de *bounds* e incrementa o contador de época. Ao retornar para a aba, `registrarReativacaoWebview()` abre uma janela de estabilização de 500ms que garante a reexibição da WebView nativa em todos os ciclos de *reflow* (`requestAnimationFrame`, `50ms`, `150ms` e `300ms`), enquanto `validarConclusaoSincronizacaoWebview()` protege contra condições de corrida assíncronas caso o usuário troque de aba ou sub-aba enquanto o IPC está em andamento.
-- **Desacoplamento entre Polling de Navegação e Timers de Layout**: Desacoplei o `useEffect` principal do `ResizeObserver` e do listener `sao-active-tab-changed` da identidade do objeto `activeTab` (usando `updateEmbeddedBoundsRef` e `activeTabRef`), evitando que o polling de título/URL de 1 segundo (`webview-navigation-changed`) reiniciasse o efeito e cancelasse os timers de estabilização no meio da transição de aba.
-- **Sincronização Direta no `LayoutMain.tsx` / `AddonsContext.tsx` e Reexibição Atômica no Backend Rust (`commands.rs`)**: No `LayoutMain.tsx` e no `AddonsContext.tsx`, unifiquei a detecção de módulos WebView via `ehModuloWebviewNativo()`, corrigi a atualização de `activeTabId` ao fechar outras abas / abas à direita / todas as abas (`fecharOutrasAbas`, `fecharAbasADireita`, `fecharTodasAsAbas`), substituí o `import()` dinâmico assíncrono por `invoke` estático imediato na troca de abas e removi `closeAddonModal` do array de dependências do efeito de troca de aba. No backend Rust (`create_or_show_embedded_webview`), passei a ocultar preventivamente outras WebViews de módulos na mesma janela (`ocultar_outras_webviews_embarcadas_na_janela`) e, ao reexibir uma WebView existente (`reexibir_e_sincronizar_webview_existente`), aplicar `set_bounds`, `show()`, `set_position`, `set_size` e notificar diretamente o `ICoreWebView2Controller` no Windows via `SetIsVisible(true)` e `NotifyParentWindowPositionChanged()`.
-
-
-### 📎 Agenda: Anexos e Mídia nos Comentários de Agendamento (Unificação com o ComuChat)
-
-- **Experiência Visual Unificada e Sem Duplicação de Código (DRY)**: A área de comentários dos agendamentos agora conta com o mesmo poder visual do ComuChat, em uma versão focada e minimalista. Novas melhorias nos reprodutores e visualizadores de mídia beneficiam ambos os módulos simultaneamente através de componentes parametrizados (`ChatAnexosLista`, `ChatAudioPlayer`, `ChatVideoPlayer`).
-- **Galeria de Imagens com Modal em Alta Resolução**: Envio de fotos com thumbnail otimizado e visualizador em tela cheia com controles de zoom (até 500%), visualização 1:1 em tamanho real, pan com arraste pelo mouse, rotação e download seguro pelo diálogo nativo do sistema operacional.
-- **Mensagens de Voz com Player de Áudio Dedicado**: Possibilidade de gravar áudios em tempo real diretamente pelo microfone com cronômetro, visualização de ondas sonoras e envio instantâneo, renderizados no histórico com player de áudio dedicado com barra de progresso e controle de tempo.
-- **Player de Vídeo Nativo e Embeds Externos**: Reprodução direta de vídeos anexados nos comentários e detecção automática de links de vídeos do YouTube e Vimeo no texto do comentário.
-- **Arquivos e Documentos com Download Seguro Desktop**: PDFs, planilhas e documentos genéricos exibem cartões com identificação visual por categoria, tamanho formatado e download em camadas via `@tauri-apps/plugin-dialog` e escrita nativa no disco pelo Tauri.
-- **Arquitetura Robusta no Banco de Dados (Migração SeaORM 63)**:
-  - Modelagem atômica dividida em metadados leves no SSD (`agendamento_comentario_anexos` em `pg_default`) e dados binários em BYTEA com detecção dinâmica da tablespace `hd_4tb` (`agendamento_comentario_anexos_arquivos`).
-  - Carregamento em lote único (*batch loading* anti-$N+1$) e download de binários sob demanda (`baixar_anexo_comentario_agendamento`), mantendo a abertura de comentários instantânea e leve.
-  - Exclusão em cascata (`CASCADE`) e sanitização rigorosa contra transbordos de string, bytes NUL e arquivos corrompidos.
-- **Design System Neutro e Acessibilidade (WCAG 2.1 AA)**: Interface em Grafite/Carvão Neutro sem classes `slate-*`, foco nítido por teclado, botões de ação com contraste estrito e scrollbar minimalista auto-ocultável `.sao-scrollbar`.
+- **Efeitos de Fundo Naturais**: O desfoque de fundo e os cenários virtuais nas chamadas de vídeo do ComuChat agora recortam com muito mais precisão o cabelo e os ombros, sem tremores nem bordas borradas.
+- **Ajuste Automático de Desempenho**: O sistema adapta a qualidade do efeito automaticamente para garantir que a chamada continue fluida mesmo em computadores mais modestos.
+- **Seletor de Qualidade**: Você pode escolher entre modo Automático, Ultra (máxima qualidade), Equilibrado ou Econômico (baixo consumo).
 
 ---
 
-## 🚀 [0.7.8] - 09-2026
+## [0.7.9] - Setembro de 2026
 
-**"Agenda Renovada: Nova Visualização em Linha do Tempo, Acessibilidade WCAG 2.1 AA e Grade Inteligente!"**
+"Agenda Mais Prática: Novo Seletor de Clientes, Repetição de Compromissos e Visual Espaçoso"
 
-### 📅 Nova Visualização de "Programação" (Schedule Timeline Feed)
+### 📅 Agenda de Atendimentos
 
-- **Linha do Tempo Cronológica Contínua**: Chegou a nova visão **"Programação"** na Agenda! Estruturada como um feed horizontal limpo e dinâmico, ela lista todos os compromissos do mês selecionado agrupados por dia, permitindo uma leitura rápida e sem barreiras da rotina.
-- **Rolagem Inteligente (*Auto-scroll*)**: Ao abrir a visão de programação no mês atual, a tela rola suavemente de forma automática para o dia atual (**"Hoje"**) ou para o próximo compromisso agendado, poupando tempo de navegação.
-- **Cards Ricos com Identificação Visual**:
-  - **Faixa Lateral de Cor**: Identificação visual imediata pela cor do responsável ou da agenda, com suporte automático a gradientes listrados quando há múltiplos responsáveis.
-  - **Horário e Duração Calculada**: Exibição clara do período e da duração total do evento (ex.: `09:00 – 10:30 (1h 30min)`).
-  - **Cliente Sempre em Evidência**: Nome e código do cliente CLC sempre destacados e legíveis.
-  - **Prévia da Pauta com Abertura Inteligente DeMaria**: Links para Ordens de Serviço do SAC ou Tarefas da Intranet continuam funcionando com clique direto para abertura nos módulos nativos do SAO.
-  - **Transparência em Cancelamentos**: Agendamentos cancelados exibem detalhes completos de justificativa, solicitante e motivo cadastrado.
-- **Cabeçalho de Dia Limpo e Acessível**: Quadrado moderno e compacto destacando apenas o número do dia do mês (eliminando redundâncias visuais e transbordos com o texto do cabeçalho) e otimizado para tecnologias assistivas via `aria-hidden`.
+- **Busca Rápida de Clientes (CLC)**: Encontre clientes e cartórios pesquisando por código, nome, cidade ou estado. Ao selecionar, o título e o telefone de contato são preenchidos automaticamente.
+- **Repetição Inteligente de Compromissos**: Crie facilmente rotinas periódicas (diárias, dias úteis, semanais, quinzenais ou mensais), com datas e regras claras no padrão do Google Calendar.
+- **Tela Ampla e Organizada**: O formulário de agendamento agora abre em formato confortável de tela inteira, destacando o cliente e os participantes.
+- **Separação entre Rotinas e Horários Livres**: Visual mais claro para diferenciar suas tarefas diárias dos blocos de vagas livres abertos para atendimentos futuros.
+- **Gestão Flexível de Vagas**: Ao editar um horário livre, você pode mantê-lo como vaga disponível, convertê-lo em agendamento padrão ou cancelar com segurança.
+- **Barras de Rolagem Discretas**: As barras de rolagem agora ficam invisíveis em repouso e surgem suavemente apenas quando você rola a página, igual ao padrão moderno do celular e do macOS.
 
-### ♿ Acessibilidade Digital e Contraste Estrito (WCAG 2.1 Nível AA)
+### 💬 ComuChat
 
-- **Cálculo Matemático de Luminância Relativa sRGB**: Criado motor universal de contraste (`estilizadorEventos.ts`) em estrita conformidade com as diretrizes internacionais da **WCAG 2.1 AA**, garantindo taxa de contraste mínima de **4.5:1** em todos os elementos da Agenda.
-- **Seleção Dinâmica de Cores de Texto e Ícones**: O sistema avalia dinamicamente qualquer cor de fundo cadastrada (incluindo cores customizadas e gradientes complexos de múltiplos colaboradores). Fundos claros (amarelo, verde-limão, ciano e tons pastéis) recebem tipografia em tom escuro de alto contraste (`#0f172a` ou `#000000`), enquanto fundos profundos mantêm texto branco com sombra de realce.
-- **Independência de Cores para Cancelamentos**: Status de cancelamento não depende unicamente da cor. Agendamentos cancelados contam com indicador textual explícito `[CANC]` com fundo contrastante, borda tracejada de alta visibilidade e texto riscado (*line-through*) em todas as visões (Mês, Semana, Dia e Programação).
-- **Avatares e Badges Acessíveis**: As siglas e avatares dos responsáveis agora calculam contraste individual contra a respectiva cor de fundo do colaborador, mantendo contorno nítido e legibilidade cristalina.
+- **Notificações em Segundo Plano**: Sons e alertas visuais continuam funcionando mesmo quando o chat estiver fechado ou você estiver navegando em outros módulos.
+- **Áudio de Notificação Confiável**: Alertas sonoros locais integrados ao sistema que não dependem de internet externa para tocar.
+- **Conversas com Rolagem Leve**: O histórico de mensagens ficou ultra-rápido, rolando com máxima fluidez mesmo em conversas longas e cheias de fotos.
+- **Rascunhos Salvos**: Se você começar a digitar uma mensagem e mudar de canal, o texto continuará salvo esperando por você.
 
-### 🎨 Grade Inteligente, Layout sem Sobreposição e Atenuação Visual
+### 🌐 Módulos Web (SAC e Intranet)
 
-- **Organização Inteligente sem Sobreposição (`no-overlap`)**: A grade semanal e diária foi configurada com o algoritmo de layout `no-overlap`. Eventos com horários concorrentes agora dividem a coluna harmoniosamente lado a lado, sem sobreposições opacas ou dados encobertos.
-- **Atenuação Visual para Eventos Passados (Estilo Google Calendar)**: Compromissos passados recebem tratamento visual atenuado e sutil com filtros balanceados de saturação e brilho, mantendo o foco total nos compromissos do momento e recuperando a cor viva ao passar o cursor (*hover*).
-- **Opacidade Sólida e Foco Visual**: Eliminada a transparência excessiva que causava confusão visual em eventos sobrepostos na grade, assegurando leitura nítida das informações.
+- **Navegação Fluida entre Abas**: Fim da tela branca ao alternar entre o SAC, Intranet e outros módulos.
 
-### 🧭 Navegação Confortável e Estabilidade de Layout na Barra Superior
+### 📎 Mídias e Comentários
 
-- **Fim do "Pula-Pula" nos Botões de Navegação**:
-  - Reformulada a formatação dos intervalos de datas da visualização semanal (`formatarIntervaloSemana`). Meses abreviados padronizados (ex.: `SET 21 – 25` ou `SET 28 – OUT 02`) mantêm o texto com tamanho estável.
-  - Largura fixa e estável no botão seletor de data da barra superior (`w-[250px] shrink-0 tabular-nums`), eliminando variações de tamanho (*layout shift*) e garantindo que os botões de avançar e retroceder fiquem sempre exatamente no mesmo lugar durante a navegação rápida.
-  - Formatação e capitalização refinadas em português (pt-BR) para os cabeçalhos diários e mensais.
-
-### 🏗️ Arquitetura, Testes Automatizados e Resiliência
-
-- **Isolamento de Contextos da Grade**: Contextos da barra de ferramentas e dos eventos desacoplados em `GradeCalendarioContext.tsx`, facilitando manutenções futuras e o consumo de ações por novas visualizações da Agenda.
-- **Busca Resiliente de Usuários**: A função `obterUsuario` agora realiza correspondência insensível a maiúsculas/minúsculas (*case-insensitive*) e suporta com segurança tanto estruturas de lista quanto mapeamentos de usuários.
-- **100% de Cobertura nos Testes de Estilização**: Criada suíte completa de testes automatizados com Node Test Runner (`estilizadorEventos.test.ts`), validando conversões sRGB, luminâncias limites, regras de contraste para gradientes e os métodos de ciclo de vida da visão de Programação.
+- **Fotos, Áudios e Arquivos nos Agendamentos**: Agora você pode gravar recados de voz pelo microfone, enviar fotos com zoom em tela cheia e anexar documentos diretamente nos comentários da Agenda.
 
 ---
 
-## 🚀 [0.7.7] - 09-2026
+## [0.7.8] - Setembro de 2026
 
-**"ComuChat: Fim do Vazamento de Notificações e Blindagem de Acesso!"**
+"Nova Visão de Programação na Agenda e Cores Mais Confortáveis"
 
-### 🐛 Correções de Estabilidade
+### 📅 Agenda
 
-- **Notificações de DM não vazam mais para todo mundo**: encontrei a causa raiz — o trigger do Postgres que dispara a notificação de nova mensagem (`notify_new_chat_message`) não enviava `comunidade_id` nem os participantes da DM no payload, então o filtro de destinatário no frontend (`AlertsContext`) nunca tinha dado suficiente para funcionar e acabava notificando todo mundo conectado. Também existia uma corrida de eventos: o INSERT disparava esse trigger incompleto *antes* do evento correto emitido manualmente por `enviar_mensagem`, e como o frontend deduplica por ID de mensagem, o evento incompleto sempre "vencia".
-- Corrigi o payload de `notify_new_chat_message()` e `notify_chat_reacao_event()` para sempre incluírem `comunidade_id` (canais de comunidade) ou `participant_ids` (DMs), e endureci o filtro em `AlertsContext.tsx`/`SidebarChannels.tsx`: se a mensagem não trouxer nenhum dado de destinatário, ela agora é ignorada por segurança, em vez de ser exibida para todos.
-- Corrigi também o mesmo vazamento na notificação de edição de mensagem (`editar_mensagem`), cujo payload manual também não incluía `comunidade_id`/`participant_ids`.
-
-### 🔒 Segurança e Arquitetura
-
-- **Autorização no backend para todos os comandos do chat**: antes, vários comandos Rust (`listar_mensagens`, `buscar_mensagens_canal`, `toggle_pin_mensagem`, `obter_detalhes_notificacao_chat`, reações, digitação, etc.) confiavam apenas no frontend para restringir o acesso, e alguns nem recebiam o `user_id` de quem chamava. Agora todos exigem `user_id` e passam por uma checagem central (`usuario_pode_acessar_canal`) que confirma participação em DM ou vínculo com a comunidade (owner, membro direto ou por setor) antes de descriptografar e retornar qualquer conteúdo.
-- **Consultas de não lidos deixaram de vazar por todo o sistema**: `buscar_mensagens_nao_lidas` e `buscar_status_leitura` varriam mensagens de qualquer canal do banco; agora usam a mesma CTE de canais acessíveis para restringir o resultado apenas aos canais em que o usuário realmente participa.
-- **Nova tabela `chat_canal_participantes`**: substitui a dependência de fazer *parsing* do nome do canal (`DM_<uuid>_<uuid>`) para saber quem participa de uma DM, com índice único e migração de backfill para os canais existentes. Novas DMs já registram os participantes automaticamente na criação.
-- **Índices de performance**: adicionados índices em `chat_mensagens (canal_id, created_at)`, `chat_comunidade_membros`, `chat_comunidade_setores` e `chat_canais (comunidade_id)` para acelerar as consultas de listagem e autorização à medida que o volume de mensagens cresce.
-- **Canais Postgres NOTIFY segmentados por usuário (Fase 4)**: em vez de todo evento de chat (nova mensagem, edição, reação, exclusão, fixar, digitando) ser publicado em um único canal global `realtime_events` — recebido por 100% dos clientes conectados, mesmo sem qualquer relação com a DM/comunidade —, os triggers e os comandos Rust agora calculam a lista real de destinatários (via a função `chat_canal_destinatarios`, reaproveitando a mesma lógica de `usuario_pode_acessar_canal`) e disparam `pg_notify` individualmente em canais `realtime_events_user_<uuid>`. O app passa a registrar um listener Postgres dedicado após o login (`registrar_ouvinte_realtime_usuario`) e encerrá-lo no logout (`desregistrar_ouvinte_realtime_usuario`), sem qualquer mudança necessária nos consumidores do evento Tauri `realtime_event` já existentes. Isso elimina o vazamento de metadados de mensagens na própria origem dos dados (não apenas no filtro client-side) e reduz o tráfego de eventos irrelevantes para cada cliente.
-- Validado manualmente contra o banco de produção: migrações 052–056 aplicadas com sucesso, e testes com `LISTEN`/`pg_notify` reais confirmaram que apenas usuários participantes do canal recebem a notificação — um usuário fora da comunidade testada não recebeu nada em seu canal segmentado.
+- **Nova Visão em Programação**: Veja todos os compromissos do mês organizados em uma linha do tempo contínua, rolando automaticamente para o dia atual.
+- **Leitura Confortável e Alto Contraste**: As cores dos eventos agora ajustam automaticamente o texto para claro ou escuro, garantindo leitura perfeita em qualquer monitor.
+- **Destaque para Cancelamentos**: Compromissos cancelados agora exibem aviso visual nítido com motivo e solicitante, sem depender apenas da cor.
+- **Horários Lado a Lado**: Atendimentos no mesmo horário agora ficam organizados lado a lado, sem tampar as informações um do outro.
+- **Foco no Presente**: Compromissos que já passaram ganham um tom suave e discreto para destacar o que ainda vai acontecer no dia.
 
 ---
 
-## 🚀 [0.7.1] - 09-2026
+## [0.7.7] - Setembro de 2026
 
-**"Correções no Fluxo de Edição de Agendamentos e Gestão de Horários Livres!"**
+"Privacidade Reforçada nas Mensagens Diretas e Maior Segurança"
 
-### 🐛 Correções Críticas na Agenda
+### 💬 ComuChat
 
-- **Correção na Edição de Agendamentos (Abertura Atômica via Zustand)**:
-  - Corrigida falha em que tentar editar qualquer compromisso ou bloco da Agenda abria invariavelmente o formulário de "Novo Agendamento" (sem carregar o ID existente), impedindo a alteração e gerando agendamentos duplicados por cima dos horários existentes.
-  - Abertura e fechamento do modal unificados de forma atômica e direta através da store Zustand (`useAgendaStore`), eliminando qualquer captura de estado desatualizado (*closure stale*).
-
-### 📅 Saneamento e Ciclo de Vida de "Agenda Livre"
-
-- **Ações Adequadas para Horários Disponíveis**:
-  - Removido o botão indevido de "Cancelar" dos blocos de Agenda Livre (evitando registros espúrios de cancelamento de cliente no BI e loops de geração de novos blocos).
-  - Disponibilizado o botão **"Excluir"** no popover e no menu de contexto para blocos livres, permitindo remover o horário vago com diálogo de confirmação claro.
-- **Conversão Fluida de Disponibilidade**:
-  - Ao editar um bloco de Agenda Livre e associar um cliente ou alterar o título, o horário disponível é convertido automaticamente em um agendamento regular e o mesmo registro é atualizado no banco de dados via ID, sem exigir diálogos de confirmação redundantes.
-- **Persistência de Horários Livres Pós-Cancelamento no Backend Rust**:
-  - Corrigida a persistência em `cancelar_agendamento` para gravar `is_bloqueio_disponibilidade: true` nos blocos de Agenda Livre gerados, garantindo consistência nas checagens de conflito e autorização adequada para colaboradores com permissão de edição/criação/agendamento.
+- **Privacidade Garantida nas DMs**: Notificações de conversas particulares agora chegam exclusivamente para quem participa da conversa.
+- **Controle Rigoroso de Acesso**: Apenas membros autorizados têm acesso às mensagens de canais e comunidades do seu setor.
+- **Atualizações Mais Rápidas**: Novidades e recados chegam de forma mais rápida e direta para cada usuário.
 
 ---
 
-## 🚀 [0.7.0] - 09-2026
+## [0.7.1] - Setembro de 2026
 
-**"Inteligência Analítica com Painel BI de Cancelamentos e Governança na Agenda!"**
+"Edição Mais Rápida de Agendamentos e Horários Livres"
 
-### 📊 Painel de BI e Métricas de Cancelamentos
+### 📅 Agenda
 
-- **Métricas e Indicadores em Tempo Real**: Novo painel analítico para acompanhamento detalhado dos cancelamentos de agendamentos. Acompanhe taxas de cancelamento, motivos mais frequentes, distribuição por solicitante (Cliente vs. DeMaria) e volume por agenda.
-- **Filtros e Análise Histórica**: Filtre os cancelamentos por período e agenda, visualizando o histórico completo com data, horário, responsável, motivo, solicitante, justificativa e indicação de reagendamento.
-- **Gestão de Motivos Customizados**: Gestores de agendas agora possuem uma aba exclusiva chamada **"Motivos de Cancelamento"** nas configurações da agenda, permitindo cadastrar, editar e desativar motivos específicos para a realidade da sua equipe.
-- **Filtro Rápido "Ocultar Cancelados"**: Adicionado botão de alternância na barra superior da agenda para ocultar ou exibir agendamentos cancelados, mantendo o calendário limpo no dia a dia sem perder o histórico analítico.
-
-### 🛡️ Governança de Acesso e Permissões Granulares
-
-- **Acesso Nativo por Hierarquia de Cargo**: Usuários em cargos iguais ou superiores a **Gerente** (Gerente, Gerente Geral, Diretoria e Administrador) têm acesso imediato e nativo ao Painel BI e suas métricas.
-- **Permissão Granular por Agenda (`view_bi`)**: Gestores de agenda podem delegar acesso analítico a colaboradores específicos da equipe através de uma nova permissão chamada **"Visualizar BI e Métricas"** na aba de membros das configurações da agenda.
-
-### 🎯 Saneamento das Ações do Agendamento (Popover)
-
-- **Separação Clara entre "Cancelar" e "Excluir"**: Diferenciação definitiva das ações no popover do agendamento:
-  - **Cancelar** (ícone âmbar): abre o modal para registro formal do motivo, solicitante e justificativa, alimentando os dados do BI.
-  - **Excluir** (ícone vermelho): realiza a remoção permanente do agendamento com diálogo de confirmação.
-  - **Reativar** (ícone verde): permite restaurar rapidamente um compromisso previamente cancelado.
-  - **Editar** (ícone lápis): abre o formulário completo para edição de dados do compromisso.
-- **Correção de Duplicidades**: Eliminados botões duplicados de cancelamento que apareciam sob determinadas condições no popover de clique simples do agendamento.
-
-### 🔄 Sincronização em Tempo Real e Navegação Fluida da Agenda
-
-- **Preservação de Contexto e Detalhes Abertos**: Acabou o incômodo de perder o que estava fazendo ao clicar em links de Tarefas da Intranet ou Ordens de Serviço do SAC dentro de um agendamento! As abas agora contam com preservação de estado (*keep-alive*): ao navegar para a Intranet ou SAC e depois retornar para a Agenda, o modal de detalhes do agendamento continua aberto no exato lugar onde estava.
-- **Resultados de Pesquisa Persistentes**: A lista de resultados da Pesquisa Avançada agora permanece intacta mesmo após clicar em um agendamento para inspecioná-lo ou alternar entre módulos. Chega de ter que pesquisar tudo de novo ao voltar!
-- **Sincronização Silenciosa em Background**: As atualizações em tempo real entre diferentes usuários (`NOTIFY realtime_events` e eventos Tauri) agora recarregam os dados da Agenda silenciosamente em segundo plano, sem fechar modais, desmarcar seleções ou atrapalhar a digitação do usuário.
-- **Isolamento de WebViews Nativas (Intranet e SAC)**: Criado controle inteligente no backend Rust (`hide_all_embedded_webviews`) e frontend para sincronizar a visibilidade de janelas nativas Webview2 do Windows. Ao retornar à Agenda ou outros módulos React, as WebViews filhas são ocultadas imediatamente pelo sistema operacional, impedindo qualquer sobreposição indevida na tela e reaparecendo instantaneamente quando a aba do módulo for reativada.
-
-### 🏗️ Melhorias de Arquitetura e Engenharia
-
-- **Store Global da Agenda (`useAgendaStore`)**: Criação de store reativa com Zustand para centralizar a persistência de modais, data de visão e resultados de pesquisa, desacoplando o ciclo de vida do componente visual dos dados em memória.
-- **Centralização DRY de Permissões**: Refatorada a deserialização de permissões em Rust (`PermissoesJson::resolver`), substituindo dezenas de blocos repetitivos e garantindo robustez a cada novo atributo de autorização adicionado.
+- **Edição Direta e Sem Duplicações**: Corrigido o fluxo de edição para atualizar o compromisso correto com um clique, sem abrir novos formulários por cima.
+- **Exclusão Simples de Vagas**: Botão direto para excluir horários livres sem gerar cancelamentos falsos nos relatórios.
+- **Transformação Automática de Vagas**: Vincule um cliente a um horário disponível para transformá-lo imediatamente em um atendimento confirmado.
 
 ---
 
-## 🚀 [0.6.9] - 09-2026
+## [0.7.0] - Setembro de 2026
 
-**"Pesquisa mais inteligente na Agenda e suporte completo a clientes CLC!"**
+"Relatórios de Cancelamento (BI) e Navegação sem Perder Informações"
 
-### 🔍 Busca Avançada por Clientes na Agenda
+### 📊 Relatórios e Indicadores
 
-- **Campo Dedicado de Cliente CLC**: Adicionamos um campo específico de busca de clientes na pesquisa de agendamentos, com autocomplete idêntico ao formulário de criação/edição. Agora é possível buscar tanto selecionando da lista (pelo código ou nome) quanto digitando termos livres.
-- **Busca de Clientes na Pesquisa Rápida ("O quê")**: Sabe aquele agendamento com título genérico como "Treinamento" ou "Migração"? Agora, ao digitar o nome ou código do cliente no campo de palavras-chave ("O quê" ou "Pesquisa rápida"), o sistema localiza o compromisso automaticamente através do vínculo com o cliente CLC!
-- **Filtro Independente de Vínculo**: O checkbox foi mantido de forma separada como **"Apenas com cliente associado"**, permitindo filtrar agendamentos que possuam qualquer cliente associado, combinado ou não com outros filtros.
-- **Cliente Visível no Preview**: O card de resultados da pesquisa agora exibe uma linha dedicada ao **Cliente** associado (com ícone e formato `código - nome`), facilitando a identificação imediata do compromisso antes mesmo de abri-lo.
+- **Painel de Cancelamentos (BI)**: Gráficos e indicadores em tempo real para acompanhar taxas de cancelamento, motivos mais frequentes e distribuição por cliente ou equipe.
+- **Cadastro de Motivos Personalizados**: Gestores podem criar e organizar os motivos de cancelamento específicos para o seu setor.
+- **Botão Ocultar Cancelados**: Limpe a visualização da agenda com um clique, mantendo o histórico guardado nos relatórios.
+- **Diferença Clara entre Cancelar e Excluir**: Opções separadas para cancelar com registro formal ou excluir definitivamente com confirmação.
 
-### 📝 Renderização de HTML nos Detalhes do Agendamento
+### 🔄 Navegação Contínua
 
-- **Links e Formatações Clicáveis**: Corrigimos o preview de resultados da pesquisa da Agenda para renderizar tags HTML nativamente nos detalhes do evento. Links de tarefas e formatações ricas agora funcionam diretamente no card, eliminando a exibição de tags brutas de código.
-
-### 🐛 Correções de Estabilidade
-
-- **Tooltip de Links nos Detalhes do Agendamento**: Corrigi a visualização do aviso de atalho/clique nos links dentro do mini editor de texto rico. O tooltip agora flutua via portal com prioridade máxima de camada (`z-[99999]`), evitando que fique cortado ou oculto atrás da barra de ferramentas de formatação.
-- **Unificação da Abertura de Links (SAC, Intranet e Externos)**: Unifiquei o comportamento de navegação em todo o sistema. Links de ordens de serviço do SAC (`https://www.sacdemaria.com.br/adm/...`) e de tarefas da Intranet (`https://www.demaria.com.br/intranet/v3/...`) agora abrem diretamente nos respectivos módulos internos do SAO tanto no ComuChat e Comentários da Agenda quanto nos editores de texto rico (MiniRichTextEditor e RichTextEditor) e visualizações da Agenda (popover e busca), reservando o navegador externo apenas para links de outros domínios.
+- **Telas Abertas Preservadas**: Clicar em links de tarefas da Intranet ou ordens do SAC dentro de um agendamento não fecha mais o que você estava fazendo.
+- **Resultados de Pesquisa Mantidos**: Ao voltar de um atendimento, seus filtros e lista de pesquisa continuam no mesmo lugar.
 
 ---
 
-## 🚀 [0.6.8] - 09-2026
+## [0.6.9] - Setembro de 2026
 
-**"Agendamentos mais rápidos e uma visão semanal muito mais limpa!"**
+"Busca Avançada por Clientes na Agenda e Links Mais Inteligentes"
 
-### 💡 Sugestões de Títulos Padrão na Agenda
+### 📅 Agenda
 
-- **Agilidade na Digitação**: Chega de digitar o mesmo título várias vezes! Agora, ao criar um agendamento, o sistema exibe automaticamente uma lista de sugestões de títulos conforme você digita, baseada na agenda selecionada.
-- **Gestão de Títulos**: Se você tem permissão para gerenciar a agenda, agora conta com uma nova aba exclusiva chamada **"Títulos Padrão"** nas configurações. Lá, você pode cadastrar, editar e excluir facilmente os títulos que mais usa no seu setor.
-- **Sincronização Mágica**: Adicionou um título novo? Ele já aparece para toda a sua equipe na mesma hora, sem precisar recarregar a tela!
-
-### 📅 Mais Espaço na Sua Semana (Ocultar Finais de Semana)
-
-- **Foco nos Dias Úteis**: Atendendo a pedidos, adicionamos a opção de **"Ocultar Finais de Semana"** nas configurações da agenda.
-- **Fim do Aperto**: Ao ativar essa opção, a visão semanal esconde o sábado e o domingo, esticando as colunas de segunda a sexta. Isso dá um belo respiro na tela, deixando os agendamentos mais largos, fáceis de ler e com um visual muito mais agradável, principalmente naqueles dias super lotados!
-
-### 🐛 Correções
-
-- **Estabilidade e Ajustes**: Apliquei também um pacote de correções internas e ajustes finos baseados em feedbacks fornecidos no Discord.
+- **Busca Específica de Clientes**: Encontre compromissos selecionando o cliente ou digitando livremente parte do nome ou código.
+- **Cliente no Resumo**: O código e o nome do cliente aparecem logo no resumo dos resultados para facilitar a identificação imediata.
+- **Links de Tarefas Clicáveis**: Links da Intranet e do SAC abrem diretamente no sistema com um clique.
 
 ---
 
-## 🚀 [0.6.7] - 09-2026
+## [0.6.8] - Setembro de 2026
 
-### 💬 Contraste nos Comentários da Agenda
+"Sugestões Rápidas de Títulos e Visão Semanal Mais Espaçosa"
 
-- Ajustei os balões do chat de agendamentos para usar tons de grafite no modo escuro, preservando a diferenciação visual entre mensagens próprias e de outros usuários.
-- Corrigi a herança de cores do conteúdo formatado para manter o texto legível dentro dos balões.
+### 📅 Agenda
 
-### 📅 Recorrência de Agendamentos
-
-- Adicionei a opção **Repetir agendamento** ao fluxo de agendamento único, mantendo o Lote de Agendamento para registros independentes.
-- A criação recorrente grava uma série e suas ocorrências em uma transação, com suporte a recorrência diária, semanal, quinzenal e mensal.
-- A série permite definir intervalo, quantidade de ocorrências ou data final, com validação de permissão e limite de segurança no backend.
-
-## 🚀 [0.6.6] - 09-2026
-
-### Correção de Bug no Controle de Scripts SQL
-
-Foi identificado um pequeno bug no arquivo `.bat` que executava todos o arquivo de script `.sql` unificado gerado pelo módulo de **Controle de Scripts SQL**.
-
-A correção foi aplicado na build `0.6.6`
-
-## 🚀 [0.6.5] - 09-2026
-
-**"Evolução: De Unificador de Scripts para Controle de Scripts SQL"**
-
-### 🗄️ Renomeação e Refatoração: Controle de Scripts SQL
-
-O antigo módulo **Unificador de Scripts** amadureceu e agora se chama oficialmente **Controle de Scripts SQL**! A nova nomenclatura reflete a transformação da ferramenta em um verdadeiro hub para gestão, empacotamento e deploy de atualizações em bancos de dados.
-
-- **Execução Direta no Banco (Nativa e sem Modais)**:
-  - Adicionada a aba **"Executar no Banco de Dados"** diretamente no módulo, dispensando janelas modais flutuantes e mantendo navegação fluida por abas.
-  - Varredura e detecção automática de instâncias locais ativas do PostgreSQL (portas 5432 a 5438).
-  - Seletor inteligente de bancos de dados locais com opção de digitação manual livre.
-  - Indicadores em tempo real da versão do PostgreSQL e da versão do sistema DOC-Windows (tabela `aux_preferencias_tb.inf_bd_rel`), com atualização automática ao concluir os scripts e botão interativo para refresh.
-  - Suporte completo a modos de transação: *Única (Tudo ou Nada)*, *Por Script* ou *Sem Transação*, além de parada no primeiro erro e decodificação automática de encodings (UTF-8, Windows-1252, ASCII, UTF-8 BOM).
-- **Fila de Execução com Paridade Visual e Funcional**:
-  - Grid adaptativo com proporção otimizada (5 colunas para a Fila de Scripts e 7 colunas para o Terminal de Logs).
-  - Barra de ferramentas idêntica à lista principal: campo de busca textual e opção destacada de **pesquisar dentro do conteúdo dos arquivos** (tanto em pastas locais quanto no cache do GitHub).
-  - Pílulas de filtro (*Todos* / *Selecionados*), ordenação cronológica (*V. Mais Antiga* / *V. Mais Recente*) e ações em lote (*Selecionar Todos* / *Desmarcar Todos*).
-  - Botão de ação rápida para **copiar a seleção da aba Unificar** diretamente para a fila de execução.
-- **Terminal de Logs Amplo em Tempo Real**:
-  - Acompanhamento do progresso script a script com tempo de execução em milissegundos.
-  - Realce sintático de SQL, filtros por nível de log (*Sucesso*, *Aviso*, *Erro*), busca no histórico, cópia e download da saída em `.txt`.
-- **Refatoração Arquitetural e Limpeza de Código**:
-  - Código, componentes e diretórios refatorados para `ControleScriptsSqlModule` e `src/components/controle-scripts-sql/`.
-  - Retrocompatibilidade total preservada nas permissões de usuário e chaves de armazenamento local (`localStorage`).
-  - Cache de sincronização com o GitHub otimizado para pular instantaneamente scripts inalterados sem queries ou downloads repetidos.
+- **Sugestões Automáticas de Títulos**: Conforme você digita, o sistema sugere os assuntos mais comuns do seu setor para você preencher com um clique.
+- **Cadastro de Títulos Frequentes**: Gestores podem cadastrar uma lista de títulos recomendados para agilizar o atendimento da equipe.
+- **Ocultar Finais de Semana**: Opção para esconder sábado e domingo na visão semanal, deixando os dias úteis mais largos e fáceis de ler.
 
 ---
 
-## 🚀 [0.6.0] - 08-2026
+## [0.6.7] - Setembro de 2026
 
-**"Novas Ferramentas: Cofre de Senhas, SenhaDB e Licenças Temporárias"**
+"Balões de Conversa Mais Bonitos e Compromissos Recorrentes"
 
-### 🗄️ Novo Módulo: Cofre de Senhas
+### 📅 Agenda
 
-- **Cofres Pessoais e Coletivos**: Gerencie suas senhas de forma segura! Crie cofres individuais ou espaços coletivos para compartilhar acessos estratégicos com o seu setor.
-- **Gestão de Permissões Granular**: Compartilhamento inteligente com 4 níveis de acesso: **Leitura** (apenas visualizar), **Criação** (adicionar novas), **Edição** (modificar existentes) e **Total** (poderes de arquivar e excluir definitivamente).
-- **Ações em Lote**: Ganhe produtividade selecionando várias senhas simultaneamente para arquivar, restaurar ou apagar do arquivo morto.
-- **Importação Inteligente (KeePass CSV)**: Migrar de outros gerenciadores ficou incrivelmente simples. O sistema permite a importação direta de arquivos `.csv` e lida automaticamente com anomalias de formatação e colunas em branco.
-- **Segurança Reforçada (PIN Master e Auto-Lock)**: Criamos uma camada dupla de proteção. O Cofre agora exige a criação de um PIN. Caso se afaste do PC, um cronômetro invisível de inatividade trava o cofre automaticamente após 5 minutos, blindando o conteúdo e exigindo o PIN ou senha para voltar a exibir os dados.
-- **Performance Extrema**: Otimizamos radicalmente o motor do painel para aguentar milhares de senhas. Com técnicas avançadas de renderização (Memoization), interagir com as senhas, buscar ou copiar credenciais acontece de forma instantânea, zero engasgos.
-- **Visual Responsivo**: Toda a interface do Cofre de Senhas já está adaptada para o novo padrão de *Cores Dinâmicas*, acompanhando nativamente a identidade visual do módulo sem engessar a UI.
-
-### 🔐 Módulo SenhaDB
-
-- **Descriptografia Local (INFO.001)**: Agora o SAO conta com um módulo nativo, acessível diretamente na Home (para usuários com permissão), capaz de ler e extrair senhas de arquivos `INFO.001` do DOC-Windows.
-- **Rapidez e Segurança**: Basta arrastar o arquivo para a tela. Todo o processamento é feito localmente e instantaneamente, revelando a senha em um painel com botão de "Copiar para Área de Transferência".
-
-### ⏳ Módulo Licença Temporária
-
-- **Geração Ágil de Contra-Senhas**: Precisa estender a licença de um cliente? O novo módulo permite gerar as contra-senhas temporárias do DOC-Windows em segundos!
-- **Flexibilidade Total**: Escolha o prazo facilmente digitando um período numérico e selecionando entre **Dias, Meses ou Anos** no menu, ou simplesmente escolha a data final no calendário bidirecional.
-- **Formatação Original**: O sistema replica com perfeição a formatação matemática do antigo bot, devolvendo a numeração já separada por traços para colar direto no sistema ou no WhatsApp do cliente.
-
-### 📅 Agenda Turbinada (Drag & Drop e UX)
-
-- **Arrastar e Soltar (Drag & Drop)**: Remanejar agendamentos nunca foi tão fácil! Agora você pode clicar, segurar e arrastar um evento diretamente para outro dia ou horário. O sistema também respeita suas permissões de edição!
-- **Redimensionamento Rápido**: Precisou estender ou encurtar a duração de um atendimento? Basta puxar a borda inferior do agendamento diretamente no calendário para ajustar o tempo com precisão.
-- **Legibilidade e Organização Visual**:
-  - As etiquetas (badges) dos usuários responsáveis agora são renderizadas em destaque, sem problemas de ocultação por transparência.
-  - Eventos de mesma cor seguidos agora possuem um contorno sutil, impedindo que pareçam um bloco visual único.
-- **Nomes de Exibição (Display Name)**: O card de detalhes do evento passou a valorizar o "Nome de Exibição" configurado pelo usuário, e o gerador de siglas padrão (fallback) subiu de 2 para 3 caracteres, facilitando bater o olho e reconhecer a equipe!
+- **Repetição em Séries**: Agende atendimentos recorrentes (semanais, quinzenais ou mensais) definindo data final ou total de encontros.
+- **Comentários Mais Legíveis**: Balões de comentários com contraste melhorado e visual elegante no modo escuro.
 
 ---
 
-## 🚀 [0.5.2] - 08-2026
+## [0.6.6] - Setembro de 2026
 
-### 🛠️ Correções e Melhorias (Módulos Webview)
+"Ajuste na Execução de Scripts"
 
-- **Controle de Abas Internas**: Agora, os módulos que funcionam por webview (como Intranet) suportam abas internas nativamente! Sempre que um link exigir uma nova janela (seja por um clique do meio ou `target="_blank"`), o SAO abrirá uma aba na própria barra do módulo, melhorando drasticamente a navegação.
-- **Correção da Tela Preta em Múltiplos Monitores**: Resolvemos um bug no mecanismo de renderização do Windows (`WebView2`). Janelas desacopladas que eram arrastadas para monitores com escalas ou resoluções diferentes não ficarão mais com a tela preta travada. Agora, cada janela filha gera sua própria instância independente e isolada, sendo 100% à prova de trocas de monitor.
+### 🔧 Correções
 
----
-
-## 🚀 [0.5.1] - 08-2026
-
-### 🪟 Abas Desacopladas (Multi-Monitores)
-
-- **Liberdade de Trabalho**: Agora você pode desacoplar abas dos módulos principais! Basta arrastar a aba para fora da barra (ou clicar com o botão direito e escolher a opção) para transformá-la em uma janela independente nativa do Windows. Perfeito para quem trabalha com dois ou mais monitores e quer, por exemplo, deixar a Agenda em uma tela e o Editor de Textos na outra.
-- **Desempenho e Persistência "Lazy"**: As janelas desacopladas nascem sabendo exatamente qual módulo carregar (ex: `SAO - Editor de Textos`). Otimizamos radicalmente os componentes mais pesados (como o Corretor Ortográfico) para carregar no fundo de forma assíncrona, garantindo que a nova janela abra instantaneamente sem engasgos.
-
-### 📅 Integração Agenda x Clientes (CLC)
-
-- **Vínculo Rápido e Direto**: Adicionamos o campo inteligente `Cliente (Opcional)` aos modais de agendamento. Agora você pode pesquisar por código e nome para vincular agendamentos aos clientes do CLC, disponível em todos os métodos de criação (Único, em Lote ou Sequência).
-- **Zero Lentidão**: Implementado através do HTML5 nativo (`datalist`), o componente exibe a lista completa da base de clientes na velocidade da luz e sem nenhum "engasgo", substituindo componentes Dropdowns pesados.
-- **Pensando no Futuro**: A ligação robusta que criamos através da coluna `cod_clc` no banco de dados PostgreSQL é o primeiro passo para no futuro permitir visualizar *todo* o histórico e formulários atrelados a um único cliente num piscar de olhos.
-
-### 🎯 Refinamentos Visuais e Funcionais na Agenda
-
-- **Escala de Tempo Ampliada**: Aumentamos o espaçamento vertical das visões de Dia e Semana, garantindo que textos e badges caibam sem sufoco nas linhas. Além disso, a visão inicial do calendário agora tem seu "scroll" padrão posicionado nas **08:00h**, facilitando a navegação diária.
-- **Melhoria Absurda na Visão Mensal**:
-  - Acabamos com os *popups* quebrados padrão do calendário quando muitos eventos tentam disputar o mesmo dia! Agora um botão discreto **"Mais X"** aparece no rodapé do dia. Ao clicar, um **Modal Dialog** focado e elegante é aberto listando todos os eventos extras.
-  - Eventos na visão mensal agora exibem nativamente as badges dos participantes para bater o olho e saber quem está envolvido, com um limite de até **3 badges**. Caso a equipe seja maior, um botão inteligente de reticências (`...`) exibe o resto da turma ao passar o mouse (*tooltip list*).
-- **Lapidação do Modo Escuro**: A janela de "Configurações da Agenda" ganhou um banho de loja no Dark Mode. Ajustamos as paletas e caixas de lembretes para que utilizem a cor padrão de fundo do painel e sigam o requinte de todos os outros módulos do SAO.
-- **Hierarquia Inteligente nos Lembretes**: Removemos o gargalo nas configurações de WhatsApp das Agendas Setoriais. Agora, qualquer membro com perfil **Sênior** ou superior no sistema terá automaticamente a permissão para gerenciar a **Duração Padrão** de agendamento e configurar o disparo de lembretes sem precisar que um diretor altere a configuração.
+- **Controle de Scripts**: Ajuste no arquivo de execução unificada para garantir que os scripts rodem sem interrupções.
 
 ---
 
-## 🚀 [0.5.0] - 08-2026
+## [0.6.5] - Setembro de 2026
 
-**"Pequenos Detalhes, Grandes Impactos: O Mini Editor Cresceu e o CLC Chegou!"**
+"Novo Módulo de Controle de Scripts SQL e Execução Direta"
 
-### 🏢 Novo Módulo: Clientes e Licenças (CLC)
+### 🗄️ Banco de Dados e Scripts
 
-O coração administrativo agora pulsa dentro do SAO! O novo módulo CLC traz toda a base de clientes do sistema legado para uma interface moderna, unificada e ultra-rápida.
-
-- **Busca e Filtros Inteligentes**: Encontre clientes em milissegundos pesquisando por nome, código, CNPJ, CPF ou nome oficial. Filtre instantaneamente por status (Regular, Inadimplente, Implantação).
-- **Sincronização Invisível**: O módulo verifica sozinho o servidor de arquivos a cada acesso (respeitando cooldowns) e se atualiza automaticamente em background sem travar a tela, garantindo que os dados em cache estejam sempre sincronizados com a base original da empresa.
-- **Cópia Rápida (1-Click)**: Extratos práticos e rápidos dos módulos contratados pelo cliente. Copie siglas dos módulos diretamente (`NCOEw`) ou gere listas amigáveis para colar no WhatsApp.
-
-⚠️ **ATENÇÃO** ⚠️
-
-```plaintext
-Os módulos exibidos ainda não refletem com precisão o status de ativação no cliente. Por favor, valide sempre os módulos ativos diretamente no CLC original ou via SAC.
-```
-
-### ✍️ Evolução do Mini Editor de Textos (Addon)
-
-- **Aproveitamento de Espaço Inteligente**: Corrigido um gap visual no final do modal do Mini Editor. Agora, a área de digitação de texto expande automaticamente preenchendo toda a área disponível do modal de forma natural e elegante.
-- **Menu de Contexto Inteligente (Bubble Menu)**: Adicionado um menu flutuante muito mais fluido! Agora, ao selecionar qualquer texto dentro do Mini Editor, um menu de acesso rápido aparecerá exatamente sobre a seleção, facilitando a aplicação de formatações (Negrito, Itálico, Sublinhado e Tachado) sem precisar mover o mouse até a barra superior.
-- **Formatação de Código Inline**: Atendendo a pedidos, o Mini Editor agora conta com o botão de formatação de código `</>`, exatamente como no Editor Principal, tornando-o perfeito para formatar comandos, caminhos de arquivo ou trechos de scripts de forma destacada.
-
-### 🌐 Integração Webview Avançada (SAC, PABX, WhatsApp e Intranet)
-
-- **Pop-ups 100% Nativos**: Resolvemos o bloqueio de novas abas nos módulos web (como SAC e Intranet). Agora, quando o sistema tentar abrir um pop-up ou impressão de PDF via JavaScript, a interface intercepta e abre uma **janela nativa do Windows independente**, trazendo uma usabilidade idêntica à do Google Chrome.
-- **Sincronização Mágica de Credenciais**: O recurso de salvar senhas não é mais exclusivo. Expandimos e padronizamos a captura inteligente de login para todos os módulos (SAC, PABX, WhatsApp e Intranet).
-- **Segurança Criptografada**: Privacidade é inegociável! Todas as senhas salvas para o preenchimento automático são fortemente criptografadas antes de serem armazenadas no banco de dados, protegendo contra qualquer vazamento de dados.
-- **Otimização Extrema (Cache + Nuvem)**: As senhas salvas ganharam superpoderes! Elas agora ficam armazenadas no cache local (`localStorage`) para um carregamento ultra-rápido, mas são espelhadas silenciosamente no banco de dados. Formatar o PC ou trocar de máquina não é mais um problema: seu login segue com você e o preenchimento automático funciona sem engasgos.
+- **Execução Direta no Banco**: Conecte-se facilmente aos bancos de dados locais e execute scripts de atualização sem ferramentas externas.
+- **Acompanhamento com Terminal ao Vivo**: Visualize o progresso de cada atualização passo a passo com mensagens claras de sucesso ou aviso.
+- **Busca no Conteúdo de Scripts**: Encontre comandos e alterações pesquisando dentro dos próprios arquivos de atualização.
 
 ---
 
-## 🚀 [0.4.16] - 08-2026
+## [0.6.0] - Agosto de 2026
 
-**"O Fim do F5 nas Imagens e a Nova Vida do Visualizador"**
+"Novas Ferramentas: Cofre de Senhas, SenhaDB, Licenças Temporárias e Arrastar na Agenda"
 
-E aí, pessoal! A versão `0.4.16` traz uma correção cirúrgica mas que impacta muito no dia a dia, especialmente para quem trabalha muito com prints e imagens dentro do editor de texto. Adeus à tela em branco!
+### 🔐 Segurança e Senhas
 
-### 🖼️ Melhorias no Visualizador de Imagens (Editor)
+- **Cofre de Senhas**: Guarde suas credenciais em cofres pessoais ou compartilhe acessos com o seu setor de forma organizada e segura.
+- **Bloqueio Automático por Inatividade**: O cofre bloqueia sozinho após 5 minutos sem uso para proteger seus dados contra olhares curiosos.
+- **Importação Fácil**: Traga suas senhas de outros gerenciadores via planilha CSV sem complicações.
+- **Módulo SenhaDB**: Extraia senhas de arquivos INFO.001 com segurança arrastando o arquivo para a tela.
+- **Licenças Temporárias**: Gere contra-senhas do DOC-Windows em segundos escolhendo dias, meses ou a data final no calendário.
 
-- **Renderização Imediata (Fim do F5!)**: Sabe aquele bug chato onde você clicava em uma imagem colada (em `base64`) e a nova aba abria em branco, te obrigando a apertar F5? Foi resolvido! Agora as imagens renderizam na hora.
-- **Segurança e Performance**: Joguei fora o antigo `document.write` e reescrevi a lógica de abertura de imagens em nova guia usando manipulação limpa do DOM (`document.createElement`). Isso não só resolve o bug do F5, mas deixa o carregamento mais seguro e fluido.
-- **Correção de Links de Imagem**: Havia um pequeno erro onde o sistema tentava forçar um `https://` na frente do código `base64` da imagem, quebrando a URL. O sistema agora é inteligente o suficiente para identificar e respeitar links de protocolo `data:`.
-- **Melhoria no Fallback (Tauri)**: A comunicação nativa em Rust (`open_image_in_browser`) agora se integra de forma ainda mais suave ao comportamento do frontend para renderizar o visualizador em novas janelas com suporte a zoom nativo.
+### 📅 Agenda
 
----
-
-## 🚀 [0.4.15] - 08-2026
-
-**"O Renascimento do Chat, Auto-Updates Mágicos e Fim da Ansiedade"**
-
-Fala pessoal! Muita coisa aconteceu desde a versão `0.4.14`. Trabalhei duro nos bastidores para trazer atualizações massivas que mudam completamente a forma como vocês interagem dentro do SAO. Pegue um café e confira a lista gigantesca do que mudou:
-
-### 📝 Novo Editor de Texto (Sincronização Nuvem)
-
-- **Salvamento Automático Robusto**: Agora o Editor de Texto salva seus documentos diretamente no banco de dados, além de manter uma cópia rápida no navegador (*Local Storage*).
-  - **O ganho prático:** Se você mudar de computador, limpar o cache do navegador ou formatar o PC, **seus textos não serão mais perdidos**, pois estarão sincronizados com a nuvem! (Lembrando que os textos não bloqueados ficam salvos no banco por 90 dias).
-- **Privacidade Garantida**: Para a sua tranquilidade, todos esses dados salvos no banco são rigorosamente criptografados, garantindo a total privacidade dos textos de cada usuário.
-- **Imagens Otimizadas**: Fiz uma otimização profunda no tratamento das imagens auto-hospedadas dentro do Editor de Texto, melhorando significativamente a qualidade visual e o comportamento do visualizador de imagens embutido.
-
-### 💬 ComuChat: Agora é Oficialmente um Monstro
-
-- **Novo Editor de Texto (Tiptap)**: O chat recebeu um upgrade absurdo. Agora há suporte para emojis nativos, blocos de código formatados e links customizados!
-- **Sistema de Menções Completo**: Agora você pode digitar `@` e mencionar não apenas **Usuários**, mas também **Setores** e **Cargos**. Falar com a pessoa certa nunca foi tão fácil.
-- **Mensagens Fixadas**: Informação importante no canal? Agora você pode fixar (*pin*) mensagens para que ninguém perca os avisos cruciais.
-- **Gestão de Comunidades**: Adicionei painéis completos para administração de membros, atribuição de cargos e até exclusão de comunidades, dando total controle aos administradores.
-
-### 🔔 Notificações e Agenda: O Poder é Seu
-
-- **Granularidade Máxima no ComuChat**: Nas Configurações, você agora decide exatamente o que aciona um alerta (Todas as mensagens, Menções, Cargos ou DMs) *separadamente* para os seus status (Disponível, Ocupado ou Ausente). Escolha se quer som, pop-up ou apenas silêncio.
-- **Integração de Agenda com WhatsApp**: Implementei um sistema robusto de gestão de agendas que agora conta com configurações para disparar notificações automáticas via WhatsApp.
-- **Sons Elegantes para Status Temporários**: Colocou o status em "Almoço" por 60 minutos? O sistema te avisará com um suave efeito sonoro de piano assim que o timer expirar.
-
-### ⚡ Infraestrutura e Qualidade de Vida (QoL)
-
-- **Atualizações Silenciosas via GitHub**: Diga adeus ao antigo servidor IIS! Migrei todo o sistema de entrega de atualizações para o *GitHub Releases*. O SAO agora baixa atualizações silenciosamente no fundo e os instaladores lidam automaticamente com os certificados.
-- **Nova Arquitetura Core (Tauri v2)**: Reconstruí a base do aplicativo para suportar múltiplas abas (multi-tab layout) e uma navegação muito mais rápida e fluida.
-- **Visualizador Unificado de Scripts SQL**: Para otimizar a parte técnica, criei um novo componente dedicado à visualização unificada de scripts do banco.
-
-### 🐛 Correções de Estabilidade
-
-- Refatorei todo o processamento de mensagens em tempo real e corrigi travamentos internos (o famoso *borrow checker* do Rust) que ocorriam nas trocas de status. O SAO está mais leve do que nunca.
+- **Arrastar e Soltar Compromissos**: Mude o dia ou o horário de um agendamento simplesmente arrastando-o pelo calendário.
+- **Ajuste de Duração com o Mouse**: Puxe a borda inferior do evento para aumentar ou diminuir a duração do compromisso com facilidade.
+- **Identificação com Nomes Reais**: Os cartões de agendamento agora priorizam o nome de exibição dos colaboradores.
 
 ---
 
-*Para acompanhar as próximas novidades em tempo real, fique de olho aqui no canal!*
+## [0.5.2] - Agosto de 2026
+
+"Abas Internas no SAC e Intranet e Suporte a Múltiplos Monitores"
+
+### 🌐 Navegação e Telas
+
+- **Abas Internas nos Módulos Web**: Links abertos em nova guia agora aparecem como abas organizadas na barra do próprio módulo.
+- **Estabilidade com Múltiplos Monitores**: As janelas desacopladas agora funcionam sem falhas ao serem movidas entre monitores com resoluções diferentes.
+
+---
+
+## [0.5.1] - Agosto de 2026
+
+"Janelas Desacopladas para Vários Monitores e Integração com Clientes"
+
+### 🪟 Produtividade e Janelas
+
+- **Desacoplar Módulos em Janelas Separadas**: Arraste uma aba para fora para transformá-la em uma janela independente do Windows, ideal para usar dois monitores simultaneamente.
+
+### 📅 Agenda
+
+- **Vínculo com Clientes do CLC**: Pesquise clientes por código e nome em qualquer tipo de agendamento de forma instantânea.
+- **Mais Espaço e Horários Bem Posicionados**: Visão diária e semanal com linhas mais espaçosas e rolagem inicial focada a partir das 08:00h.
+- **Visualização de Dias Cheios**: Quando um dia tiver muitos compromissos, clique no botão "Mais" para abrir a lista completa de atendimentos sem desorganizar o mês.
+
+---
+
+## [0.5.0] - Agosto de 2026
+
+"Novo Módulo CLC de Clientes, Mini Editor Aprimorado e Salvamento de Senhas"
+
+### 🏢 Clientes e Licenças (CLC)
+
+- **Central Unificada de Clientes**: Encontre qualquer cliente em milissegundos buscando por nome, código, CPF ou CNPJ.
+- **Cópia Rápida de Módulos**: Copie códigos de módulos contratados com 1 clique para colar no WhatsApp ou no SAC.
+- **Sincronização Automática**: Os dados de clientes se atualizam em segundo plano para manter as informações sempre em dia.
+
+### ✍️ Mini Editor de Textos
+
+- **Menu Flutuante de Formatação**: Selecione qualquer texto para abrir opções rápidas de negrito, itálico e destaque.
+- **Formatação de Códigos**: Botão dedicado para destacar comandos e caminhos de arquivos.
+
+### 🌐 Módulos Web
+
+- **Lembrar Senhas com Segurança**: O sistema memoriza seus logins nos módulos web com proteção criptografada para você não precisar redigitar toda vez.
+
+---
+
+## [0.4.16] - Agosto de 2026
+
+"Visualizador de Imagens Mais Rápido no Editor de Texto"
+
+### 🖼️ Editor de Texto
+
+- **Abertura Imediata de Imagens**: Clique em fotos e prints colados no documento para visualizá-los em tamanho ampliado sem telas em branco.
+- **Navegação com Zoom**: Controles de zoom nativos para conferir detalhes de fotos e diagramas em alta resolução.
+
+---
+
+## [0.4.15] - Agosto de 2026
+
+"Novo Editor de Texto na Nuvem, ComuChat Turbinado e Atualizações Automáticas"
+
+### 📝 Editor de Texto
+
+- **Salvamento Automático na Nuvem**: Seus textos agora são salvos com segurança no servidor. Se formatar ou trocar de computador, seus documentos continuam disponíveis.
+- **Proteção e Privacidade**: Todos os documentos salvos contam com criptografia avançada.
+
+### 💬 ComuChat
+
+- **Menções Inteligentes (@)**: Chame a atenção de pessoas, setores ou cargos usando @ para falar diretamente com quem precisa.
+- **Mensagens Fixadas**: Fixe avisos e mensagens importantes no topo do canal para ninguém perder.
+- **Formatação Rica e Emojis**: Digite com emojis, links interativos e blocos destacados de texto.
+
+### 🔔 Notificações
+
+- **Controle de Alertas por Status**: Escolha como receber notificações (som, aviso na tela ou silêncio) para quando você estiver Disponível, Ocupado ou Ausente.
+- **Avisos Sonoros Suaves**: Toques delicados ao término de intervalos e pausas.
+
+### ⚡ Sistema e Atualizações
+
+- **Atualizações Silenciosas**: O SAO baixa novas versões automaticamente em segundo plano para você se manter sempre atualizado sem esforço.
+- **Navegação em Abas**: Abra múltiplos módulos ao mesmo tempo e alterne facilmente entre eles pela barra superior.
