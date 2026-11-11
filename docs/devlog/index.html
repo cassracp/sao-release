@@ -24,16 +24,26 @@ SAO
 #    ### Melhorias e Correções
 #    - **Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
-<h2 id="093---11-de-novembro-de-2026">[0.9.3] - 11 de Novembro de 2026</h2>
+<h2 id="093---12-de-novembro-de-2026">[0.9.3] - 12 de Novembro de 2026</h2>
 <p>“Build de Melhoria e Correção”</p>
 <h3 id="o-que-há-de-novo">O que há de novo</h3>
 <ul>
+<li><strong>Agendamento em Sequência Repaginado:</strong> A tela agora tem uma área só para as sessões encontradas, em cartões com dia da semana, data, horário e responsável, para você ver todas de uma vez sem ficar rolando uma lista pequena. A busca e os dados do agendamento ficam em uma coluna ao lado, e os responsáveis viraram um filtro compacto com as mesmas siglas coloridas da Agenda.</li>
+<li><strong>Copiar Datas para o Cliente:</strong> No agendamento em sequência, o botão “Copiar datas” copia a lista das sessões, com dia da semana, data e horário, pronta para colar na conversa do WhatsApp com o cliente.</li>
+<li><strong>Trocar o Horário de uma Sessão:</strong> No agendamento em sequência, cada sessão tem um botão de relógio que mostra as vagas livres daquele dia, com o responsável de cada uma. Escolha outro horário e a sessão é ajustada ali mesmo, sem precisar criar tudo e corrigir depois na agenda.</li>
+<li><strong>Pular um Dia que o Cliente Não Pode:</strong> O X em cada sessão retira aquele dia da sequência e acrescenta uma nova sessão no fim, mantendo a quantidade combinada. As outras sessões ficam como estão, e você pode desfazer logo em seguida se clicar sem querer.</li>
+<li><strong>Nova Pesquisa de Mensagens no ComuChat!:</strong> A busca (<code>Ctrl + F</code>) ganhou um painel lateral completo que mostra a foto e o nome de quem enviou cada mensagem, a data e o horário exatos, os anexos e a palavra buscada destacada em amarelo, mantendo os resultados abertos ao lado da conversa enquanto você pula de uma mensagem para outra. Agora você também pode pesquisar em toda a comunidade de uma vez e filtrar rapidamente por pessoa, canal, período ou tipo de conteúdo (links, arquivos, imagens, vídeos, áudios e mensagens fixadas).</li>
 <li><strong>Aviso de Nova Versão Instalada:</strong> Toda vez que uma atualização do SAO for aplicada, um aviso verde-água no canto da tela avisa que a versão foi instalada com sucesso e convida você a ver as novidades com um clique, ficando visível até você fechar ou conferir.</li>
 </ul>
 <h3 id="melhorias-e-correções">Melhorias e Correções</h3>
 <ul>
+<li><strong>Marcação <code>@todos</code> no ComuChat!:</strong> Corrigido um detalhe ao marcar <code>@todos</code> nas conversas da comunidade, que antes ficava com duas arrobas (<code>@@todos</code>). Agora a marcação aparece certinho como <code>@todos</code>, tanto nas novas mensagens quanto nas que já tinham sido enviadas.</li>
+<li><strong>Horário Preferencial no Agendamento em Sequência:</strong> Corrigido um problema em que a busca sugeria o primeiro horário do dia (por exemplo, 09:00) em vez do horário preferencial que você informou, mesmo com ele livre na agenda. Isso acontecia principalmente nas segundas-feiras e depois de dias sem vaga. Agora o SAO procura o horário preferencial em cada dia da sequência. Quando o dia não tem esse horário livre, ele mantém o dia, sugere o horário livre mais próximo e marca a sessão como “Fora do horário preferencial”, para você conferir antes de confirmar.</li>
+<li><strong>Autocompletar de Emojis no ComuChat!:</strong> Ao digitar palavras-chave iniciadas por dois pontos (como <code>:ok</code>), você pode navegar pelas sugestões com as setas do teclado e apertar <code>Enter</code> ou <code>Tab</code> para colocar o emoji escolhido no campo de texto, enviando a mensagem apenas quando apertar <code>Enter</code> novamente.</li>
 <li><strong>Notificações do ComuChat! que Sumiam Sozinhas:</strong> Corrigido um problema em que o aviso de mensagem nova (no sininho, no ícone e no atalho) piscava e desaparecia sem você ter visto a mensagem. Isso acontecia quando a aba do ComuChat! ficava aberta em segundo plano na conversa de quem escreveu. Agora a mensagem só é marcada como lida quando a conversa está de fato na sua tela.</li>
 <li><strong>Aviso de Mensagem Nova ao Reler a Conversa:</strong> Se você estiver rolando para cima para reler mensagens antigas e chegar uma nova na mesma conversa, o SAO agora avisa normalmente. Antes ela era dada como lida mesmo sem aparecer na sua tela. O aviso some assim que você volta ao fim da conversa.</li>
+<li><strong>Permissões e Privilégios nas Agendas de Setor:</strong> Corrigido um problema em que administradores, gerentes e usuários seniores não conseguiam criar ou gerenciar agendamentos nas agendas de setor. Nas <strong>Configurações da Agenda</strong>, agora é possível ajustar normalmente os privilégios individuais de cada colaborador e salvar preferências visuais sem mensagens de erro indevidas.</li>
+<li><strong>Rolagem na Janela de Trocar Horário:</strong> Corrigido um problema em que a rolagem do mouse não funcionava na lista de vagas livres do dia, ao trocar o horário de uma sessão no agendamento em sequência. A barrinha de rolagem aparecia, mas a lista não se movia. Agora a rolagem funciona normalmente com o mouse ou o toque.</li>
 </ul>
 <h2 id="092---11-de-novembro-de-2026">[0.9.2] - 11 de Novembro de 2026</h2>
 <p>“Build de Melhoria e Correção”</p>

@@ -21,18 +21,28 @@
 #    - **Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
-## [0.9.3] - 11 de Novembro de 2026
+## [0.9.3] - 12 de Novembro de 2026
 
 "Build de Melhoria e Correção"
 
 ### O que há de novo
 
+- **Agendamento em Sequência Repaginado:** A tela agora tem uma área só para as sessões encontradas, em cartões com dia da semana, data, horário e responsável, para você ver todas de uma vez sem ficar rolando uma lista pequena. A busca e os dados do agendamento ficam em uma coluna ao lado, e os responsáveis viraram um filtro compacto com as mesmas siglas coloridas da Agenda.
+- **Copiar Datas para o Cliente:** No agendamento em sequência, o botão "Copiar datas" copia a lista das sessões, com dia da semana, data e horário, pronta para colar na conversa do WhatsApp com o cliente.
+- **Trocar o Horário de uma Sessão:** No agendamento em sequência, cada sessão tem um botão de relógio que mostra as vagas livres daquele dia, com o responsável de cada uma. Escolha outro horário e a sessão é ajustada ali mesmo, sem precisar criar tudo e corrigir depois na agenda.
+- **Pular um Dia que o Cliente Não Pode:** O X em cada sessão retira aquele dia da sequência e acrescenta uma nova sessão no fim, mantendo a quantidade combinada. As outras sessões ficam como estão, e você pode desfazer logo em seguida se clicar sem querer.
+- **Nova Pesquisa de Mensagens no ComuChat!:** A busca (`Ctrl + F`) ganhou um painel lateral completo que mostra a foto e o nome de quem enviou cada mensagem, a data e o horário exatos, os anexos e a palavra buscada destacada em amarelo, mantendo os resultados abertos ao lado da conversa enquanto você pula de uma mensagem para outra. Agora você também pode pesquisar em toda a comunidade de uma vez e filtrar rapidamente por pessoa, canal, período ou tipo de conteúdo (links, arquivos, imagens, vídeos, áudios e mensagens fixadas).
 - **Aviso de Nova Versão Instalada:** Toda vez que uma atualização do SAO for aplicada, um aviso verde-água no canto da tela avisa que a versão foi instalada com sucesso e convida você a ver as novidades com um clique, ficando visível até você fechar ou conferir.
 
 ### Melhorias e Correções
 
+- **Marcação `@todos` no ComuChat!:** Corrigido um detalhe ao marcar `@todos` nas conversas da comunidade, que antes ficava com duas arrobas (`@@todos`). Agora a marcação aparece certinho como `@todos`, tanto nas novas mensagens quanto nas que já tinham sido enviadas.
+- **Horário Preferencial no Agendamento em Sequência:** Corrigido um problema em que a busca sugeria o primeiro horário do dia (por exemplo, 09:00) em vez do horário preferencial que você informou, mesmo com ele livre na agenda. Isso acontecia principalmente nas segundas-feiras e depois de dias sem vaga. Agora o SAO procura o horário preferencial em cada dia da sequência. Quando o dia não tem esse horário livre, ele mantém o dia, sugere o horário livre mais próximo e marca a sessão como "Fora do horário preferencial", para você conferir antes de confirmar.
+- **Autocompletar de Emojis no ComuChat!:** Ao digitar palavras-chave iniciadas por dois pontos (como `:ok`), você pode navegar pelas sugestões com as setas do teclado e apertar `Enter` ou `Tab` para colocar o emoji escolhido no campo de texto, enviando a mensagem apenas quando apertar `Enter` novamente.
 - **Notificações do ComuChat! que Sumiam Sozinhas:** Corrigido um problema em que o aviso de mensagem nova (no sininho, no ícone e no atalho) piscava e desaparecia sem você ter visto a mensagem. Isso acontecia quando a aba do ComuChat! ficava aberta em segundo plano na conversa de quem escreveu. Agora a mensagem só é marcada como lida quando a conversa está de fato na sua tela.
 - **Aviso de Mensagem Nova ao Reler a Conversa:** Se você estiver rolando para cima para reler mensagens antigas e chegar uma nova na mesma conversa, o SAO agora avisa normalmente. Antes ela era dada como lida mesmo sem aparecer na sua tela. O aviso some assim que você volta ao fim da conversa.
+- **Permissões e Privilégios nas Agendas de Setor:** Corrigido um problema em que administradores, gerentes e usuários seniores não conseguiam criar ou gerenciar agendamentos nas agendas de setor. Nas **Configurações da Agenda**, agora é possível ajustar normalmente os privilégios individuais de cada colaborador e salvar preferências visuais sem mensagens de erro indevidas.
+- **Rolagem na Janela de Trocar Horário:** Corrigido um problema em que a rolagem do mouse não funcionava na lista de vagas livres do dia, ao trocar o horário de uma sessão no agendamento em sequência. A barrinha de rolagem aparecia, mas a lista não se movia. Agora a rolagem funciona normalmente com o mouse ou o toque.
 
 ## [0.9.2] - 11 de Novembro de 2026
 
