@@ -18,9 +18,31 @@ arquivo seguindo a estrutura abaixo (sem jargões técnicos, focando nos benefí
 - # **Título do Ajuste**: Descrição objetiva da correção ou aperfeiçoamento.
   -->
 
+## [0.9.2] - 11 de Novembro de 2026
+
+"Build de Melhoria e Correção"
+
+### O que há de novo
+
+- **Barra de Acesso Rápido na Lateral:** Agora você pode fixar os módulos que mais usa na barra lateral esquerda (pela estrela nos cartões da tela inicial, pelo menu direito das abas ou na nova aba **Favoritos** das Configurações) e reordená-los como preferir arrastando com o mouse. Clique no ícone para abrir ou voltar direto à aba já aberta sem duplicar, feche rapidamente com o botão do meio do mouse ou clique com o botão direito para desacoplar em outra janela — com indicadores visuais de uso e salvamento automático na sua conta.
+- **Botão de Tema Claro e Escuro no Topo:** O botão para alternar entre o modo claro e o modo escuro (ícone de Sol e Lua) agora fica sempre à mão no cabeçalho superior, ao lado da busca (`Ctrl + K`), substituindo a antiga aba Aparência nas Configurações.
+- **Edição Avançada de Tabelas no Editor de Texto:** Agora você pode ajustar livremente a altura das linhas e a largura das colunas arrastando as bordas com o mouse ou informando medidas exatas. Também é possível mesclar ou dividir células, distribuir linhas e colunas igualmente, escolher o alinhamento vertical e personalizar cores e estilos das bordas pela barra de tabela, pelo menu de contexto ou pela janela de propriedades.
+
+### Melhorias e Correções
+
+- **Novo Visual nas Chamadas de Voz:** O palco das chamadas de voz do ComuChat foi redesenhado para ficar mais limpo e elegante, exibindo ondas animadas ao lado do nome de quem está falando e o tempo de duração ao vivo no cabeçalho. Também corrigimos o recorte no contorno verde de destaque dos participantes ao falar.
+- **Visualização de Mídias nas Solicitações:** Imagens, vídeos e áudios anexados às solicitações agora são exibidos diretamente no SAO, sem precisar baixar o arquivo. As imagens podem ser ampliadas com um clique, com zoom e arraste para ver os detalhes.
+- **Anexos Mais Leves:** Imagens coladas com `Ctrl + V` ou anexadas ao abrir uma solicitação agora são otimizadas automaticamente, ocupando bem menos espaço sem perder a nitidez.
+- **Fonte Padrão do Editor de Texto**: O Editor de Texto agora utiliza a fonte Calibri como padrão ao digitar e ao exportar documentos, mantendo as demais opções disponíveis na barra de ferramentas.
+- **Solicitações do Discord agora no SAO:** Todas as solicitações abertas no antigo fórum do Discord foram trazidas para a Central de Reportes, com a data original, os prints e vídeos e o histórico da conversa. Você encontra as suas em "Meus Reportes" e pode acompanhar e conversar sobre elas direto pelo SAO.
+- **Solicitações sem Duplicidade:** Corrigido um problema que, com vários SAOs abertos ao mesmo tempo, podia registrar a mesma solicitação mais de uma vez. Agora cada solicitação é enviada uma única vez, inclusive ao usar o botão "Reenviar".
+- **Botões e Interruptores Padronizados:** Os interruptores de liga/desliga das Configurações e da Agenda agora têm o mesmo tamanho e a mesma aparência em todo o SAO: preenchidos com a cor do módulo quando ligados e apenas contornados quando desligados, fáceis de distinguir em qualquer tema, e também podem ser acionados pelo teclado. Os botões passaram a seguir um padrão único de altura, de acordo com o lugar onde aparecem.
+- **Visual Mais Consistente e Legível:** Os botões principais, como Salvar, Novo e Entrar, agora aparecem na cor do módulo em que você está, tanto no tema claro quanto no escuro. As cores foram ajustadas para garantir uma leitura confortável em qualquer tema (os textos brancos sobre o verde-água da Agenda, por exemplo, agora ficam bem legíveis), e o tema escuro ganhou tons de grafite mais uniformes em menus e listas. Os módulos Gerar Tópicos, Gestão Organizacional e Senhas ganharam cores novas (esmeralda, ameixa e ouro), para que os botões de salvar não se confundam mais com o vermelho dos botões de exclusão.
+- **Dicas da Agenda Visíveis no Tema Claro:** O nome e o tipo de cada agenda, exibidos ao passar o mouse sobre a barra lateral, ficavam invisíveis no tema claro e agora aparecem com boa leitura, assim como os rótulos "Detalhes" e "Responsáveis" dos eventos.
+
 ## [0.9.1] - 09 de Novembro de 2026
 
-Build de Melhoria e Correção
+"Build de Melhoria e Correção"
 
 ### Melhorias e Correções
 
