@@ -1,8 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import notasReleaseRaw from '../../NOTAS_RELEASE.md?raw';
+import { interpretarNotasRelease, type NotaReleaseVersao } from '../utils/interpretadorNotasRelease';
+
+let notasPorVersao: Record<string, NotaReleaseVersao> = {};
+let listaVersoesOrdenadas: NotaReleaseVersao[] = [];
+
+try {
+  if (notasReleaseRaw) {
+    listaVersoesOrdenadas = interpretarNotasRelease(notasReleaseRaw);
+    for (const v of listaVersoesOrdenadas) {
+      const versaoSemV = v.versao.replace(/^v/i, '').trim();
+      notasPorVersao[versaoSemV] = v;
+      notasPorVersao[`v${versaoSemV}`] = v;
+    }
+  }
+} catch (erro) {
+  console.error('Falha ao interpretar NOTAS_RELEASE.md no build:', erro);
+}
+
+const dadosNotasJson = JSON.stringify({
+  mapa: notasPorVersao,
+  lista: listaVersoesOrdenadas,
+});
 ---
 
-<Layout title="SAO - Download">
+<Layout title="SAO - Download e Atualizações">
 	<section class="hero">
 		<h1>Baixe a versão mais recente</h1>
 		<p>Experimente a versão mais rápida e estável do SAO.</p>
@@ -14,7 +37,7 @@ import Layout from '../layouts/Layout.astro';
 
 	<section class="legacy">
 		<h2><i data-lucide="archive" style="display:inline-block; vertical-align:middle; margin-right:8px;"></i> Histórico de Versões</h2>
-		<p class="legacy-subtitle">Versões anteriores de instalação</p>
+		<p class="legacy-subtitle">Versões anteriores de instalação com notas de release</p>
 		<div id="legacy-releases-container">
 			<div class="spinner"></div>
 			<p>Carregando histórico...</p>
@@ -22,9 +45,17 @@ import Layout from '../layouts/Layout.astro';
 	</section>
 </Layout>
 
-<script is:inline>
+<script is:inline define:vars={{ baseUrl: import.meta.env.BASE_URL, dadosNotasJson }}>
 	const REPO = 'cassracp/sao-release';
 	const API_URL = `https://api.github.com/repos/${REPO}/releases`;
+
+	// Lê as notas estruturadas compiladas estaticamente a partir do NOTAS_RELEASE.md
+	let dadosNotasEstadicas = { mapa: {}, lista: [] };
+	try {
+		dadosNotasEstadicas = typeof dadosNotasJson === 'string' ? JSON.parse(dadosNotasJson) : dadosNotasJson;
+	} catch (e) {
+		console.warn('Não foi possível ler as notas estáticas:', e);
+	}
 
 	document.addEventListener('DOMContentLoaded', () => {
 		ConsultarReleases();
@@ -33,12 +64,17 @@ import Layout from '../layouts/Layout.astro';
 	async function ConsultarReleases() {
 		try {
 			const resposta = await fetch(API_URL);
-			if (!resposta.ok) throw new Error('Falha ao buscar as versões no GitHub.');
-			
+			if (!resposta.ok) {
+				// Se der erro (ex: 403 Rate Limit do GitHub para IP público), faz fallback para a lista estática
+				console.warn('Resposta da API do GitHub não foi OK:', resposta.status);
+				UsarFallbackEstatico();
+				return;
+			}
+
 			const versoes = await resposta.json();
-			
-			if (versoes.length === 0) {
-				RenderizarEstadoVazio();
+
+			if (!Array.isArray(versoes) || versoes.length === 0) {
+				UsarFallbackEstatico();
 				return;
 			}
 
@@ -49,46 +85,181 @@ import Layout from '../layouts/Layout.astro';
 			RenderizarLegado(historicoLegado);
 
 		} catch (erro) {
-			console.error(erro);
-			RenderizarErro();
+			console.error('Erro ao consultar releases do GitHub:', erro);
+			UsarFallbackEstatico();
 		} finally {
-			if (window.lucide) {
-				window.lucide.createIcons();
-			}
+			AtualizarIconesLucide();
+		}
+	}
+
+	function UsarFallbackEstatico() {
+		if (dadosNotasEstadicas.lista && dadosNotasEstadicas.lista.length > 0) {
+			const maisRecente = {
+				tag_name: `v${dadosNotasEstadicas.lista[0].versao.replace(/^v/i, '')}`,
+				published_at: dadosNotasEstadicas.lista[0].data,
+				html_url: `https://github.com/${REPO}/releases/tag/v${dadosNotasEstadicas.lista[0].versao.replace(/^v/i, '')}`,
+				assets: [],
+				fallback: true
+			};
+
+			const legado = dadosNotasEstadicas.lista.slice(1).map(v => ({
+				tag_name: `v${v.versao.replace(/^v/i, '')}`,
+				published_at: v.data,
+				html_url: `https://github.com/${REPO}/releases/tag/v${v.versao.replace(/^v/i, '')}`,
+				assets: [],
+				fallback: true
+			}));
+
+			RenderizarMaisRecente(maisRecente);
+			RenderizarLegado(legado);
+		} else {
+			RenderizarErro();
+		}
+		AtualizarIconesLucide();
+	}
+
+	function AtualizarIconesLucide() {
+		if (window.lucide && typeof window.lucide.createIcons === 'function') {
+			window.lucide.createIcons();
 		}
 	}
 
 	function FormatarData(dataString) {
+		if (!dataString) return '';
+		const data = new Date(dataString);
+		if (isNaN(data.getTime())) {
+			return dataString;
+		}
 		const opcoes = { day: '2-digit', month: 'long', year: 'numeric' };
-		return new Date(dataString).toLocaleDateString('pt-BR', opcoes);
+		return data.toLocaleDateString('pt-BR', opcoes);
 	}
 
-	function EncontrarInstalador(assets) {
-		return assets.find(a => a.name.endsWith('.exe') || a.name.endsWith('.msi')) || 
-			   assets.find(a => a.name.endsWith('.zip'));
+	function EncontrarInstalador(assets, versaoTag) {
+		if (!assets || assets.length === 0) {
+			// URL canônica de download caso assets esteja vazio
+			const tagLimpa = (versaoTag || '').replace(/^v/i, '');
+			return {
+				browser_download_url: `https://github.com/${REPO}/releases/download/v${tagLimpa}/SAO_${tagLimpa}_x64-setup.exe`
+			};
+		}
+
+		return assets.find(a => a.name.endsWith('.exe') || a.name.endsWith('.msi')) ||
+			   assets.find(a => a.name.endsWith('.zip')) || {
+			browser_download_url: assets[0].browser_download_url
+		};
+	}
+
+	function ObterNotaDaVersao(tagVersao) {
+		const tagLimpa = (tagVersao || '').replace(/^v/i, '').trim();
+		return dadosNotasEstadicas.mapa[tagLimpa] || dadosNotasEstadicas.mapa[`v${tagLimpa}`] || null;
+	}
+
+	function FormatarTextoInline(texto) {
+		if (!texto) return '';
+		let seguro = String(texto)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
+
+		// Substitui crases `código` por <code class="inline-code">código</code>
+		seguro = seguro.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+
+		// Substitui **negrito** por <strong>negrito</strong>
+		seguro = seguro.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+		return seguro;
+	}
+
+	function GerarHtmlNotas(notaVersao, fallbackCorpo) {
+		if (notaVersao && notaVersao.secoes && notaVersao.secoes.length > 0) {
+			let html = '';
+
+			if (notaVersao.resumoDestaque) {
+				html += `
+					<div class="nota-destaque">
+						<i data-lucide="sparkles" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
+						<span>&ldquo;${FormatarTextoInline(notaVersao.resumoDestaque)}&rdquo;</span>
+					</div>
+				`;
+			}
+
+			html += '<div class="secoes-container">';
+			notaVersao.secoes.forEach(secao => {
+				const isNovo = secao.categoriaIcone === 'novo';
+				const nomeIcone = isNovo ? 'sparkles' : (secao.categoriaIcone === 'melhoria' ? 'wrench' : 'info');
+				const classeBadge = isNovo ? 'badge-secao-novo' : 'badge-secao-melhoria';
+
+				html += `
+					<div class="secao-bloco">
+						<div class="secao-badge ${classeBadge}">
+							<i data-lucide="${nomeIcone}" style="width: 13px; height: 13px;"></i>
+							<span>${FormatarTextoInline(secao.titulo)}</span>
+						</div>
+						<ul class="secao-lista">
+							${secao.itens.map(item => `
+								<li class="secao-item">
+									${item.titulo ? `<strong class="item-titulo">${FormatarTextoInline(item.titulo)}:</strong> ` : ''}
+									<span class="item-desc">${FormatarTextoInline(item.descricao)}</span>
+								</li>
+							`).join('')}
+						</ul>
+					</div>
+				`;
+			});
+			html += '</div>';
+
+			html += `
+				<div class="link-devlog-wrapper">
+					<a href="${baseUrl}/devlog" class="link-todas-notas">
+						<span>Ver histórico completo nas Notas de Lançamento</span>
+						<i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+					</a>
+				</div>
+			`;
+
+			return html;
+		}
+
+		// Fallback para body do GitHub caso não esteja no NOTAS_RELEASE.md
+		if (fallbackCorpo && !fallbackCorpo.startsWith('Atualização automática do SAO')) {
+			return `<div class="nota-corpo-bruto">${FormatarTextoInline(fallbackCorpo)}</div>`;
+		}
+
+		return `
+			<p class="nota-vazia">
+				Novidades e melhorias disponíveis nas <a href="${baseUrl}/devlog" style="color: var(--accent-color); font-weight: 600;">Notas de Lançamento</a>.
+			</p>
+		`;
 	}
 
 	function RenderizarMaisRecente(versao) {
 		const container = document.getElementById('latest-release-container');
-		const instalador = EncontrarInstalador(versao.assets);
-		const urlDownload = instalador ? instalador.browser_download_url : versao.html_url;
+		const instalador = EncontrarInstalador(versao.assets, versao.tag_name);
+		const urlDownload = instalador ? instalador.browser_download_url : (versao.html_url || '#');
+		const notaVersao = ObterNotaDaVersao(versao.tag_name);
+		const dataFormatada = FormatarData(versao.published_at || (notaVersao ? notaVersao.data : ''));
 
 		container.innerHTML = `
-			<div class="release-card">
+			<div class="release-card latest-card">
 				<div class="release-header">
 					<div class="release-version">
 						<i data-lucide="package"></i>
-						${versao.tag_name}
+						<span>${versao.tag_name}</span>
+						<span class="badge-recente">Mais Recente</span>
 					</div>
 					<div class="release-date">
 						<i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
-						${FormatarData(versao.published_at)}
+						<span>${dataFormatada}</span>
 					</div>
 				</div>
-				<div class="release-notes">${versao.body || 'Nenhuma nota de lançamento disponível.'}</div>
-				<a href="${urlDownload}" class="download-btn" target="_blank">
+
+				<div class="release-notes-box">
+					${GerarHtmlNotas(notaVersao, versao.body)}
+				</div>
+
+				<a href="${urlDownload}" class="download-btn" target="_blank" rel="noopener noreferrer">
 					<i data-lucide="download"></i>
-					Baixar Instalador Windows
+					<span>Baixar Instalador Windows</span>
 				</a>
 			</div>
 		`;
@@ -96,46 +267,88 @@ import Layout from '../layouts/Layout.astro';
 
 	function RenderizarLegado(versoes) {
 		const container = document.getElementById('legacy-releases-container');
-		
-		if (versoes.length === 0) {
-			container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Nenhum histórico disponível ainda.</p>';
+
+		if (!versoes || versoes.length === 0) {
+			container.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 20px;">Nenhum histórico anterior disponível.</p>';
 			return;
 		}
 
-		container.innerHTML = versoes.map(versao => {
-			const instalador = EncontrarInstalador(versao.assets);
-			const urlDownload = instalador ? instalador.browser_download_url : versao.html_url;
+		container.innerHTML = versoes.map((versao, idx) => {
+			const instalador = EncontrarInstalador(versao.assets, versao.tag_name);
+			const urlDownload = instalador ? instalador.browser_download_url : (versao.html_url || '#');
+			const notaVersao = ObterNotaDaVersao(versao.tag_name);
+			const dataFormatada = FormatarData(versao.published_at || (notaVersao ? notaVersao.data : ''));
+			const idUnico = `legado-${versao.tag_name.replace(/[^a-zA-Z0-9_-]/g, '_')}-${idx}`;
 
 			return `
-				<div class="release-card legacy-card">
+				<div class="release-card legacy-card" id="card-${idUnico}">
 					<div class="release-header">
-						<div class="release-version" style="font-size: 1.2rem;">
+						<div class="release-version" style="font-size: 1.25rem;">
 							<i data-lucide="package" style="width: 20px; height: 20px;"></i>
-							${versao.tag_name}
+							<span>${versao.tag_name}</span>
 						</div>
 						<div class="release-date">
-							<i data-lucide="calendar" style="width: 12px; height: 12px;"></i>
-							${FormatarData(versao.published_at)}
+							<i data-lucide="calendar" style="width: 13px; height: 13px;"></i>
+							<span>${dataFormatada}</span>
 						</div>
 					</div>
-					<div style="display: flex; justify-content: flex-end;">
-						<a href="${urlDownload}" class="download-btn" target="_blank" style="width: auto; padding: 8px 16px; font-size: 0.9rem; background-color: transparent; border: 1px solid var(--border-color); color: var(--text-primary);">
+
+					<div class="legacy-card-actions">
+						<button type="button" class="btn-toggle-notas" onclick="AlternarNotas('${idUnico}')" id="btn-${idUnico}" aria-expanded="false" aria-controls="painel-${idUnico}">
+							<i data-lucide="file-text" style="width: 15px; height: 15px;"></i>
+							<span class="btn-texto">Ver o que mudou nesta versão</span>
+							<i data-lucide="chevron-down" style="width: 15px; height: 15px;" class="chevron-indicador"></i>
+						</button>
+
+						<a href="${urlDownload}" class="download-btn download-btn-legacy" target="_blank" rel="noopener noreferrer">
 							<i data-lucide="download" style="width: 16px; height: 16px;"></i>
-							Download Antigo
+							<span>Download</span>
 						</a>
+					</div>
+
+					<div id="painel-${idUnico}" class="painel-notas-legado" style="display: none;">
+						<div class="release-notes-box legado-box">
+							${GerarHtmlNotas(notaVersao, versao.body)}
+						</div>
 					</div>
 				</div>
 			`;
 		}).join('');
 	}
 
-	function RenderizarEstadoVazio() {
-		document.getElementById('latest-release-container').innerHTML = '<p>Nenhuma versão publicada ainda.</p>';
-		document.getElementById('legacy-releases-container').innerHTML = '';
-	}
+	window.AlternarNotas = function(idUnico) {
+		const painel = document.getElementById(`painel-${idUnico}`);
+		const botao = document.getElementById(`btn-${idUnico}`);
+		if (!painel || !botao) return;
+
+		const estaAberto = painel.style.display !== 'none';
+		if (estaAberto) {
+			painel.style.display = 'none';
+			botao.setAttribute('aria-expanded', 'false');
+			const texto = botao.querySelector('.btn-texto');
+			if (texto) texto.textContent = 'Ver o que mudou nesta versão';
+			botao.classList.remove('ativo');
+		} else {
+			painel.style.display = 'block';
+			botao.setAttribute('aria-expanded', 'true');
+			const texto = botao.querySelector('.btn-texto');
+			if (texto) texto.textContent = 'Ocultar notas da versão';
+			botao.classList.add('ativo');
+		}
+
+		AtualizarIconesLucide();
+	};
 
 	function RenderizarErro() {
-		document.getElementById('latest-release-container').innerHTML = '<p style="color: #f85149;">Erro ao carregar as versões.</p>';
+		document.getElementById('latest-release-container').innerHTML = `
+			<div class="erro-box">
+				<i data-lucide="alert-circle" style="width: 24px; height: 24px; color: #f87171; margin-bottom: 8px;"></i>
+				<p style="color: #f87171; font-weight: 500;">Não foi possível consultar os pacotes no momento.</p>
+				<p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 6px;">
+					Consulte diretamente as <a href="${baseUrl}/devlog" style="color: var(--accent-color);">Notas de Lançamento</a>.
+				</p>
+			</div>
+		`;
 		document.getElementById('legacy-releases-container').innerHTML = '';
 	}
 </script>
@@ -143,49 +356,77 @@ import Layout from '../layouts/Layout.astro';
 <style is:global>
 	.hero {
 		text-align: center;
-		margin-bottom: 60px;
+		margin-bottom: 50px;
+	}
+	.hero h1 {
+		font-size: 2.2rem;
+		font-weight: 800;
+		color: var(--text-primary);
+		margin-bottom: 8px;
 	}
 	.hero p {
 		color: var(--text-secondary);
-		margin-bottom: 30px;
+		margin-bottom: 25px;
+		font-size: 1.05rem;
 	}
 	.legacy h2 {
 		text-align: center;
 		margin-top: 40px;
+		font-size: 1.6rem;
+		font-weight: 700;
 	}
 	.legacy-subtitle {
 		text-align: center;
 		color: var(--text-secondary);
-		margin-bottom: 30px;
+		margin-bottom: 25px;
+		font-size: 0.95rem;
 	}
+
 	.release-card {
 		background: var(--card-bg);
 		border: 1px solid var(--border-color);
-		border-radius: 8px;
+		border-radius: 12px;
 		padding: 24px;
-		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-		transition: transform 0.2s ease, border-color 0.2s ease;
+		box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.25);
+		transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 		margin-bottom: 20px;
 	}
 	.release-card:hover {
-		transform: translateY(-2px);
-		border-color: var(--accent-color);
+		border-color: rgba(0, 171, 185, 0.4);
 	}
+	.latest-card {
+		border-color: rgba(0, 171, 185, 0.35);
+		box-shadow: 0 6px 20px -3px rgba(0, 171, 185, 0.12);
+	}
+
 	.release-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 15px;
+		margin-bottom: 16px;
 		border-bottom: 1px solid var(--border-color);
-		padding-bottom: 10px;
+		padding-bottom: 12px;
+		flex-wrap: wrap;
+		gap: 10px;
 	}
 	.release-version {
-		font-size: 1.5rem;
-		font-weight: 600;
+		font-size: 1.55rem;
+		font-weight: 700;
 		color: var(--accent-color);
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 10px;
+	}
+	.badge-recente {
+		font-size: 0.72rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		padding: 3px 8px;
+		border-radius: 9999px;
+		background: rgba(0, 171, 185, 0.18);
+		color: #22d3ee;
+		border: 1px solid rgba(0, 171, 185, 0.35);
 	}
 	.release-date {
 		color: var(--text-secondary);
@@ -194,46 +435,226 @@ import Layout from '../layouts/Layout.astro';
 		align-items: center;
 		gap: 6px;
 	}
-	.release-notes {
+
+	/* Caixa de Notas de Release */
+	.release-notes-box {
 		color: var(--text-primary);
 		text-align: left;
-		font-size: 0.95rem;
-		margin-bottom: 20px;
-		background: rgba(0,0,0,0.2);
-		padding: 15px;
-		border-radius: 6px;
-		white-space: pre-wrap;
-		border: 1px solid rgba(255,255,255,0.05);
+		font-size: 0.93rem;
+		margin-bottom: 22px;
+		background: rgba(0, 0, 0, 0.25);
+		padding: 18px 20px;
+		border-radius: 8px;
+		border: 1px solid rgba(255, 255, 255, 0.08);
 	}
-	.download-btn {
+	.legado-box {
+		margin-bottom: 0;
+		background: rgba(0, 0, 0, 0.3);
+		border-color: rgba(255, 255, 255, 0.06);
+	}
+
+	.nota-destaque {
+		font-style: italic;
+		color: #5eead4;
+		font-weight: 500;
+		margin-bottom: 16px;
+		padding-bottom: 12px;
+		border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
 		display: flex;
+		align-items: center;
+		line-height: 1.4;
+	}
+
+	.secoes-container {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.secao-bloco {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.secao-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 0.78rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		padding: 3px 10px;
+		border-radius: 6px;
+		width: fit-content;
+	}
+	.badge-secao-novo {
+		background: rgba(16, 185, 129, 0.15);
+		color: #34d399;
+		border: 1px solid rgba(16, 185, 129, 0.3);
+	}
+	.badge-secao-melhoria {
+		background: rgba(0, 171, 185, 0.15);
+		color: #22d3ee;
+		border: 1px solid rgba(0, 171, 185, 0.3);
+	}
+
+	.secao-lista {
+		list-style: none;
+		padding-left: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.secao-item {
+		position: relative;
+		padding-left: 18px;
+		line-height: 1.55;
+		color: #e5e7eb;
+		font-size: 0.92rem;
+	}
+	.secao-item::before {
+		content: "•";
+		position: absolute;
+		left: 4px;
+		color: var(--accent-color);
+		font-size: 1.1rem;
+		line-height: 1.4;
+	}
+	.item-titulo {
+		color: #ffffff;
+		font-weight: 600;
+	}
+	.item-desc {
+		color: #d1d5db;
+	}
+
+	.inline-code {
+		background: rgba(255, 255, 255, 0.08);
+		color: #e5e7eb;
+		padding: 2px 6px;
+		border-radius: 4px;
+		font-family: monospace;
+		font-size: 0.88em;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.link-devlog-wrapper {
+		margin-top: 14px;
+		padding-top: 10px;
+		border-top: 1px solid rgba(255, 255, 255, 0.06);
+		display: flex;
+		justify-content: flex-end;
+	}
+	.link-todas-notas {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		color: var(--accent-color);
+		text-decoration: none;
+		font-size: 0.86rem;
+		font-weight: 600;
+		transition: color 0.15s ease, transform 0.15s ease;
+	}
+	.link-todas-notas:hover {
+		color: #38bdf8;
+		transform: translateX(2px);
+	}
+
+	/* Ações do Histórico Legado */
+	.legacy-card-actions {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+	.btn-toggle-notas {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid var(--border-color);
+		color: var(--text-secondary);
+		padding: 8px 14px;
+		border-radius: 6px;
+		font-size: 0.88rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	.btn-toggle-notas:hover, .btn-toggle-notas.ativo {
+		background: rgba(0, 171, 185, 0.1);
+		border-color: var(--accent-color);
+		color: var(--text-primary);
+	}
+	.btn-toggle-notas.ativo .chevron-indicador {
+		transform: rotate(180deg);
+	}
+	.chevron-indicador {
+		transition: transform 0.2s ease;
+	}
+
+	.painel-notas-legado {
+		margin-top: 16px;
+		padding-top: 16px;
+		border-top: 1px solid var(--border-color);
+		animation: aparecer 0.25s ease-out;
+	}
+
+	@keyframes aparecer {
+		from { opacity: 0; transform: translateY(-4px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	.download-btn {
+		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		gap: 8px;
 		background-color: var(--accent-color);
-		color: #fff;
+		color: #ffffff;
 		text-decoration: none;
-		padding: 12px 30px;
-		border-radius: 6px;
+		padding: 12px 28px;
+		border-radius: 8px;
 		font-weight: 600;
-		transition: background-color 0.2s ease;
+		font-size: 0.98rem;
+		transition: background-color 0.2s ease, transform 0.15s ease;
 		width: 100%;
+		box-shadow: 0 2px 8px rgba(0, 171, 185, 0.3);
 	}
 	.download-btn:hover {
 		background-color: var(--accent-hover);
+		transform: translateY(-1px);
 	}
-	.loading-box {
+	.download-btn-legacy {
+		width: auto;
+		padding: 8px 18px;
+		font-size: 0.9rem;
+		background-color: transparent;
+		border: 1px solid var(--border-color);
+		color: var(--text-primary);
+		box-shadow: none;
+	}
+	.download-btn-legacy:hover {
+		background-color: rgba(255, 255, 255, 0.08);
+		border-color: var(--text-secondary);
+		transform: none;
+	}
+
+	.loading-box, .erro-box {
 		text-align: center;
-		padding: 40px;
+		padding: 30px;
 	}
 	.spinner {
 		border: 3px solid rgba(255,255,255,0.1);
-		width: 36px;
-		height: 36px;
+		width: 34px;
+		height: 34px;
 		border-radius: 50%;
 		border-left-color: var(--accent-color);
 		animation: spin 1s linear infinite;
-		margin: 0 auto 15px auto;
+		margin: 0 auto 12px auto;
 	}
 	@keyframes spin {
 		0% { transform: rotate(0deg); }

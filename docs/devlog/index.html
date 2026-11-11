@@ -3,33 +3,47 @@
 </style></head> <body> <div class="glow-bg"></div> <div class="container"> <header> <a href="/sao-release/" style="text-decoration: none;"> <div class="logo"> <img src="/sao-release/favicon.svg" class="logo-icon" alt="SAO Logo">
 SAO
 </div> </a> <p class="subtitle">Sistema de Auxílio Operacinal</p> <nav class="main-nav"> <a href="/sao-release/" class="nav-link"><i data-lucide="download"></i> Downloads</a> <a href="/sao-release/devlog" class="nav-link"><i data-lucide="file-text"></i> Notas de Lançamento</a> </nav> </header> <main>  <article class="markdown-body"> <!-- #
-# GUIA RÁPIDO PARA ADICIONAR OU EDITAR NOTAS DA RELEASE MANUALMENTE:
-
-Quando quiser registrar uma nova atualização, basta adicionar um bloco no topo deste
-arquivo seguindo a estrutura abaixo (sem jargões técnicos, focando nos benefícios):
-
-## [0.9.0] - Novembro de 2026
-
-"Frase de Destaque da Versão entre Aspas"
-
-### ✨ O que há de novo
-
-- **Título da Novidade**: Explicação simples e amigável do que melhorou no dia a dia.
-- **Outra Funcionalidade**: Suporta formatação de código curto com crases (ex: `Ctrl + K`).
-
-### 🔧 Melhorias e Correções
-
-- # **Título do Ajuste**: Descrição objetiva da correção ou aperfeiçoamento.
-  -->
-<h2 id="092---11-de-novembro-de-2026">[0.9.2] - 11 de Novembro de 2026</h2>
+# GUIA RÁPIDO PARA AGENTES DE IA E DESENVOLVEDORES:
+#
+# 1. VERIFICAÇÃO DE VERSÃO EM PRODUÇÃO:
+#    - Antes de registrar novas notas, sempre verifique a versão atual em package.json e confira se a última versão listada já foi liberada/lançada para produção.
+#    - NUNCA adicione novidades ou alterações a uma versão já publicada!
+#
+# 2. PRÓXIMA RELEASE (SEMPRE UMA VERSÃO ACIMA):
+#    - Se a última versão já foi liberada, crie um novo bloco ACIMA com a próxima versão.
+#    - PERGUNTE AO USUÁRIO se deve manter a sequência de build menor (patch, ex.: 0.9.2 -> 0.9.3)
+#      ou se o escopo da entrega deve subir para uma release maior (minor/major, ex.: 0.9.x -> 0.10.x ou 1.0.0).
+#
+# 3. ESTRUTURA DO BLOCO DE VERSÃO:
+#    ## [X.Y.Z] - DD de Mês de AAAA
+#    "Frase de Destaque da Versão entre Aspas"
+#
+#    ### O que há de novo
+#    - **Título Curto da Novidade:** Descrição em linguagem simples e amigável para leigos (sem jargões técnicos).
+#
+#    ### Melhorias e Correções
+#    - **Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
+-->
+<h2 id="093---11-de-novembro-de-2026">[0.9.3] - 11 de Novembro de 2026</h2>
 <p>“Build de Melhoria e Correção”</p>
 <h3 id="o-que-há-de-novo">O que há de novo</h3>
+<ul>
+<li><strong>Aviso de Nova Versão Instalada:</strong> Toda vez que uma atualização do SAO for aplicada, um aviso verde-água no canto da tela avisa que a versão foi instalada com sucesso e convida você a ver as novidades com um clique, ficando visível até você fechar ou conferir.</li>
+</ul>
+<h3 id="melhorias-e-correções">Melhorias e Correções</h3>
+<ul>
+<li><strong>Notificações do ComuChat! que Sumiam Sozinhas:</strong> Corrigido um problema em que o aviso de mensagem nova (no sininho, no ícone e no atalho) piscava e desaparecia sem você ter visto a mensagem. Isso acontecia quando a aba do ComuChat! ficava aberta em segundo plano na conversa de quem escreveu. Agora a mensagem só é marcada como lida quando a conversa está de fato na sua tela.</li>
+<li><strong>Aviso de Mensagem Nova ao Reler a Conversa:</strong> Se você estiver rolando para cima para reler mensagens antigas e chegar uma nova na mesma conversa, o SAO agora avisa normalmente. Antes ela era dada como lida mesmo sem aparecer na sua tela. O aviso some assim que você volta ao fim da conversa.</li>
+</ul>
+<h2 id="092---11-de-novembro-de-2026">[0.9.2] - 11 de Novembro de 2026</h2>
+<p>“Build de Melhoria e Correção”</p>
+<h3 id="o-que-há-de-novo-1">O que há de novo</h3>
 <ul>
 <li><strong>Barra de Acesso Rápido na Lateral:</strong> Agora você pode fixar os módulos que mais usa na barra lateral esquerda (pela estrela nos cartões da tela inicial, pelo menu direito das abas ou na nova aba <strong>Favoritos</strong> das Configurações) e reordená-los como preferir arrastando com o mouse. Clique no ícone para abrir ou voltar direto à aba já aberta sem duplicar, feche rapidamente com o botão do meio do mouse ou clique com o botão direito para desacoplar em outra janela — com indicadores visuais de uso e salvamento automático na sua conta.</li>
 <li><strong>Botão de Tema Claro e Escuro no Topo:</strong> O botão para alternar entre o modo claro e o modo escuro (ícone de Sol e Lua) agora fica sempre à mão no cabeçalho superior, ao lado da busca (<code>Ctrl + K</code>), substituindo a antiga aba Aparência nas Configurações.</li>
 <li><strong>Edição Avançada de Tabelas no Editor de Texto:</strong> Agora você pode ajustar livremente a altura das linhas e a largura das colunas arrastando as bordas com o mouse ou informando medidas exatas. Também é possível mesclar ou dividir células, distribuir linhas e colunas igualmente, escolher o alinhamento vertical e personalizar cores e estilos das bordas pela barra de tabela, pelo menu de contexto ou pela janela de propriedades.</li>
 </ul>
-<h3 id="melhorias-e-correções">Melhorias e Correções</h3>
+<h3 id="melhorias-e-correções-1">Melhorias e Correções</h3>
 <ul>
 <li><strong>Novo Visual nas Chamadas de Voz:</strong> O palco das chamadas de voz do ComuChat foi redesenhado para ficar mais limpo e elegante, exibindo ondas animadas ao lado do nome de quem está falando e o tempo de duração ao vivo no cabeçalho. Também corrigimos o recorte no contorno verde de destaque dos participantes ao falar.</li>
 <li><strong>Visualização de Mídias nas Solicitações:</strong> Imagens, vídeos e áudios anexados às solicitações agora são exibidos diretamente no SAO, sem precisar baixar o arquivo. As imagens podem ser ampliadas com um clique, com zoom e arraste para ver os detalhes.</li>
@@ -43,7 +57,7 @@ arquivo seguindo a estrutura abaixo (sem jargões técnicos, focando nos benefí
 </ul>
 <h2 id="091---09-de-novembro-de-2026">[0.9.1] - 09 de Novembro de 2026</h2>
 <p>“Build de Melhoria e Correção”</p>
-<h3 id="melhorias-e-correções-1">Melhorias e Correções</h3>
+<h3 id="melhorias-e-correções-2">Melhorias e Correções</h3>
 <ul>
 <li><strong>Painel de Abertura de Solicitações:</strong> Corrigido um pequeno bug que impedia a abertura de solicitação através do painel.</li>
 <li><strong>Sincronização Painel de Aberutra de SOlicitações:</strong> Otimizada a comunicação entre o Painel de Abertura de Solicitações e o Notion (utilizado para gestão das solicitações).</li>
@@ -51,14 +65,14 @@ arquivo seguindo a estrutura abaixo (sem jargões técnicos, focando nos benefí
 </ul>
 <h2 id="090---09-de-novembro-de-2026">[0.9.0] - 09 de Novembro de 2026</h2>
 <p>“Um passo mais próximo da versão de lançamento 1.0.0”</p>
-<h3 id="o-que-há-de-novo-1">O que há de novo</h3>
+<h3 id="o-que-há-de-novo-2">O que há de novo</h3>
 <ul>
 <li><strong>Atalho Rápido (Ctrl + K)</strong>: Pressione <code>Ctrl + K</code> em qualquer tela para abrir uma busca unificada e encontrar ferramentas, conversas do <em>ComuChat!</em>, compromissos da Agenda e mais em um instante.</li>
 <li><strong>Tutorial Guiado</strong>: Adicionei um tutorial guiado para ajudar você a se familiarizar com o sistema e seus módulos.</li>
 <li><strong>Notas de Release</strong>: Adicionado esse painel que você lê! Todas as novidades e atualizações serão publicadas aqui.</li>
 <li><strong>Painel para abertura de solicitação</strong>: Agora o SAO conta com um painel interno para abertura de solicitação de melhoria (feat) e correção (bug). Basta clicar no botão no cabeçalho superior e preencher o formulário. As solicitação são organizadas por prioriedade e viabilidade e permitem adição de vários de tipos de mídia para exemplificação.</li>
 </ul>
-<h3 id="melhorias-e-correções-2">Melhorias e Correções</h3>
+<h3 id="melhorias-e-correções-3">Melhorias e Correções</h3>
 <ul>
 <li><strong>Chamadas de Video Salvas no ComuChat!</strong>: Aperfeiçoei as chamadas de video do ComuChat, de modo que sejam salvas no histórico mesmo em caso de queda de conexão.</li>
 <li><strong>Configurações de Notificações aprimorada</strong>: Agora é possível configurar todas as notificações de forma independente dando total autonomia e controle. Além disso, foi corrigido um bug que fazia com que algumas notificações fossem exibidas com erro.</li>

@@ -1,22 +1,38 @@
 <!-- #
-# GUIA RÁPIDO PARA ADICIONAR OU EDITAR NOTAS DA RELEASE MANUALMENTE:
+# GUIA RÁPIDO PARA AGENTES DE IA E DESENVOLVEDORES:
+#
+# 1. VERIFICAÇÃO DE VERSÃO EM PRODUÇÃO:
+#    - Antes de registrar novas notas, sempre verifique a versão atual em package.json e confira se a última versão listada já foi liberada/lançada para produção.
+#    - NUNCA adicione novidades ou alterações a uma versão já publicada!
+#
+# 2. PRÓXIMA RELEASE (SEMPRE UMA VERSÃO ACIMA):
+#    - Se a última versão já foi liberada, crie um novo bloco ACIMA com a próxima versão.
+#    - PERGUNTE AO USUÁRIO se deve manter a sequência de build menor (patch, ex.: 0.9.2 -> 0.9.3)
+#      ou se o escopo da entrega deve subir para uma release maior (minor/major, ex.: 0.9.x -> 0.10.x ou 1.0.0).
+#
+# 3. ESTRUTURA DO BLOCO DE VERSÃO:
+#    ## [X.Y.Z] - DD de Mês de AAAA
+#    "Frase de Destaque da Versão entre Aspas"
+#
+#    ### O que há de novo
+#    - **Título Curto da Novidade:** Descrição em linguagem simples e amigável para leigos (sem jargões técnicos).
+#
+#    ### Melhorias e Correções
+#    - **Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
+-->
 
-Quando quiser registrar uma nova atualização, basta adicionar um bloco no topo deste
-arquivo seguindo a estrutura abaixo (sem jargões técnicos, focando nos benefícios):
+## [0.9.3] - 11 de Novembro de 2026
 
-## [0.9.0] - Novembro de 2026
+"Build de Melhoria e Correção"
 
-"Frase de Destaque da Versão entre Aspas"
+### O que há de novo
 
-### ✨ O que há de novo
+- **Aviso de Nova Versão Instalada:** Toda vez que uma atualização do SAO for aplicada, um aviso verde-água no canto da tela avisa que a versão foi instalada com sucesso e convida você a ver as novidades com um clique, ficando visível até você fechar ou conferir.
 
-- **Título da Novidade**: Explicação simples e amigável do que melhorou no dia a dia.
-- **Outra Funcionalidade**: Suporta formatação de código curto com crases (ex: `Ctrl + K`).
+### Melhorias e Correções
 
-### 🔧 Melhorias e Correções
-
-- # **Título do Ajuste**: Descrição objetiva da correção ou aperfeiçoamento.
-  -->
+- **Notificações do ComuChat! que Sumiam Sozinhas:** Corrigido um problema em que o aviso de mensagem nova (no sininho, no ícone e no atalho) piscava e desaparecia sem você ter visto a mensagem. Isso acontecia quando a aba do ComuChat! ficava aberta em segundo plano na conversa de quem escreveu. Agora a mensagem só é marcada como lida quando a conversa está de fato na sua tela.
+- **Aviso de Mensagem Nova ao Reler a Conversa:** Se você estiver rolando para cima para reler mensagens antigas e chegar uma nova na mesma conversa, o SAO agora avisa normalmente. Antes ela era dada como lida mesmo sem aparecer na sua tela. O aviso some assim que você volta ao fim da conversa.
 
 ## [0.9.2] - 11 de Novembro de 2026
 
