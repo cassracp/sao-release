@@ -9,6 +9,76 @@ import { Content as DevlogContent } from '../../DEVLOG.md';
 	</article>
 </Layout>
 
+<script is:inline>
+	document.addEventListener('DOMContentLoaded', () => {
+		const itens = document.querySelectorAll('.markdown-body li');
+		const regexProtocolos = /^((?:\[[A-Za-z]{2,12}-\d+(?:-\d+)*\]\s*)+)(.*)$/;
+
+		function extrairEInserirBadges(containerAlvo, textoAlvo, antesDe) {
+			const match = textoAlvo.match(regexProtocolos);
+			if (!match) return false;
+
+			const codigos = [...match[1].matchAll(/\[([A-Za-z]{2,12}-\d+(?:-\d+)*)\]/g)].map((m) =>
+				m[1].toUpperCase(),
+			);
+			const restante = match[2].replace(/^\s*[-–—:]?\s*/, '');
+
+			const fragmento = document.createDocumentFragment();
+			for (const codigo of codigos) {
+				const badge = document.createElement('span');
+				badge.className = 'badge-protocolo';
+				badge.title = `Chamado ${codigo}`;
+
+				const icone = document.createElement('i');
+				icone.setAttribute('data-lucide', 'ticket');
+				icone.style.width = '11px';
+				icone.style.height = '11px';
+				badge.appendChild(icone);
+
+				const rotulo = document.createElement('span');
+				rotulo.textContent = codigo;
+				badge.appendChild(rotulo);
+
+				fragmento.appendChild(badge);
+			}
+
+			containerAlvo.insertBefore(fragmento, antesDe);
+			return { restante };
+		}
+
+		itens.forEach((li) => {
+			let container = li;
+			if (
+				container.firstChild &&
+				container.firstChild.nodeType === Node.ELEMENT_NODE &&
+				container.firstChild.tagName === 'P'
+			) {
+				container = container.firstChild;
+			}
+
+			const primeiroNo = container.firstChild;
+			if (!primeiroNo) return;
+
+			if (primeiroNo.nodeType === Node.ELEMENT_NODE && primeiroNo.tagName === 'STRONG') {
+				const res = extrairEInserirBadges(container, primeiroNo.textContent || '', primeiroNo);
+				if (res) {
+					primeiroNo.textContent = res.restante;
+				}
+			} else if (primeiroNo.nodeType === Node.TEXT_NODE) {
+				const texto = (primeiroNo.textContent || '').trimStart();
+				const res = extrairEInserirBadges(container, texto, primeiroNo);
+				if (res) {
+					primeiroNo.textContent = res.restante;
+				}
+			}
+		});
+
+		if (window.lucide && typeof window.lucide.createIcons === 'function') {
+			window.lucide.createIcons();
+		}
+	});
+</script>
+
 <style is:global>
 	.markdown-body {
 		background: var(--card-bg);

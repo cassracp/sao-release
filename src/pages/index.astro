@@ -198,6 +198,9 @@ const dadosNotasJson = JSON.stringify({
 						<ul class="secao-lista">
 							${secao.itens.map(item => `
 								<li class="secao-item">
+									${(item.protocolos && item.protocolos.length > 0)
+										? item.protocolos.map(p => `<span class="badge-protocolo" title="Chamado ${FormatarTextoInline(p)}"><i data-lucide="ticket" style="width: 11px; height: 11px;"></i><span>${FormatarTextoInline(p)}</span></span>`).join('')
+										: ''}
 									${item.titulo ? `<strong class="item-titulo">${FormatarTextoInline(item.titulo)}:</strong> ` : ''}
 									<span class="item-desc">${FormatarTextoInline(item.descricao)}</span>
 								</li>

@@ -16,6 +16,7 @@ export type CategoriaIconeSecao =
   | "outro";
 
 export interface ItemNotaRelease {
+  protocolos?: string[];
   titulo?: string;
   descricao: string;
 }
@@ -117,6 +118,29 @@ export function identificarCategoriaIcone(tituloSecao: string): CategoriaIconeSe
 }
 
 /**
+ * Extrai códigos de protocolo de chamado no início do texto (ex.: "[FB-0088] Título...").
+ */
+export function extrairProtocolosDoInicio(texto: string): {
+  protocolos: string[];
+  restante: string;
+} {
+  let atual = (texto || "").trim();
+  const protocolos: string[] = [];
+
+  while (true) {
+    const match = atual.match(/^\[([A-Za-z]{2,12}-\d+(?:-\d+)*)\](?:\s*[-–—:]?\s*|\s*)/);
+    if (!match) break;
+    const codigo = match[1].toUpperCase();
+    if (!protocolos.includes(codigo)) {
+      protocolos.push(codigo);
+    }
+    atual = atual.slice(match[0].length).trim();
+  }
+
+  return { protocolos, restante: atual };
+}
+
+/**
  * Interpreta o conteúdo em Markdown bruto do NOTAS_RELEASE.md e devolve a lista de versões estruturadas.
  */
 export function interpretarNotasRelease(conteudoMarkdown: string): NotaReleaseVersao[] {
@@ -188,21 +212,33 @@ export function interpretarNotasRelease(conteudoMarkdown: string): NotaReleaseVe
       continue;
     }
 
-    // 4. Item da Seção: - **Título**: Descrição ou - Descrição
+    // 4. Item da Seção: - **[FB-0088] Título:** Descrição, - [FB-0088] **Título:** Descrição ou - Descrição
     const matchItem = linha.match(/^[-*]\s+(.*)$/);
     if (matchItem && secaoAtual) {
       const corpoItem = matchItem[1].trim();
+      const prefixoExterno = extrairProtocolosDoInicio(corpoItem);
+      const corpoSemPrefixo = prefixoExterno.restante;
 
-      const matchNegrito = corpoItem.match(/^\*\*(.*?)\*\*(?::\s*|\s*-\s*|\s+)?(.*)$/);
+      const matchNegrito = corpoSemPrefixo.match(/^\*\*(.*?)\*\*(?:\s*:\s*|\s+-\s+|\s+)?(.*)$/);
       if (matchNegrito) {
-        const tituloLimpo = matchNegrito[1].trim().replace(/[:\s-]+$/, "").trim();
+        const tituloBruto = matchNegrito[1].trim().replace(/[:\s-]+$/, "").trim();
+        const prefixoInterno = extrairProtocolosDoInicio(tituloBruto);
+        const protocolos = Array.from(
+          new Set([...prefixoExterno.protocolos, ...prefixoInterno.protocolos]),
+        );
+        const tituloLimpo = prefixoInterno.restante.replace(/[:\s-]+$/, "").trim();
+
         secaoAtual.itens.push({
-          titulo: tituloLimpo,
+          ...(protocolos.length > 0 ? { protocolos } : {}),
+          ...(tituloLimpo ? { titulo: tituloLimpo } : {}),
           descricao: matchNegrito[2].trim(),
         });
       } else {
         secaoAtual.itens.push({
-          descricao: corpoItem,
+          ...(prefixoExterno.protocolos.length > 0
+            ? { protocolos: prefixoExterno.protocolos }
+            : {}),
+          descricao: corpoSemPrefixo,
         });
       }
       continue;
