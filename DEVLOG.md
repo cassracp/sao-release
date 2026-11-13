@@ -21,6 +21,14 @@
 #    - **[FB-XXXX] Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
+## [0.9.5] - 13 de Novembro de 2026
+
+"Build de Melhoria e Correção"
+
+### Melhorias e Correções
+
+- **[FB-0053-3] Chaves de Segurança Renovadas:** Trocamos nos bastidores as chaves usadas pelo envio de e-mails de recuperação de senha e pelas chamadas de voz do ComuChat. Você não precisa fazer nada além de atualizar o SAO quando o aviso aparecer: e-mails, chamadas e compartilhamento de tela continuam funcionando como sempre.
+
 ## [0.9.4] - 12 de Novembro de 2026
 
 "Build de Melhoria e Correção"
@@ -29,14 +37,14 @@
 
 - **[FB-0083] Recursos Configuráveis por Agenda e Painel de BI Isolado:** As **Configurações da Agenda** ganharam a nova aba **Recursos**, onde é possível ativar ou desativar em cada agenda (pessoal, de setor ou personalizada) o **Painel de BI de Cancelamentos**, os **Campos de Implantação** e a **Fila de Espera**, mantendo apenas a agenda de **Implantações** com esses recursos ligados por padrão. O **Painel Analítico de Cancelamentos & BI** agora exibe apenas os dados da agenda aberta no momento e permite escolher onde salvar a planilha de exportação no seu computador.
 
-### Melhorias e Correções
+# Melhorias e Correções
 
 - **[FB-0088] Card de Atualização Mais Limpo e Organizado:** Corrigido um problema em que as notas de lançamento apareciam por completo e sem formatação dentro do aviso de nova versão, deformando o quadro na aba **Sobre & Ajuda** das **Configurações** e no alerta na tela. Agora o aviso mostra um resumo curto do que mudou, com a opção de expandir a lista organizada de novidades quando você quiser conferir os detalhes antes de atualizar.
 - **[FB-0085] Senha sem Data de Expiração:** Agora você consegue desligar o "Expira?" ao criar ou editar uma senha (antes a opção piscava e voltava marcada), e a lista do cofre mostra na hora a nova expiração depois de salvar. Se o "Expira?" ficar ligado sem uma data escolhida, o SAO avisa antes de salvar.
-- **[FB-0053] [FB-0053-2] Login Salvo do SAC, Intranet e WhatsApp Corporativo:** Depois que você clica em **Salvar Login**, o SAO passa a preencher seu usuário e senha sozinho ao abrir esses acessos, inclusive depois de fechar e reabrir o SAO. O aviso para salvar a senha só aparece quando o login é novo ou mudou, e não a cada entrada. As senhas salvas agora ficam guardadas de forma protegida, e não mais legíveis no seu computador. No PABX Web o login salvo ainda não está disponível.
-- **[FB-0053-4] Abas Web Mais Seguras:** O SAC, a Intranet, o PABX Web e o WhatsApp Corporativo continuam funcionando como sempre. Os outros sites que você abrir por links dentro deles passam a ficar isolados do SAO, sem acesso às funções internas do aplicativo, e os links continuam abrindo normalmente.
+- - - **[FB-0053] [FB-0053-2] Login Salvo do SAC, Intranet, PABX Web e WhatsApp Corporativo:** Depois que você clica em **Salvar Login**, o SAO passa a preencher seu usuário e senha sozinho ao abrir esses acessos, inclusive depois de fechar e reabrir o SAO. As senhas salvas agora ficam guardadas de forma protegida, e não mais legíveis no seu computador.
+      **[FB-0053-4] Abas Web Mais Seguras:** O SAC, a Intranet, o PABX Web e o WhatsApp Corporativo continuam funcionando como sempre. Os outros sites que você abrir por links dentro deles passam a ficar isolados do SAO, sem acesso às funções internas do aplicativo, e os links continuam abrindo normalmente.
 
-## [0.9.3] - 12 de Novembro de 2026
+# [0.9.3] - 12 de Novembro de 2026
 
 "Build de Melhoria e Correção"
 
