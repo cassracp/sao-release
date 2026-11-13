@@ -4,4 +4,7 @@ export default defineConfig({
   site: 'https://cassracp.github.io',
   base: '/sao-release',
   outDir: './docs',
+  build: {
+    inlineStylesheets: 'always',
+  },
 });
