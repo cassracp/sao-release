@@ -21,6 +21,15 @@
 #    - **[FB-XXXX] Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
+## [0.9.6] - 13 de Novembro de 2026
+
+"Build de Melhoria e Correção"
+
+### O que há de novo
+
+- **[FB-0017] [FB-0017-02] Execução na Bandeja e Indicador de Alertas:** Ao clicar no botão de fechar (`X`), o SAO permanece ativo junto ao relógio do Windows exibindo uma sinalização de alertas não lidos no ícone da bandeja e a contagem na barra de tarefas. Você pode restaurar a janela com um clique no ícone, ajustar a inicialização automática com o Windows em **Configurações → Geral** ou encerrar o aplicativo pelo menu da bandeja e pelo menu do perfil.
+- **[FB-0017-03] Notificações Nativas do Windows:** Quando o SAO estiver minimizado ou na bandeja do sistema, os alertas do ComuChat, Agenda, WhatsApp Corporativo, Downloads e Reportes aparecem na Central de Ações do Windows com som único e clique direto para o destino do aviso. Você pode personalizar esses alertas e as regras de WhatsApp e Downloads em **Configurações → Notificações**.
+
 ## [0.9.5] - 13 de Novembro de 2026
 
 "Build de Melhoria e Correção"
