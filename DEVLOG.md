@@ -21,6 +21,27 @@
 #    - **[FB-XXXX] Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
+## [0.10.0] - 18 de Novembro de 2026
+
+"Captura de Imagens, Gravação de Vídeo e muito mais no SAO"
+
+### O que há de novo
+
+- **Módulo Captura de Tela, Editor de Anotações e Histórico Pesquisável:** O novo módulo **Captura de Tela** permite capturar regiões, janelas ou a tela inteira (`PrintScreen`), copiar texto da tela, capturar cores e fixar imagens no topo, além de contar com editor completo (textos com múltiplas linhas, balões de diálogo, passos numerados com ponteira reposicionável, setas, tarja e desfoque com edição livre de cores, bordas e tamanhos), histórico das últimas 30 capturas com busca pelo texto visível na imagem, atalhos globais personalizáveis e um tutorial guiado rápido.
+- **Envio Direto de Capturas para ComuChat! e Reportes:** Ao capturar uma região da tela ou concluir uma edição, você pode enviar a imagem diretamente para qualquer colega, canal ou comunidade do ComuChat! (com legenda opcional) ou abrir um novo reporte já com a imagem anexada.
+- **Gravação de Vídeo da Tela, Anotações ao Vivo, Recorte e GIF Animado:** Grave vídeos de até 5 minutos de uma área, janela ou tela inteira (`Ctrl + Shift + R`), ligando e desligando o microfone, o som do computador, a câmera flutuante e o destaque visual do mouse e dos cliques. Durante a gravação, abra a paleta de desenho (`Ctrl + Shift + D`) para fazer setas, círculos, retângulos ou traços livres com sumiço automático (3 segundos) ou fixos e volte ao mouse normal com `Esc`. Você também pode gravar GIFs animados de até 30 segundos, com a opção de mostrar o ponteiro do mouse e os cliques. Ao parar a gravação do GIF, a tela é liberada na hora e um aviso acompanha o processamento até o GIF ficar pronto. Os vídeos são salvos em WebM, formato aberto e fácil de compartilhar. Você ainda pode aparar o início e o fim de qualquer gravação direto pelo histórico, exportar em formato universal compatível com qualquer aparelho ou enviar direto para o ComuChat! e Reportes.
+- **Marca d'Água DeMaria em Imagens, Vídeos e GIFs:** Ative e posicione a marca d'água da DeMaria nas capturas de tela, vídeos e GIFs gravados, escolhendo entre os quatro cantos (tamanho discreto) ou o centro (grande e suave para manter o texto legível). Você pode definir um padrão nas preferências da Captura de Tela ou ligar, desligar e mudar a posição na hora pela barra rápida e no editor completo, sem perder a imagem original no histórico. O menu da marca d'água abre sempre dentro da área visível, mesmo com a seleção perto da borda do monitor.
+
+### Melhorias e Correções
+
+- **[FB-0093] Envio Instantâneo de Mensagens no ComuChat!:** Ao apertar `Enter`, a mensagem agora aparece na conversa na mesma hora e o campo de texto fica livre imediatamente para você continuar digitando a próxima, sem atraso e sem apagar o que você começou a escrever.
+- **Download de Vídeos em Formato Original ou WebM:** Ao baixar vídeos anexados na **Central de Reportes**, você agora pode escolher entre salvar no formato original (como MP4 ou MKV) ou converter automaticamente para **WebM** antes de salvar.
+- **Gravações de Chamadas do ComuChat! Mais Leves e Compatíveis:** Os vídeos de chamadas gravados no ComuChat! e anexos de vídeo enviados no sistema passam a ser otimizados automaticamente, ocupando menos espaço e abrindo rapidamente em qualquer computador ou celular.
+- **[FB-0091] Agendas Canceladas na Pesquisa CTRL + K:** Na pesquisa, agendamentos cancelados agora aparecem com destaque (título riscado e selo vermelho "Cancelado"), como na Agenda. Ao clicar em um deles, você é levado até a data na Agenda em vez de abrir a tela de edição. Para voltar a editar, reative o agendamento.
+- **[FB-0080] Cor da Agenda Livre ao Cancelar:** Ao cancelar um agendamento e gerar o bloco de Agenda Livre, ele agora nasce com a mesma cor do agendamento cancelado. Se preferir outra, a tela de cancelamento tem um seletor de cor para você escolher antes de confirmar.
+- **[FB-0112] Estabilidade ao Abrir o Editor de Textos:** Corrigido um erro que podia exibir uma tela de falha ao abrir o Editor de Textos, garantindo que suas abas carreguem normalmente e prontas para uso.
+- **[FB-0104] Copiar Link da Página nas Telas Externas:** Removida a opção nativa de compartilhamento do navegador que gerava um endereço interno incorreto e adicionada a opção **Copiar link da página** ao clicar com o botão direito nas telas da Intranet, SAC e demais páginas externas.
+
 ## [0.9.6] - 13 de Novembro de 2026
 
 "Build de Melhoria e Correção"
