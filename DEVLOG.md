@@ -21,6 +21,28 @@
 #    - **[FB-XXXX] Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
+## [0.11.0] - 23 de Novembro de 2026
+
+"Nova arquitetura de comunicação e melhorias na experiência do SAO"
+
+### O que há de novo
+
+- **[FB-0053-3] Conexão Mais Segura e Sessão Protegida no SAO:** O acesso ao SAO, o ComuChat! e os Scripts SQL passaram a se comunicar por uma camada central protegida, com renovação automática da sua sessão e aviso imediato quando for necessário entrar novamente ou atualizar o aplicativo. Agora também é possível encerrar todas as sessões abertas em outros computadores nas configurações da sua conta, e o envio ou download de anexos grandes no ComuChat! ficou mais estável em conexões mais lentas.
+
+### Melhorias e Correções
+
+- **[FB-0103] Colegas Separados por Status nas Conversas Diretas do ComuChat!:** Na lista de conversas diretas do ComuChat!, os colegas agora são agrupados em **Disponível**, **Ocupado**, **Ausente** e **Offline** em seções recolhíveis, mantendo as conversas recentes no topo de cada grupo. Quando você recebe uma mensagem não lida — mesmo de alguém que esteja offline ou invisível —, a conversa sobe para o topo em **Não lidas** e volta para o grupo correspondente assim que você a visualiza.
+- **[FB-0106] Aviso Visual ao Iniciar Downloads:** Ao começar um download em qualquer tela do SAO, um balão informativo aparece logo abaixo do botão de Downloads na barra superior indicando o arquivo e permitindo abrir a lista de acompanhamento com um clique.
+- **[FB-0119] Lembrete de WhatsApp com 1 Hora de Carência:** Quando você cria um agendamento, reativa um cancelado ou muda a data ou o telefone dentro da janela de aviso, o lembrete automático para o cliente agora só é enviado 1 hora depois. Assim você tem tempo de corrigir ou excluir um agendamento feito por engano antes de a mensagem chegar ao cliente. Agendamentos cancelados continuam sem enviar aviso.
+
+## [0.10.1] - 19 de Novembro de 2026
+
+"Build de Melhoria e Correção"
+
+### Melhorias e Correções
+
+- **Emojis do ComuChat! no Mesmo Estilo em Todo Lugar:** As reações, as sugestões de emoji ao digitar `:` e os emojis dentro das mensagens agora usam o mesmo desenho do seletor de emojis, em vez do desenho que muda conforme o seu computador.
+
 ## [0.10.0] - 18 de Novembro de 2026
 
 "Captura de Imagens, Gravação de Vídeo e muito mais no SAO"
