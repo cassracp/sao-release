@@ -21,6 +21,14 @@
 #    - **[FB-XXXX] Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
+## [0.11.1] - 23 de Novembro de 2026
+
+"Build de Melhoria e Correção"
+
+### Melhorias e Correções
+
+- **Emojis Iguais em Todo o ComuChat:** Os emojis de reação rápida (👍 e ❤️) que aparecem ao passar o mouse sobre uma mensagem ou ao clicar com o botão direito, e os indicadores de status da lista de membros, agora têm o mesmo visual dos demais emojis do chat. O mesmo padrão foi aplicado aos rótulos e avisos com emoji em Central de Reportes, Configurações, Gerar Tópicos e ao sininho de notificações. Nas listas de seleção (que só aceitam texto), o emoji foi retirado das opções, e o texto continua igual.
+
 ## [0.11.0] - 23 de Novembro de 2026
 
 "Nova arquitetura de comunicação e melhorias na experiência do SAO"
