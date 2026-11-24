@@ -21,6 +21,19 @@
 #    - **[FB-XXXX] Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
+## [0.11.2] - 24 de Novembro de 2026
+
+"Build de Melhoria e Correção"
+
+### O que há de novo
+
+- **[FB-0121] Use o SAO Sem Conexão com a Empresa:** Se o SAO abrir sem VPN ou rede da empresa e você tiver usado o SAO conectado neste computador nos últimos 7 dias, a tela de erro de conexão agora oferece **Continuar sem conexão**. Nesse modo ficam disponíveis Captura de Tela, Editor de Texto, SenhaDB, Licença Temporária, Controle de Scripts SQL (pasta local e banco local), Mini Editor, Formatar Telefone, as preferências do sistema e os downloads, e o botão **Tentar reconectar**, no topo da tela, devolve todos os recursos assim que a conexão voltar. Se a conexão cair com o SAO aberto, ele passa sozinho para o modo offline e volta ao normal quando a rede retornar.
+
+### Melhorias e Correções
+
+- **[FB-0124] Textos Sempre Legíveis entre Modo Claro e Modo Escuro:** Textos escritos ou colados em agendamentos, comentários, mensagens do ComuChat! e no Editor de Texto agora se ajustam automaticamente ao alternar entre o modo claro e o modo escuro. Assim, informações registradas em um tema nunca ficam invisíveis ou difíceis de ler no outro.
+- **[FB-0076] Sinalização de Voz e Transmissão de Tela no ComuChat!:** Agora você identifica rapidamente quando há colegas em chamada de voz ou transmitindo a tela diretamente no ícone da comunidade, na lista de membros à direita e nas conversas diretas. Quando alguém compartilha a tela, o aviso **Ao Vivo** aparece em destaque para facilitar o acompanhamento.
+
 ## [0.11.1] - 23 de Novembro de 2026
 
 "Build de Melhoria e Correção"
