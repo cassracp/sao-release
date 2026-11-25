@@ -21,6 +21,20 @@
 #    - **[FB-XXXX] Título Curto do Ajuste:** Descrição objetiva do benefício ou da correção.
 -->
 
+## [0.11.3] - 25 de Novembro de 2026
+
+"Build de Melhoria e Correção"
+
+### O que há de novo
+
+- **[FB-0126] [FB-0127] Checklist Completo e Listas em Colunas nos Formulários:** Nas perguntas de múltipla seleção do módulo Formulários, agora você pode escolher o formato Checklist completo para exibir todas as opções no documento final — marcadas com ☑ e não marcadas com ☐. Tanto o checklist quanto a lista com marcadores podem ser distribuídos automaticamente em 1, 2 ou 3 colunas sem bordas, evitando documentos extensos, e a tela de preenchimento ganhou atalhos para marcar todos ou limpar a seleção.
+
+### Melhorias e Correções
+
+- **[FB-0125] Login e Janelas Funcionam em Telas Pequenas:** Em notebooks e monitores pequenos, o botão "Entrar" da tela de login ficava escondido e não havia como rolar a tela. Agora o login e a tela de primeiro acesso se ajustam à altura da janela e rolam quando necessário. Revisamos também outras janelas do SAO (como edição de senhas, cofres, imagens, áudio, tabelas e avatar), que agora também rolam em vez de cortar o conteúdo.
+
+- **[FB-0125-2] Login com o Visual Padrão do SAO:** Os botões da tela de login e da tela de primeiro acesso ("Entrar", "Enviar Código", "Voltar ao Login" e outros) agora seguem o mesmo estilo dos demais botões do SAO, com a mesma altura. Os avisos de erro e de sucesso ganharam um ícone e ficam mais fáceis de ler nos temas claro e escuro.
+
 ## [0.11.2] - 24 de Novembro de 2026
 
 "Build de Melhoria e Correção"
